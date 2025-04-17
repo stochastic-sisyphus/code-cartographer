@@ -1,6 +1,5 @@
 # code-cartographer  
 ## Deep Multilayer Static Analyzer for Python Projects  
-> *“If Git is for branches, this is for forks of forks.”*
 
 ---
 
@@ -21,6 +20,11 @@ Has any LLM ever in all of human history actually internalized even a tree struc
 Yeah, I didn’t think so. Not for me either.  
 So if a vicious cycle is now my daily routine, at a certain point I decided to give myself the illusion of respite, however brief.  
 This has given me solace at least once. Enjoy.
+
+---
+
+# Code Cartographer 
+> *“If Git is for branches, this is for forks of forks.”*
 
 ---
 
