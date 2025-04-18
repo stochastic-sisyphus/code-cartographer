@@ -8,18 +8,16 @@ To me, perfection is so far beyond running correctly or achieving 0 problems acr
 Although I’ve never actually achieved the elusive “perfect” finish line in any project ever, so I can’t be sure about the definition.
 
 Therefore, I unsurprisingly constantly have at least a few iterations of the same project on my local machine that I’m actively making more refinements to at all times.  
-This can cause confusion (shocker!), especially because I am reluctant to push or publish incomplete or “inadequate” code.  
-I also have a fear of being perceived—and what’s more vulnerable than my code?
+This can cause confusion (shocker!), especially because I am reluctant to push or publish incomplete or “inadequate” code. I also have a fear of being perceived—and what’s more vulnerable than my code?
 
 > *“For when your code is too chaotic for flake8 and too personal for git push.”*
 
 Just like that, a vicious cycle is born.  
 An unproductive, deeply confusing, memory-consuming vicious cycle.
 
-Has any LLM ever in all of human history actually internalized even a tree structure to assist you in reorganizing a repo?  
-Yeah, I didn’t think so. Not for me either.  
+Has any LLM ever in all of human history actually internalized even a tree structure to assist you in reorganizing a repo? Yeah, I didn’t think so. Not for me either.  
 So if a vicious cycle is now my daily routine, at a certain point I decided to give myself the illusion of respite, however brief.  
-This has given me solace at least once. Enjoy.
+This has given me solace at least once. Enjoy!
 
 ---
 
