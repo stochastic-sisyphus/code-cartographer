@@ -13,8 +13,7 @@ This can cause confusion (shocker!), especially because I am reluctant to push o
 Just like that, a vicious cycle is born.  
 An unproductive, deeply confusing, memory-consuming vicious cycle.
 
-Has any LLM ever in all of human history actually internalized even a tree structure to assist you in reorganizing a repo? Yeah, I didn’t think so. Not for me either. So if a vicious cycle is now my daily routine, at a certain point I decided to give myself the illusion of respite, however brief.  
-This has given me solace at least once. Enjoy!
+Has any LLM ever in all of human history actually internalized even a tree structure to assist you in reorganizing a repo? Yeah, I didn’t think so. Not for me either. So if a vicious cycle is now my daily routine, at a certain point I decided to give myself the illusion of respite, however brief. This has given me solace at least once. Enjoy!
 
 ---
 
