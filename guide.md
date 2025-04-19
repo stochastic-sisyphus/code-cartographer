@@ -1,212 +1,239 @@
-# Code Analysis & Variant Detection Guide
-
-This toolset helps you analyze Python codebases to find code duplicates, compare variants, and generate insights. It's particularly useful when you have multiple versions or forks of a project.
+# Complete Guide to Using the Code Cartographer Toolkit
 
 ## Setup
 
-1. **Install Dependencies**
+1. **Create Project Directory**
 ```bash
-# Create and activate virtual environment
+mkdir code-analysis-toolkit
+cd code-analysis-toolkit
+```
+
+2. **Install Required Files**
+```
+code-analysis-toolkit/
+├── code_analyzer_engine.py     # Core static analysis
+├── code_variant_analyzer.py    # Variant detection/merging
+├── analyze_codebase.sh        # Main automation script
+├── templates/
+│   └── dashboard.html.j2      # Dashboard template
+└── requirements.txt           # Dependencies
+```
+
+3. **Set Up Environment**
+```bash
+# The script will automatically create this if it doesn't exist
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install required packages
-pip install radon jinja2 networkx
+pip install -r requirements.txt
 ```
 
-2. **Required Files**
-Copy these files to your project root:
-- `deep_code_analyzer.py` - Core analysis engine
-- `compare_code_variants.py` - Variant comparison and merging
-- `run_code_cartography.sh` - Automation script
-- `templates/dashboard.html.j2` - Dashboard template
+## Basic Usage
 
-## Usage Options
-
-### Option 1: Full Automated Analysis
-
-Use this when you want to analyze multiple codebases/forks at once:
-
+### Single Command Analysis
+Analyze any Python project with one command:
 ```bash
-# Make script executable
-chmod +x run_code_cartography.sh
-
-# Run full analysis
-./run_code_cartography.sh
-```
-
-This will:
-1. Analyze all code in specified directories
-2. Compare and find variants
-3. Generate diffs and merged code
-4. Create an HTML dashboard
-
-### Option 2: Step-by-Step Analysis
-
-#### 1. Deep Code Analysis
-Analyze a single codebase:
-```bash
-python deep_code_analyzer.py \
-  -d /path/to/your/project \
-  --output analysis_output.json \
-  --markdown analysis_report.md \
-  --graphviz dependency_graph.dot \
-  --exclude "tests/.*" "build/.*" ".venv/.*" ".git/.*"
+./analyze_codebase.sh --project-dir /path/to/your/project
 ```
 
 This generates:
-- `analysis_output.json` - Detailed code analysis
-- `analysis_report.md` - Human-readable summary
-- `dependency_graph.dot` - Import dependency graph
+```
+/path/to/your/project/
+├── code_analysis/
+│   ├── analysis.json         # Complete analysis data
+│   ├── analysis.md          # Human-readable summary
+│   ├── dependencies.dot     # Dependency graph
+│   ├── diffs/              # Code variant differences
+│   └── dashboard.html      # Interactive visualization
+└── merged_code/            # Merged variant implementations
+```
 
-#### 2. Compare Code Variants
-If you have multiple analysis outputs:
+### Customizing Analysis
+
+1. **Change Output Location**:
 ```bash
-python compare_code_variants.py compare \
-  --summary-dir output \
-  --diffs-dir output/diffs \
-  --summary-csv output/summary.csv \
-  --profile balanced \
-  --match-threshold 0.7
+./analyze_codebase.sh \
+    --project-dir /path/to/your/project \
+    --output-dir ./my-analysis
 ```
 
-Available profiles:
-- `balanced` - Equal weight to all metrics
-- `simplicity` - Favors simpler code
-- `robustness` - Favors well-tested code
-- `maintainability` - Favors readable code
-
-#### 3. Merge Similar Code
+2. **Exclude Patterns**:
 ```bash
-python compare_code_variants.py merge \
-  --summary-dir output \
-  --output-dir merged_code \
-  --format both \
-  --preserve-structure
+./analyze_codebase.sh \
+    --project-dir /path/to/your/project \
+    --exclude "tests/.*,build/.*,.venv/.*,docs/.*"
 ```
 
-Format options:
-- `script` - Python files only
-- `markdown` - Markdown documentation
-- `both` - Both formats
-- `json` - JSON summary
+## Component-by-Component Usage
 
-#### 4. Generate Dashboard
+### 1. Static Code Analysis
 ```bash
-python compare_code_variants.py dashboard \
-  --summary-csv output/summary.csv \
-  --diffs-dir output/diffs \
-  --template-dir templates \
-  --output dashboard.html \
-  --show-all-variants
+python code_analyzer_engine.py \
+    -d /path/to/project \
+    --output analysis.json \
+    --markdown report.md \
+    --graphviz deps.dot \
+    --exclude "tests/.*" "build/.*" ".venv/.*"
 ```
 
-## Output Structure
+Options:
+- `-d, --dir`: Project to analyze
+- `--output`: JSON output file
+- `--markdown`: Generate Markdown report
+- `--graphviz`: Generate dependency graph
+- `--exclude`: Patterns to exclude
+- `--no-git`: Skip git SHA tagging
+- `--indent`: JSON indentation level
 
+### 2. Code Variant Analysis
+
+a) **Compare Variants**:
+```bash
+python code_variant_analyzer.py compare \
+    --summary-dir ./analysis \
+    --diffs-dir ./diffs \
+    --summary-csv ./summary.csv \
+    --profile balanced \
+    --match-threshold 0.7
 ```
-project_root/
-├── output/                     # Analysis outputs
-│   ├── *.json                 # Raw analysis data
-│   ├── *.md                   # Markdown reports
-│   ├── *.dot                  # Dependency graphs
-│   ├── diffs/                 # Code variant diffs
-│   └── dashboard.html         # Interactive dashboard
-├── merged_code/               # Merged variants
-│   ├── *.py                   # Merged Python files
-│   └── *.md                   # Documentation
+
+b) **Merge Similar Code**:
+```bash
+python code_variant_analyzer.py merge \
+    --summary-dir ./analysis \
+    --output-dir ./merged \
+    --format both \
+    --preserve-structure
 ```
+
+c) **Generate Dashboard**:
+```bash
+python code_variant_analyzer.py dashboard \
+    --summary-csv ./summary.csv \
+    --diffs-dir ./diffs \
+    --template-dir ./templates \
+    --output ./dashboard.html
+```
+
+### 3. Matching Profiles
+```bash
+--profile strict    # 90% similarity required
+--profile balanced  # 70% similarity required
+--profile lenient   # 50% similarity required
+```
+
+## Understanding the Output
+
+### 1. Analysis JSON Structure
+```json
+{
+    "files": [
+        {
+            "path": "file.py",
+            "imports": [...],
+            "definitions": [...],
+            "metrics": {
+                "cyclomatic": 5,
+                "maintainability_index": 75.0,
+                "risk_flag": false
+            }
+        }
+    ],
+    "variants": {...},
+    "dependencies": [...]
+}
+```
+
+### 2. Dashboard Sections
+- Overview metrics
+- Code variant analysis
+- Complexity distribution
+- Dependency visualization
+- Documentation coverage
 
 ## Advanced Usage
 
-### Custom Exclusion Patterns
+### 1. Large Projects
 ```bash
-python deep_code_analyzer.py -d /path/to/project \
-  --exclude \
-    "tests/.*" \
-    "build/.*" \
-    ".venv/.*" \
-    ".git/.*" \
-    ".*_test\.py$" \
-    "setup\.py"
+# Analyze specific directories
+./analyze_codebase.sh \
+    --project-dir ./src \
+    --exclude "tests/.*,docs/.*,*.pyc"
 ```
 
-### Variant Matching Sensitivity
-```bash
-python compare_code_variants.py compare \
-  --summary-dir output \
-  --match-threshold 0.8  # Higher = stricter matching
-  --max-variants 5       # Limit variants per group
+### 2. CI/CD Integration
+
+```yaml
+# .github/workflows/code-analysis.yml
+name: Code Analysis
+on: [push, pull_request]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: Run Analysis
+        run: |
+          ./analyze_codebase.sh --project-dir .
+      - uses: actions/upload-artifact@v2
+        with:
+          name: code-analysis
+          path: code_analysis/
 ```
 
-### Custom Scoring Weights
+### 3. Pre-commit Hook
 ```bash
-python compare_code_variants.py compare \
-  --summary-dir output \
-  --weights 1 2 3 1 1  # lines calls branches cc mi
+#!/bin/bash
+# .git/hooks/pre-commit
+
+./analyze_codebase.sh --project-dir .
+if [ $? -ne 0 ]; then
+    echo "Code analysis failed"
+    exit 1
+fi
 ```
-
-## Analysis Features
-
-The tools analyze:
-1. **Code Structure**
-   - Functions and classes
-   - Import dependencies
-   - Code complexity metrics
-
-2. **Code Quality**
-   - Cyclomatic complexity
-   - Maintainability index
-   - Type hint usage
-   - Documentation coverage
-
-3. **Patterns**
-   - Code duplication
-   - Similar implementations
-   - Common patterns
-   - Refactoring opportunities
-
-4. **Dependencies**
-   - Internal imports
-   - External dependencies
-   - Module relationships
-
-## Best Practices
-
-1. **Before Analysis**
-   - Clean up your codebase
-   - Remove generated files
-   - Update `.gitignore` patterns
-
-2. **During Analysis**
-   - Start with default settings
-   - Adjust thresholds if needed
-   - Check intermediate outputs
-
-3. **After Analysis**
-   - Review the dashboard
-   - Examine variant diffs
-   - Consider refactoring suggestions
 
 ## Troubleshooting
 
-1. **Syntax Errors**
-   - The analyzer will warn about syntax errors
-   - Fix the errors in the source files
-   - Re-run the analysis
+### Common Issues:
 
-2. **Memory Issues**
-   - Analyze smaller chunks
-   - Increase exclusion patterns
-   - Run step-by-step instead of automated
+1. **Memory Problems**:
+```bash
+# Reduce analysis scope
+./analyze_codebase.sh \
+    --project-dir . \
+    --exclude "tests/.*,docs/.*,*.pyc,__pycache__/.*"
+```
 
-3. **Missing Variants**
-   - Lower the match threshold
-   - Check file exclusions
-   - Verify file encoding
+2. **Slow Analysis**:
+```bash
+# Focus on core directories
+./analyze_codebase.sh --project-dir ./src/core
+```
 
-4. **Dashboard Issues**
-   - Check template directory
-   - Verify JSON/CSV files exist
-   - Check file permissions
+3. **Dashboard Issues**:
+- Check browser console
+- Verify template paths
+- Ensure all JSON files exist
+
+### Best Practices:
+
+1. **Regular Analysis**:
+- Run on each commit/PR
+- Track metrics over time
+- Review variant reports regularly
+
+2. **Output Management**:
+- Version control analysis results
+- Archive dashboards by date
+- Track trends in metrics
+
+3. **Customization**:
+- Adjust similarity thresholds based on needs
+- Customize exclusion patterns
+- Modify dashboard template for specific metrics
 
 Remember to always backup your code before applying any automated changes or refactoring suggestions!
+
+__xoxo stochastic-sisyphus__
