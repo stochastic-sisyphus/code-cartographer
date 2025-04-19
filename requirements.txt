@@ -1,0 +1,11 @@
+radon>=5.1.0  # For code complexity metrics 
+pandas>=1.5.0  # For creating comparison matrices
+astunparse>=1.6.3  # For parsing AST
+astroid>=2.15.0  # For parsing AST
+matplotlib>=3.7.0  # For visualization
+matplotlib-venn>=0.11.7  # For Venn diagrams
+numpy>=1.24.0  # Required by pandas and matplotlib
+graphviz>=0.20.1  # For dependency graphs
+pygraphviz>=1.7  # For dependency graphs
+networkx>=2.8.0  # For graph operations
+jinja2>=3.1.2  # For templating
