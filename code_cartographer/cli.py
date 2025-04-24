@@ -10,8 +10,8 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from .core.analyzer import ProjectAnalyzer, generate_markdown, generate_dependency_graph
-from .core.variant_analyzer import VariantAnalyzer
+from code_cartographer.core.analyzer import ProjectAnalyzer, generate_markdown, generate_dependency_graph
+from code_cartographer.core.variant_analyzer import VariantAnalyzer
 
 def analyze_command(args: argparse.Namespace) -> None:
     """Run the main code analysis."""
