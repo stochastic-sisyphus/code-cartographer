@@ -11,32 +11,27 @@ from pathlib import Path
 
 from code_cartographer.core.analyzer import (
     ProjectAnalyzer,
-    generate_markdown,
     generate_dependency_graph,
+    generate_markdown,
 )
 from code_cartographer.core.variant_analyzer import VariantAnalyzer
 
 
 def analyze_command(args: argparse.Namespace) -> None:
     """Run the main code analysis."""
-    analyzer = ProjectAnalyzer(
-        root=args.dir,
-        exclude_patterns=args.exclude or []
-    )
-    
+    analyzer = ProjectAnalyzer(root=args.dir, exclude_patterns=args.exclude or [])
+
     analysis = analyzer.execute()
-    
+
     # Write JSON output
-    args.output.write_text(
-        json.dumps(analysis, indent=2)
-    )
+    args.output.write_text(json.dumps(analysis, indent=2))
     print(f"[INFO] Analysis complete: {args.output.resolve()}")
-    
+
     # Generate additional outputs if requested
     if args.markdown:
         generate_markdown(analysis, args.markdown)
         print(f"[INFO] Markdown report: {args.markdown.resolve()}")
-        
+
     if args.graphviz:
         generate_dependency_graph(analysis["dependencies"], args.graphviz)
         print(f"[INFO] Dependency graph: {args.graphviz.resolve()}")
@@ -48,14 +43,12 @@ def variants_command(args: argparse.Namespace) -> None:
         root=args.dir,
         semantic_threshold=args.semantic_threshold,
         min_lines=args.min_lines,
-        exclude_patterns=args.exclude
+        exclude_patterns=args.exclude,
     )
-    
+
     analysis = analyzer.analyze()
-    
-    args.output.write_text(
-        json.dumps(analysis, indent=2)
-    )
+
+    args.output.write_text(json.dumps(analysis, indent=2))
     print(f"[INFO] Variant analysis complete: {args.output.resolve()}")
 
 
@@ -63,14 +56,10 @@ def main() -> None:
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
         description="Code Cartographer - Advanced Python Codebase Analysis",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    subparsers = parser.add_subparsers(
-        title="commands",
-        dest="command",
-        required=True
-    )
+    subparsers = parser.add_subparsers(title="commands", dest="command", required=True)
 
     analyze_parser = _extracted_from_main_15(
         subparsers,
@@ -79,22 +68,17 @@ def main() -> None:
         "code_analysis.json",
     )
     analyze_parser.add_argument(
-        "-e",
-        "--exclude",
-        nargs="*",
-        help="Regex patterns for paths to exclude"
+        "-e", "--exclude", nargs="*", help="Regex patterns for paths to exclude"
     )
 
     analyze_parser.add_argument(
-        "--markdown",
-        type=Path,
-        help="Generate Markdown report at specified path"
+        "--markdown", type=Path, help="Generate Markdown report at specified path"
     )
 
     analyze_parser.add_argument(
         "--graphviz",
         type=Path,
-        help="Generate Graphviz dependency graph at specified path"
+        help="Generate Graphviz dependency graph at specified path",
     )
 
     variants_parser = _extracted_from_main_15(
@@ -107,21 +91,18 @@ def main() -> None:
         "--semantic-threshold",
         type=float,
         default=0.8,
-        help="Similarity threshold for semantic variants (0.0-1.0)"
+        help="Similarity threshold for semantic variants (0.0-1.0)",
     )
 
     variants_parser.add_argument(
         "--min-lines",
         type=int,
         default=5,
-        help="Minimum lines for variant consideration"
+        help="Minimum lines for variant consideration",
     )
 
     variants_parser.add_argument(
-        "-e",
-        "--exclude",
-        nargs="*",
-        help="Regex patterns for paths to exclude"
+        "-e", "--exclude", nargs="*", help="Regex patterns for paths to exclude"
     )
 
     # Parse and dispatch

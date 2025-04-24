@@ -19,7 +19,7 @@ import sys
 import textwrap
 import tokenize
 from collections import defaultdict
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from functools import cached_property
 from io import StringIO
 from pathlib import Path

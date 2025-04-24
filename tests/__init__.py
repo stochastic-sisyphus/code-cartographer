@@ -1,1 +1,1 @@
-"""Test suite for code-cartographer.""" 
+"""Test suite for code-cartographer."""

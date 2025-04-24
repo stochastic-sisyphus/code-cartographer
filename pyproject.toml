@@ -34,6 +34,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
@@ -79,7 +83,7 @@ warn_unreachable = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --cov"
+addopts = "-ra -q --cov=code_cartographer"
 testpaths = [
     "tests",
 ] 
