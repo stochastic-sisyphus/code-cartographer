@@ -8,10 +8,14 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Optional
 
-from code_cartographer.core.analyzer import ProjectAnalyzer, generate_markdown, generate_dependency_graph
+from code_cartographer.core.analyzer import (
+    ProjectAnalyzer,
+    generate_markdown,
+    generate_dependency_graph,
+)
 from code_cartographer.core.variant_analyzer import VariantAnalyzer
+
 
 def analyze_command(args: argparse.Namespace) -> None:
     """Run the main code analysis."""
@@ -37,6 +41,7 @@ def analyze_command(args: argparse.Namespace) -> None:
         generate_dependency_graph(analysis["dependencies"], args.graphviz)
         print(f"[INFO] Dependency graph: {args.graphviz.resolve()}")
 
+
 def variants_command(args: argparse.Namespace) -> None:
     """Run variant analysis."""
     analyzer = VariantAnalyzer(
@@ -53,6 +58,7 @@ def variants_command(args: argparse.Namespace) -> None:
     )
     print(f"[INFO] Variant analysis complete: {args.output.resolve()}")
 
+
 def main() -> None:
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
@@ -67,10 +73,14 @@ def main() -> None:
     )
 
     analyze_parser = _extracted_from_main_15(
-        subparsers, "analyze", "Run deep code analysis", "code_analysis.json"
+        subparsers,
+        "analyze",
+        "Run deep code analysis",
+        "code_analysis.json",
     )
     analyze_parser.add_argument(
-        "-e", "--exclude",
+        "-e",
+        "--exclude",
         nargs="*",
         help="Regex patterns for paths to exclude"
     )
@@ -108,7 +118,8 @@ def main() -> None:
     )
 
     variants_parser.add_argument(
-        "-e", "--exclude",
+        "-e",
+        "--exclude",
         nargs="*",
         help="Regex patterns for paths to exclude"
     )
@@ -129,9 +140,7 @@ def main() -> None:
         sys.exit(1)
 
 
-# TODO Rename this here and in `main`
 def _extracted_from_main_15(subparsers, arg1, help, arg3):
-    # Analyze command
     result = subparsers.add_parser(arg1, help=help)
 
     result.add_argument(
@@ -152,5 +161,6 @@ def _extracted_from_main_15(subparsers, arg1, help, arg3):
 
     return result
 
+
 if __name__ == "__main__":
-    main() 
+    main()

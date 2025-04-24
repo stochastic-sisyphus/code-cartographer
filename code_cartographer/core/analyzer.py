@@ -29,15 +29,18 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 try:
     from radon.complexity import cc_visit  # type: ignore
     from radon.metrics import mi_visit  # type: ignore
+
     _HAS_METRICS = True
 except ImportError:
     _HAS_METRICS = False
+
 
 @dataclass
 class ComplexityMetrics:
     cyclomatic: Optional[int] = None
     maintainability_index: Optional[float] = None
     risk_flag: bool = False  # True if exceeds thresholds
+
 
 @dataclass
 class DefinitionMetadata:
@@ -54,6 +57,7 @@ class DefinitionMetadata:
     source_hash: str
     has_type_hints: bool
     metrics: ComplexityMetrics
+
 
 @dataclass
 class FileMetadata:
@@ -77,14 +81,15 @@ class FileMetadata:
     definitions: List[DefinitionMetadata]
     metrics: ComplexityMetrics
 
+
 class CodeInspector(ast.NodeVisitor):
     """Advanced AST visitor for deep code analysis."""
-    
+
     def __init__(self, source: str, project_root: Path):
         self._src = source
         self._lines = source.splitlines()
         self.project_root = project_root
-        
+
         # Analysis containers
         self.imports: List[str] = []
         self.internal_imports: List[str] = []
@@ -100,7 +105,7 @@ class CodeInspector(ast.NodeVisitor):
         self.oop_flags = {"inheritance": False, "polymorphism": False, "dunder": False}
         self.concurrent_libs: Set[str] = set()
         self.definitions: List[DefinitionMetadata] = []
-        
+
         # Pre-scan for regex usage
         if re.search(r"\bimport\s+re\b", source):
             self.regex_patterns = 1
@@ -124,7 +129,7 @@ class CodeInspector(ast.NodeVisitor):
             "concurrent.futures",
         }:
             self.concurrent_libs.add(mod_path)
-            
+
         # Check for internal project imports
         candidate = self.project_root / (mod_path.replace(".", os.sep) + ".py")
         if candidate.exists():
@@ -181,15 +186,15 @@ class CodeInspector(ast.NodeVisitor):
     def visit_ClassDef(self, node):
         self.oop_flags["inheritance"] |= bool(node.bases)
         self._process_definition(node, "class")
-        
+
         # Process methods
         for child in node.body:
             if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 self._process_definition(
-                    child, 
+                    child,
                     "method",
                     parent=node.name,
-                    is_async=isinstance(child, ast.AsyncFunctionDef)
+                    is_async=isinstance(child, ast.AsyncFunctionDef),
                 )
         self.generic_visit(node)
 
@@ -198,7 +203,7 @@ class CodeInspector(ast.NodeVisitor):
         try:
             return ast.get_source_segment(self._src, node) or ""
         except Exception:
-            return "\n".join(self._lines[node.lineno-1: node.end_lineno])
+            return "\n".join(self._lines[node.lineno - 1 : node.end_lineno])
 
     def _extract_calls(self, node):
         """Extract all function/method calls from an AST node."""
@@ -215,17 +220,15 @@ class CodeInspector(ast.NodeVisitor):
         """Compute complexity metrics if radon is available."""
         if not _HAS_METRICS:
             return ComplexityMetrics()
-            
+
         text = ast.unparse(node)
         cc_blocks = cc_visit(text)
         cyclo = cc_blocks[0].complexity if cc_blocks else None
         mi = mi_visit(text, multi=True)
         risk = bool((cyclo and cyclo > 10) or (mi and mi < 65))
-        
+
         return ComplexityMetrics(
-            cyclomatic=cyclo,
-            maintainability_index=mi,
-            risk_flag=risk
+            cyclomatic=cyclo, maintainability_index=mi, risk_flag=risk
         )
 
     def _process_definition(self, node, category, parent=None, is_async=False):
@@ -233,21 +236,22 @@ class CodeInspector(ast.NodeVisitor):
         source = self._extract_segment(node)
         source_hash = hashlib.sha256(source.encode()).hexdigest()
         docstring = ast.get_docstring(node)
-        
+
         # Check for type hints
         try:
             has_hints = bool(getattr(node, "returns", None)) or any(
-                isinstance(a.annotation, ast.AST) for a in getattr(node.args, "args", [])
+                isinstance(a.annotation, ast.AST)
+                for a in getattr(node.args, "args", [])
             )
         except Exception:
             has_hints = False
-            
+
         metrics = self._compute_metrics(node)
         name = getattr(node, "name", "<lambda>")
-        
+
         if parent and category == "method":
             name = f"{parent}.{name}"
-            
+
         self.definitions.append(
             DefinitionMetadata(
                 name=name,
@@ -256,7 +260,9 @@ class CodeInspector(ast.NodeVisitor):
                 end_line=node.end_lineno,
                 line_count=node.end_lineno - node.lineno + 1,
                 is_async=is_async,
-                decorators=[ast.unparse(d) for d in getattr(node, "decorator_list", [])],
+                decorators=[
+                    ast.unparse(d) for d in getattr(node, "decorator_list", [])
+                ],
                 docstring=docstring,
                 outbound_calls=self._extract_calls(node),
                 source_text=source,
@@ -266,9 +272,10 @@ class CodeInspector(ast.NodeVisitor):
             )
         )
 
+
 class ProjectAnalyzer:
     """Orchestrates full-project code analysis."""
-    
+
     def __init__(self, root: Path, exclude_patterns: List[str]):
         self.root = root
         self.exclude = [re.compile(p) for p in exclude_patterns]
@@ -285,7 +292,7 @@ class ProjectAnalyzer:
                 print(f"[WARN] {py_file}: {err}")
             except Exception as exc:
                 print(f"[ERR ] Failed on {py_file}: {exc}")
-                
+
         return {
             "files": [asdict(fs) for fs in self.file_data],
             "variants": self._generate_variant_report(),
@@ -311,14 +318,16 @@ class ProjectAnalyzer:
             tok.type == tokenize.COMMENT
             for tok in tokenize.generate_tokens(StringIO(source).readline)
         )
-        
+
         metrics = inspector._compute_metrics(tree)
-        
+
         metadata = FileMetadata(
             path=str(path.relative_to(self.root)),
             imports=inspector.imports,
             internal_imports=inspector.internal_imports,
-            stdlib_imports=[imp for imp in inspector.imports if imp in sys.stdlib_module_names],
+            stdlib_imports=[
+                imp for imp in inspector.imports if imp in sys.stdlib_module_names
+            ],
             declared_variables=sorted(set(inspector.variables)),
             comprehension_patterns=dict(inspector.comprehension_patterns),
             loop_count=inspector.loop_count,
@@ -339,7 +348,10 @@ class ProjectAnalyzer:
 
         # Build indices
         for d in inspector.definitions:
-            self.definition_index[d.name][d.source_hash] = (metadata.path, d.source_text)
+            self.definition_index[d.name][d.source_hash] = (
+                metadata.path,
+                d.source_text,
+            )
 
         # Record dependencies
         for dep in inspector.internal_imports:
@@ -351,27 +363,28 @@ class ProjectAnalyzer:
         for name, implementations in self.definition_index.items():
             if len(implementations) <= 1:
                 continue
-                
+
             entries = []
             hashes = list(implementations.keys())
             base_hash = hashes[0]
             base_source = implementations[base_hash][1]
-            
+
             for hash_val, (path, source) in implementations.items():
-                diff = list(difflib.unified_diff(
-                    base_source.splitlines(), 
-                    source.splitlines(), 
-                    lineterm=""
-                )) if hash_val != base_hash else []
-                
-                entries.append({
-                    "hash": hash_val,
-                    "path": path,
-                    "diff_from_base": diff
-                })
+                diff = (
+                    list(
+                        difflib.unified_diff(
+                            base_source.splitlines(), source.splitlines(), lineterm=""
+                        )
+                    )
+                    if hash_val != base_hash
+                    else []
+                )
+
+                entries.append({"hash": hash_val, "path": path, "diff_from_base": diff})
 
             # Generate LLM-ready refactoring prompt
-            prompt = textwrap.dedent(f"""
+            prompt = textwrap.dedent(
+                f"""
                 Multiple implementations of `{name}` detected across the codebase.
                 Recommended action: Refactor into a single canonical implementation.
                 Strategy:
@@ -380,35 +393,37 @@ class ProjectAnalyzer:
                 3. Merge implementations preserving all edge cases
                 4. Add comprehensive tests covering all use cases
                 5. Update all call sites to use new implementation
-            """).strip()
-            
-            variants[name] = {
-                "implementations": entries,
-                "refactor_prompt": prompt
-            }
-            
+            """
+            ).strip()
+
+            variants[name] = {"implementations": entries, "refactor_prompt": prompt}
+
         return variants
+
 
 def generate_markdown(analysis: Dict[str, Any], output_path: Path):
     """Generate detailed Markdown report from analysis results."""
     lines = ["# Code Analysis Report\n"]
-    
+
     for fs in analysis["files"]:
-        lines.extend([
-            f"## {fs['path']}",
-            f"* Maintainability Index: {fs['metrics']['maintainability_index']}",
-            f"* Cyclomatic Complexity: {fs['metrics']['cyclomatic']}",
-            "\n### Definitions\n"
-        ])
-        
-        for d in fs['definitions']:
-            risk = "⚠️" if d['metrics']['risk_flag'] else ""
+        lines.extend(
+            [
+                f"## {fs['path']}",
+                f"* Maintainability Index: {fs['metrics']['maintainability_index']}",
+                f"* Cyclomatic Complexity: {fs['metrics']['cyclomatic']}",
+                "\n### Definitions\n",
+            ]
+        )
+
+        for d in fs["definitions"]:
+            risk = "⚠️" if d["metrics"]["risk_flag"] else ""
             lines.append(
                 f"* `{d['category']}` **{d['name']}** "
                 f"({d['line_count']} lines) {risk}"
             )
-            
+
     output_path.write_text("\n".join(lines))
+
 
 def generate_dependency_graph(edges: List[Tuple[str, str]], output_path: Path):
     """Generate Graphviz DOT file of project dependencies."""
@@ -416,64 +431,57 @@ def generate_dependency_graph(edges: List[Tuple[str, str]], output_path: Path):
         f.write("digraph project_dependencies {\n")
         f.write("  node [style=filled,fillcolor=lightgray];\n")
         f.write("  edge [color=navy];\n\n")
-        
+
         for src, dst in edges:
-            f.write(f"  \"{src}\" -> \"{dst}\";\n")
-            
+            f.write(f'  "{src}" -> "{dst}";\n')
+
         f.write("}\n")
+
 
 def main():
     parser = argparse.ArgumentParser(
         description="Advanced Python codebase analyzer",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    
+
     parser.add_argument(
-        "-d", "--dir",
+        "-d",
+        "--dir",
         type=Path,
         required=True,
-        help="Root directory of the project to analyze"
+        help="Root directory of the project to analyze",
     )
-    
+
     parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         type=Path,
         default=Path("code_analysis.json"),
-        help="Path for JSON output"
+        help="Path for JSON output",
     )
-    
+
     parser.add_argument(
-        "-e", "--exclude",
+        "-e",
+        "--exclude",
         nargs="*",
         default=[],
-        help="Regex patterns for files/dirs to exclude"
+        help="Regex patterns for files/dirs to exclude",
     )
-    
+
     parser.add_argument(
-        "--markdown",
-        type=Path,
-        help="Generate Markdown report at specified path"
+        "--markdown", type=Path, help="Generate Markdown report at specified path"
     )
-    
+
     parser.add_argument(
         "--graphviz",
         type=Path,
-        help="Generate Graphviz dependency graph at specified path"
+        help="Generate Graphviz dependency graph at specified path",
     )
-    
-    parser.add_argument(
-        "--no-git",
-        action="store_true",
-        help="Skip git SHA tagging"
-    )
-    
-    parser.add_argument(
-        "--indent",
-        type=int,
-        default=2,
-        help="JSON indentation level"
-    )
-    
+
+    parser.add_argument("--no-git", action="store_true", help="Skip git SHA tagging")
+
+    parser.add_argument("--indent", type=int, default=2, help="JSON indentation level")
+
     args = parser.parse_args()
 
     # Run analysis
@@ -483,10 +491,10 @@ def main():
     # Add git context if available
     if not args.no_git and (args.dir / ".git").exists():
         import subprocess
+
         with contextlib.suppress(Exception):
             sha = subprocess.check_output(
-                ["git", "-C", str(args.dir), "rev-parse", "HEAD"],
-                text=True
+                ["git", "-C", str(args.dir), "rev-parse", "HEAD"], text=True
             ).strip()
             analysis["git_revision"] = sha
 
@@ -495,7 +503,9 @@ def main():
         json.dumps(
             analysis,
             indent=args.indent,
-            default=lambda o: asdict(o) if hasattr(o, "__dataclass_fields__") else str(o)
+            default=lambda o: (
+                asdict(o) if hasattr(o, "__dataclass_fields__") else str(o)
+            ),
         )
     )
     print(f"[JSON] {args.output.resolve()}")
@@ -508,5 +518,6 @@ def main():
         generate_dependency_graph(analysis["dependencies"], args.graphviz)
         print(f"[DOT ] {args.graphviz.resolve()}")
 
+
 if __name__ == "__main__":
-    main() 
+    main()
