@@ -55,30 +55,32 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 ### Prerequisites
 - Python 3.8+
 - (Optional) Graphviz for dependency visualization
-- (Optional) jq for JSON manipulation
 
 ### Installation
 
-1. **Create Virtual Environment**
+You can install code-cartographer directly from PyPI:
+
+```bash
+pip install code-cartographer
+```
+
+For development installation:
+
+1. **Clone the Repository**
+```bash
+git clone https://github.com/stochastic-sisyphus/code-cartographer.git
+cd code-cartographer
+```
+
+2. **Create Virtual Environment**
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-2. **Install Dependencies**
+3. **Install in Development Mode**
 ```bash
-pip install -r requirements.txt
-```
-
-3. **Required Files Structure**
-```
-your-project/
-├── code_analyzer_engine.py     # Core analysis engine
-├── code_variant_analyzer.py    # Variant detection and merging
-├── analyze_codebase.sh        # Main automation script
-├── templates/
-│   └── dashboard.html.j2      # Dashboard template
-└── requirements.txt           # Dependencies
+pip install -e ".[dev]"
 ```
 
 ---
@@ -86,77 +88,61 @@ your-project/
 ## Usage Guide
 
 ### Quick Start
-The simplest way to analyze any project:
-```bash
-./analyze_codebase.sh --project-dir /path/to/your/project
-```
 
-This will:
-1. Run deep code analysis
-2. Detect code variants
-3. Generate comparison reports
-4. Create an interactive dashboard
+The code-cartographer package provides tools for analyzing Python codebases:
+
+```python
+from code_cartographer import ProjectAnalyzer, VariantAnalyzer
+
+# Initialize analyzers
+project_analyzer = ProjectAnalyzer("/path/to/your/project")
+variant_analyzer = VariantAnalyzer()
+
+# Run analysis
+analysis_results = project_analyzer.analyze()
+variant_results = variant_analyzer.analyze(analysis_results)
+
+# Generate reports
+project_analyzer.generate_markdown("analysis.md")
+project_analyzer.generate_dependency_graph("dependencies.dot")
+```
 
 ### Advanced Usage
 
 #### 1. Deep Code Analysis
-```bash
-python code_analyzer_engine.py \
-  -d /path/to/project \
-  --markdown summary.md \
-  --graphviz deps.dot \
-  --exclude "tests/.*" "build/.*"
+```python
+from code_cartographer import ProjectAnalyzer
+
+analyzer = ProjectAnalyzer(
+    project_dir="/path/to/project",
+    exclude_patterns=["tests/.*", "build/.*"]
+)
+
+# Run analysis
+results = analyzer.analyze()
+
+# Generate reports
+analyzer.generate_markdown("summary.md")
+analyzer.generate_dependency_graph("deps.dot")
 ```
 
 #### 2. Code Variant Analysis
-```bash
-# Compare variants
-python code_variant_analyzer.py compare \
-    --summary-dir ./analysis \
-    --diffs-dir ./diffs \
-    --summary-csv ./summary.csv \
-    --profile balanced
+```python
+from code_cartographer import VariantAnalyzer
 
-# Merge similar code
-python code_variant_analyzer.py merge \
-    --summary-dir ./analysis \
-    --output-dir ./merged \
-    --format both
+analyzer = VariantAnalyzer(
+    similarity_threshold=0.7,  # 70% similarity required
+    normalize_code=True
+)
 
-# Generate dashboard
-python code_variant_analyzer.py dashboard \
-    --summary-csv ./summary.csv \
-    --diffs-dir ./diffs \
-    --template-dir ./templates \
-    --output ./dashboard.html
-```
+# Analyze for variants
+variants = analyzer.analyze(source_files)
 
-#### 3. Comparing Multiple Versions
-```bash
-python deep_code_analyzer.py -d ./version-A -o version-A.json
-python deep_code_analyzer.py -d ./version-B -o version-B.json
+# Get variant groups
+groups = analyzer.get_variant_groups()
 
-# Merge summaries (requires jq)
-jq -n \
-  --argfile A version-A.json \
-  --argfile B version-B.json \
-  '{ "version-A": $A, "version-B": $B }' > combined_summary.json
-```
-
-### Customization Options
-
-#### Matching Profiles
-```bash
---profile strict      # 90% similarity required
---profile balanced   # 70% similarity required
---profile lenient    # 50% similarity required
-```
-
-#### Output Formats
-```bash
---format python     # Python files only
---format markdown   # Markdown documentation
---format both      # Both formats
+# Generate comparison report
+analyzer.generate_report("variants.md")
 ```
 
 ---
@@ -167,95 +153,50 @@ After analysis, you'll find:
 
 ```
 analyzed-project/
-├── code_analysis/           
-│   ├── analysis.json       # Complete analysis data
-│   ├── analysis.md         # Human-readable summary
-│   ├── dependencies.dot    # Dependency graph
-│   ├── diffs/             # Code variant differences
-│   └── dashboard.html      # Interactive dashboard
-└── merged_code/           # Merged variant implementations
+├── analysis.md         # Human-readable summary
+├── dependencies.dot    # Dependency graph (if Graphviz is installed)
+└── variants.md        # Code variant analysis report
 ```
 
-### Dashboard Features
-1. Overview metrics and trends
-2. Code variant analysis
-3. Complexity distribution
-4. Dependency visualization
-5. Documentation coverage
-
 ### Key Metrics
-- Total files and trends
-- Code variant count
-- Average complexity
+- Code complexity metrics
+- Import dependencies
+- Function/class definitions
 - Documentation coverage
-- High-complexity files
-- Most referenced modules
-- External dependencies
+- Code variants and duplicates
+- Semantic similarity scores
 
 ---
 
 ## Best Practices
 
 ### 1. Regular Analysis
-```bash
-# Add to your CI/CD pipeline
-./analyze_codebase.sh --project-dir . --output-dir ./analysis-$(date +%Y%m%d)
+```python
+from code_cartographer import ProjectAnalyzer
+import datetime
+
+# Add to your analysis pipeline
+analyzer = ProjectAnalyzer(".")
+results = analyzer.analyze()
+date_str = datetime.datetime.now().strftime("%Y%m%d")
+analyzer.generate_markdown(f"analysis-{date_str}.md")
 ```
 
 ### 2. Large Projects
-```bash
-# Analyze specific directories
-./analyze_codebase.sh \
-    --project-dir ./src \
-    --exclude "tests/.*,docs/.*,*.pyc,__pycache__/.*"
-```
+```python
+from code_cartographer import ProjectAnalyzer
 
-### 3. Memory Management
-For very large projects:
-```bash
-# Analyze in chunks
-for dir in src/*/; do
-    ./analyze_codebase.sh --project-dir "$dir" --output-dir "analysis-$(basename $dir)"
-done
-```
-
----
-
-## Integration Examples
-
-### GitHub Actions
-```yaml
-name: Code Analysis
-on: [push, pull_request]
-
-jobs:
-  analyze:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - name: Run Analysis
-        run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install -r requirements.txt
-          ./analyze_codebase.sh --project-dir .
-      - uses: actions/upload-artifact@v2
-        with:
-          name: code-analysis
-          path: code_analysis/
-```
-
-### Pre-commit Hook
-```bash
-#!/bin/bash
-# .git/hooks/pre-commit
-
-./analyze_codebase.sh --project-dir . --output-dir ./latest-analysis
-if [ $? -ne 0 ]; then
-    echo "Code analysis failed - please review"
-    exit 1
-fi
+# Analyze specific directories with exclusions
+analyzer = ProjectAnalyzer(
+    "src",
+    exclude_patterns=[
+        "tests/.*",
+        "docs/.*",
+        "*.pyc",
+        "__pycache__/.*"
+    ]
+)
+results = analyzer.analyze()
 ```
 
 ---
@@ -263,23 +204,19 @@ fi
 ## Troubleshooting
 
 ### Memory Issues
-```bash
-# Reduce analysis scope
-./analyze_codebase.sh \
-    --project-dir . \
-    --exclude "tests/.*,docs/.*,*.pyc,__pycache__/.*,migrations/.*"
-```
+- Reduce analysis scope using exclude patterns
+- Process directories sequentially for large projects
+- Use the similarity threshold in VariantAnalyzer to limit comparisons
 
-### Slow Analysis
-```bash
-# Focus on specific directories
-./analyze_codebase.sh --project-dir ./src/core
-```
+### Performance Tips
+- Focus analysis on specific directories
+- Use appropriate similarity thresholds
+- Leverage code normalization options
 
-### Dashboard Issues
-- Ensure all JavaScript dependencies are accessible
-- Check browser console for errors
-- Verify JSON data structure matches template expectations
+### Common Issues
+- Ensure Python 3.8+ is being used
+- Check file permissions for output directories
+- Verify Graphviz installation for dependency graphs
 
 ---
 
