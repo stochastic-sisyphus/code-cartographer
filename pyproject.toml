@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "code-cartographer"
-version = "0.1.0"
+version = "0.1.1"
 description = "A tool for visualizing and analyzing code repositories"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -47,6 +47,9 @@ Homepage = "https://github.com/stochastic-sisyphus"
 Repository = "https://github.com/stochastic-sisyphus/code-cartographer"
 Documentation = "https://github.com/stochastic-sisyphus/code-cartographer#readme"
 "Bug Tracker" = "https://github.com/stochastic-sisyphus/code-cartographer/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["code_cartographer"]
 
 [tool.black]
 line-length = 88
