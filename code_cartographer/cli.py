@@ -59,94 +59,63 @@ def main() -> None:
         description="Code Cartographer - Advanced Python Codebase Analysis",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    
+
     subparsers = parser.add_subparsers(
         title="commands",
         dest="command",
         required=True
     )
-    
-    # Analyze command
-    analyze_parser = subparsers.add_parser(
-        "analyze",
-        help="Run deep code analysis"
+
+    analyze_parser = _extracted_from_main_15(
+        subparsers, "analyze", "Run deep code analysis", "code_analysis.json"
     )
-    
-    analyze_parser.add_argument(
-        "-d", "--dir",
-        type=Path,
-        required=True,
-        help="Root directory to analyze"
-    )
-    
-    analyze_parser.add_argument(
-        "-o", "--output",
-        type=Path,
-        default=Path("code_analysis.json"),
-        help="Output JSON file path"
-    )
-    
     analyze_parser.add_argument(
         "-e", "--exclude",
         nargs="*",
         help="Regex patterns for paths to exclude"
     )
-    
+
     analyze_parser.add_argument(
         "--markdown",
         type=Path,
         help="Generate Markdown report at specified path"
     )
-    
+
     analyze_parser.add_argument(
         "--graphviz",
         type=Path,
         help="Generate Graphviz dependency graph at specified path"
     )
-    
-    # Variants command
-    variants_parser = subparsers.add_parser(
+
+    variants_parser = _extracted_from_main_15(
+        subparsers,
         "variants",
-        help="Analyze code variants and duplicates"
+        "Analyze code variants and duplicates",
+        "variant_analysis.json",
     )
-    
-    variants_parser.add_argument(
-        "-d", "--dir",
-        type=Path,
-        required=True,
-        help="Root directory to analyze"
-    )
-    
-    variants_parser.add_argument(
-        "-o", "--output",
-        type=Path,
-        default=Path("variant_analysis.json"),
-        help="Output JSON file path"
-    )
-    
     variants_parser.add_argument(
         "--semantic-threshold",
         type=float,
         default=0.8,
         help="Similarity threshold for semantic variants (0.0-1.0)"
     )
-    
+
     variants_parser.add_argument(
         "--min-lines",
         type=int,
         default=5,
         help="Minimum lines for variant consideration"
     )
-    
+
     variants_parser.add_argument(
         "-e", "--exclude",
         nargs="*",
         help="Regex patterns for paths to exclude"
     )
-    
+
     # Parse and dispatch
     args = parser.parse_args()
-    
+
     try:
         if args.command == "analyze":
             analyze_command(args)
@@ -158,6 +127,30 @@ def main() -> None:
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
+
+
+# TODO Rename this here and in `main`
+def _extracted_from_main_15(subparsers, arg1, help, arg3):
+    # Analyze command
+    result = subparsers.add_parser(arg1, help=help)
+
+    result.add_argument(
+        "-d",
+        "--dir",
+        type=Path,
+        required=True,
+        help="Root directory to analyze",
+    )
+
+    result.add_argument(
+        "-o",
+        "--output",
+        type=Path,
+        default=Path(arg3),
+        help="Output JSON file path",
+    )
+
+    return result
 
 if __name__ == "__main__":
     main() 
