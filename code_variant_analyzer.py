@@ -67,6 +67,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple, Any
 import jinja2
+from sklearn.base import defaultdict
 
 # Matching profiles with pre-tuned thresholds
 MATCHING_PROFILES = {
@@ -209,14 +210,13 @@ class VariantAnalyzer:
         
     def _ast_similarity(self, a: ast.AST, b: ast.AST) -> float:
         """Compute structural similarity between AST nodes."""
-        a_nodes = set(type(node).__name__ for node in ast.walk(a))
-        b_nodes = set(type(node).__name__ for node in ast.walk(b))
+        a_nodes = {type(node).__name__ for node in ast.walk(a)}
+        b_nodes = {type(node).__name__ for node in ast.walk(b)}
         return len(a_nodes & b_nodes) / max(len(a_nodes | b_nodes), 1)
         
     def _normalized_levenshtein(self, a: str, b: str) -> float:
         """Compute normalized Levenshtein similarity."""
-        matches = difflib.SequenceMatcher(None, a, b).ratio()
-        return matches
+        return difflib.SequenceMatcher(None, a, b).ratio()
         
     def _generate_diff(self, a: CodeVariant, b: CodeVariant) -> List[str]:
         """Generate unified diff between variants."""
@@ -265,29 +265,27 @@ class VariantMerger:
     def _merge_variant_group(self, group: VariantGroup) -> str:
         """Intelligently merge a group of variants."""
         base = group.base_variant
-        
+
         # Merge docstrings
         docstrings = [v.docstring for v in [base] + group.similar_variants if v.docstring]
         merged_docstring = self._merge_docstrings(docstrings) if docstrings else None
-        
+
         # Merge decorators
         all_decorators = {d for v in [base] + group.similar_variants for d in v.decorators}
-        
+
         # Build merged source
         lines = []
-        
+
         # Add decorators
-        for decorator in sorted(all_decorators):
-            lines.append(f"@{decorator}")
-            
+        lines.extend(f"@{decorator}" for decorator in sorted(all_decorators))
         # Extract definition line (def/class line)
         def_line = base.source.splitlines()[0]
         lines.append(def_line)
-        
+
         # Add merged docstring
         if merged_docstring:
             lines.extend(['    """', *merged_docstring.splitlines(), '    """'])
-            
+
         # Add implementation (using base variant as primary)
         impl_lines = base.source.splitlines()[1:]
         if merged_docstring:
@@ -301,9 +299,9 @@ class VariantMerger:
                 if not in_doc:
                     filtered_lines.append(line)
             impl_lines = filtered_lines
-            
+
         lines.extend(impl_lines)
-        
+
         return "\n".join(lines)
         
     def _merge_docstrings(self, docstrings: List[str]) -> str:
@@ -387,16 +385,14 @@ class DashboardGenerator:
         # Load variant data
         entries = []
         with open(summary_csv) as f:
-            for row in csv.DictReader(f):
-                entries.append(row)
-                
+            entries.extend(iter(csv.DictReader(f)))
         # Load diffs if showing all variants
         diffs = {}
         if show_all and diffs_dir.exists():
             for diff_file in diffs_dir.glob("*.diff"):
                 name = diff_file.stem
                 diffs[name] = diff_file.read_text()
-                
+
         # Render template
         template = self.env.get_template("dashboard.html.j2")
         html = template.render(
@@ -404,7 +400,7 @@ class DashboardGenerator:
             diffs=diffs,
             show_all_variants=show_all
         )
-        
+
         output_file.write_text(html)
 
 def compare_command(args):
