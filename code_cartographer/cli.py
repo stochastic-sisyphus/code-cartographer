@@ -48,8 +48,15 @@ def variants_command(args: argparse.Namespace) -> None:
 
     analysis = analyzer.analyze()
 
+    # Write analysis output
     args.output.write_text(json.dumps(analysis, indent=2))
     print(f"[INFO] Variant analysis complete: {args.output.resolve()}")
+
+    # Apply merged variants if requested
+    if args.apply_merges:
+        print("[INFO] Applying merged variants...")
+        analyzer.apply_merged_variants(backup=not args.no_backup)
+        print("[INFO] Variants merged successfully")
 
 
 def main() -> None:
@@ -61,11 +68,8 @@ def main() -> None:
 
     subparsers = parser.add_subparsers(title="commands", dest="command", required=True)
 
-    analyze_parser = _extracted_from_main_15(
-        subparsers,
-        "analyze",
-        "Run deep code analysis",
-        "code_analysis.json",
+    analyze_parser = _extracted_from_main_11(
+        subparsers, "analyze", "Run deep code analysis", "code_analysis.json"
     )
     analyze_parser.add_argument(
         "-e", "--exclude", nargs="*", help="Regex patterns for paths to exclude"
@@ -81,7 +85,7 @@ def main() -> None:
         help="Generate Graphviz dependency graph at specified path",
     )
 
-    variants_parser = _extracted_from_main_15(
+    variants_parser = _extracted_from_main_11(
         subparsers,
         "variants",
         "Analyze code variants and duplicates",
@@ -105,6 +109,18 @@ def main() -> None:
         "-e", "--exclude", nargs="*", help="Regex patterns for paths to exclude"
     )
 
+    variants_parser.add_argument(
+        "--apply-merges",
+        action="store_true",
+        help="Apply merged variants to codebase",
+    )
+
+    variants_parser.add_argument(
+        "--no-backup",
+        action="store_true",
+        help="Don't create backup files when applying merges",
+    )
+
     # Parse and dispatch
     args = parser.parse_args()
 
@@ -121,8 +137,12 @@ def main() -> None:
         sys.exit(1)
 
 
-def _extracted_from_main_15(subparsers, arg1, help, arg3):
-    result = subparsers.add_parser(arg1, help=help)
+# TODO Rename this here and in `main`
+def _extracted_from_main_11(subparsers, arg1, help, arg3):
+    # Analyze command
+    result = subparsers.add_parser(
+        arg1, help=help, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
 
     result.add_argument(
         "-d",

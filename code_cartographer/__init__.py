@@ -1,6 +1,6 @@
 """Code Cartographer - A tool for visualizing and analyzing code repositories."""
 
-__version__ = "0.1.7"
+__version__ = "0.2.0"
 
 from code_cartographer.core.analyzer import (
     ProjectAnalyzer,
