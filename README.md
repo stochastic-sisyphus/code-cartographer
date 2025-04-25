@@ -27,6 +27,15 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 - **Full file and definition level metadata**  
   Class/function blocks, line counts, docstrings, decorators, async flags, calls, type hints
 
+- **Intelligent Code Normalization**  
+  Standardizes variable names, function signatures, and code structure for better comparison
+
+- **Advanced Variant Detection & Merging**  
+  Automatically identifies and merges similar code blocks with semantic analysis
+
+- **Auto-patching System**  
+  Safely applies merged variants with automatic backup creation
+
 - **Function/class SHA-256 hashes**  
   Detects variants, clones, and partial rewrites across versions
 
@@ -46,7 +55,7 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
   Visual analysis of code complexity, variants, and dependencies
 
 - **CLI flexibility**  
-  Exclusion patterns, Git SHA tagging, output formatting, Markdown/Graphviz toggles
+  Exclusion patterns, Git SHA tagging, output formatting, variant merging controls
 
 ---
 
@@ -130,19 +139,30 @@ analyzer.generate_dependency_graph("deps.dot")
 ```python
 from code_cartographer import VariantAnalyzer
 
+# Initialize analyzer with custom settings
 analyzer = VariantAnalyzer(
-    similarity_threshold=0.7,  # 70% similarity required
-    normalize_code=True
+    root="/path/to/project",
+    semantic_threshold=0.8,  # 80% similarity required
+    min_lines=5  # Minimum lines for variant consideration
 )
 
-# Analyze for variants
-variants = analyzer.analyze(source_files)
+# Run analysis
+results = analyzer.analyze()
 
-# Get variant groups
-groups = analyzer.get_variant_groups()
+# Apply merged variants (with automatic backups)
+analyzer.apply_merged_variants(backup=True)
+```
 
-# Generate comparison report
-analyzer.generate_report("variants.md")
+#### 3. CLI Variant Management
+```bash
+# Analyze and merge variants with backups
+code-cartographer variants -d /path/to/project --apply-merges
+
+# Analyze and merge variants without backups
+code-cartographer variants -d /path/to/project --apply-merges --no-backup
+
+# Analyze with custom similarity threshold
+code-cartographer variants -d /path/to/project --semantic-threshold 0.9
 ```
 
 ---
