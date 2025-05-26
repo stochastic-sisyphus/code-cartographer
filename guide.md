@@ -1,239 +1,229 @@
-# Complete Guide to Using the Code Cartographer Toolkit
+# User Guide: Code Cartographer
 
-## Setup
+## Introduction
 
-1. **Create Project Directory**
+Code Cartographer is a comprehensive static analysis tool designed to help you understand complex Python codebases by mapping the relationships between functions, variables, classes, and other code elements. This guide will walk you through how to use the enhanced version of Code Cartographer to analyze your Python projects.
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/stochastic-sisyphus/code-cartographer.git
+   cd code-cartographer
+   ```
+
+2. Create a virtual environment and install dependencies:
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+3. Install system dependencies:
+
+   ```bash
+   # For Ubuntu/Debian
+   sudo apt-get install graphviz graphviz-dev
+
+   # For macOS
+   brew install graphviz
+
+   # For Windows
+   # Download and install from https://graphviz.org/download/
+   ```
+
+## Running Code Cartographer
+
+### Basic Usage
+
+The simplest way to analyze your codebase is to use the provided shell script:
+
 ```bash
-mkdir code-analysis-toolkit
-cd code-analysis-toolkit
+./analyze_codebase.sh /path/to/your/project
 ```
 
-2. **Install Required Files**
-```
-code-analysis-toolkit/
-├── code_analyzer_engine.py     # Core static analysis
-├── code_variant_analyzer.py    # Variant detection/merging
-├── analyze_codebase.sh        # Main automation script
-├── templates/
-│   └── dashboard.html.j2      # Dashboard template
-└── requirements.txt           # Dependencies
-```
+This will:
 
-3. **Set Up Environment**
-```bash
-# The script will automatically create this if it doesn't exist
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
+1. Analyze your codebase
+2. Generate visualizations
+3. Create comprehensive reports
+4. Save all outputs to the `analysis_output` directory
 
-## Basic Usage
+### Advanced Usage
 
-### Single Command Analysis
-Analyze any Python project with one command:
-```bash
-./analyze_codebase.sh --project-dir /path/to/your/project
-```
+For more control over the analysis process, you can use the Python module directly:
 
-This generates:
-```
-/path/to/your/project/
-├── code_analysis/
-│   ├── analysis.json         # Complete analysis data
-│   ├── analysis.md          # Human-readable summary
-│   ├── dependencies.dot     # Dependency graph
-│   ├── diffs/              # Code variant differences
-│   └── dashboard.html      # Interactive visualization
-└── merged_code/            # Merged variant implementations
+```python
+from code_cartographer.core.analyzer import CodeAnalyzer
+from pathlib import Path
+
+# Initialize the analyzer
+analyzer = CodeAnalyzer(
+    project_root=Path("/path/to/your/project"),
+    output_dir=Path("/path/to/output")
+)
+
+# Run the analysis
+results = analyzer.analyze(
+    exclude_patterns=["tests/", "venv/", "build/"]
+)
+
+# Generate reports
+report_path = analyzer.generate_report(results)
+graph_path = analyzer.generate_call_graph(results)
+
+print(f"Report generated at: {report_path}")
+print(f"Call graph generated at: {graph_path}")
 ```
 
-### Customizing Analysis
+## Understanding the Results
 
-1. **Change Output Location**:
-```bash
-./analyze_codebase.sh \
-    --project-dir /path/to/your/project \
-    --output-dir ./my-analysis
+### Code Analysis Report
+
+The main output is a comprehensive Markdown report (`code_analysis_report.md`) that includes:
+
+1. **Summary Statistics**
+   - Total files analyzed
+   - Function, class, and variable counts
+   - Orphaned code elements
+   - Code complexity metrics
+
+2. **Orphaned Code**
+   - Functions defined but never called
+   - Classes defined but never instantiated
+   - Variables defined but never used
+
+3. **Code Variants**
+   - Similar implementations across the codebase
+   - Potential refactoring opportunities
+
+4. **Dependency Analysis**
+   - Initialization order requirements
+   - Circular dependencies
+   - Prerequisite relationships
+
+5. **Variable Usage**
+   - Variable definitions and usages
+   - Scope analysis
+   - Redefinition detection
+
+### Visualizations
+
+The tool generates several visualizations to help you understand your codebase:
+
+1. **Call Graph**
+   - Shows which functions call which other functions
+   - Bidirectional relationships
+   - Entry points and leaf nodes
+
+2. **Dependency Graph**
+   - Shows prerequisites between code elements
+   - Helps identify initialization order requirements
+
+3. **Variable Usage Chart**
+   - Shows where variables are defined and used
+   - Highlights orphaned variables
+
+4. **Class Hierarchy**
+   - Visualizes inheritance relationships
+   - Shows method overrides
+
+5. **Initialization Sequence**
+   - Suggests a safe order for initializing components
+   - Handles circular dependencies
+
+## Interpreting the Results
+
+### Identifying Code Issues
+
+Look for:
+
+- **Orphaned Functions/Classes**: These might be dead code that can be removed
+- **Circular Dependencies**: These can cause initialization problems
+- **Variables with Multiple Definitions**: Potential naming conflicts
+- **High Complexity Metrics**: Functions that might need refactoring
+
+### Improving Code Structure
+
+Use the dependency analysis to:
+
+- Reorganize code to reduce circular dependencies
+- Identify modules that should be split
+- Find opportunities for better encapsulation
+
+### Cleaning Up Code
+
+The orphan analysis helps you:
+
+- Remove unused code
+- Identify forgotten implementations
+- Clean up unused variables
+
+## Advanced Features
+
+### Custom Exclusion Patterns
+
+You can specify patterns to exclude from analysis:
+
+```python
+analyzer.analyze(exclude_patterns=[
+    r"\.git/",
+    r"\.venv/",
+    r"__pycache__/",
+    r"tests/",
+    r"examples/"
+])
 ```
 
-2. **Exclude Patterns**:
-```bash
-./analyze_codebase.sh \
-    --project-dir /path/to/your/project \
-    --exclude "tests/.*,build/.*,.venv/.*,docs/.*"
+### Focus on Specific Areas
+
+To analyze only certain parts of your codebase:
+
+```python
+analyzer.analyze(focus_paths=[
+    "src/core/",
+    "src/utils/important_module.py"
+])
 ```
 
-## Component-by-Component Usage
+### Custom Reporting
 
-### 1. Static Code Analysis
-```bash
-python code_analyzer_engine.py \
-    -d /path/to/project \
-    --output analysis.json \
-    --markdown report.md \
-    --graphviz deps.dot \
-    --exclude "tests/.*" "build/.*" ".venv/.*"
-```
+Generate specialized reports:
 
-Options:
-- `-d, --dir`: Project to analyze
-- `--output`: JSON output file
-- `--markdown`: Generate Markdown report
-- `--graphviz`: Generate dependency graph
-- `--exclude`: Patterns to exclude
-- `--no-git`: Skip git SHA tagging
-- `--indent`: JSON indentation level
+```python
+# Generate a report focusing on orphaned code
+analyzer.generate_orphan_report(results)
 
-### 2. Code Variant Analysis
-
-a) **Compare Variants**:
-```bash
-python code_variant_analyzer.py compare \
-    --summary-dir ./analysis \
-    --diffs-dir ./diffs \
-    --summary-csv ./summary.csv \
-    --profile balanced \
-    --match-threshold 0.7
-```
-
-b) **Merge Similar Code**:
-```bash
-python code_variant_analyzer.py merge \
-    --summary-dir ./analysis \
-    --output-dir ./merged \
-    --format both \
-    --preserve-structure
-```
-
-c) **Generate Dashboard**:
-```bash
-python code_variant_analyzer.py dashboard \
-    --summary-csv ./summary.csv \
-    --diffs-dir ./diffs \
-    --template-dir ./templates \
-    --output ./dashboard.html
-```
-
-### 3. Matching Profiles
-```bash
---profile strict    # 90% similarity required
---profile balanced  # 70% similarity required
---profile lenient   # 50% similarity required
-```
-
-## Understanding the Output
-
-### 1. Analysis JSON Structure
-```json
-{
-    "files": [
-        {
-            "path": "file.py",
-            "imports": [...],
-            "definitions": [...],
-            "metrics": {
-                "cyclomatic": 5,
-                "maintainability_index": 75.0,
-                "risk_flag": false
-            }
-        }
-    ],
-    "variants": {...},
-    "dependencies": [...]
-}
-```
-
-### 2. Dashboard Sections
-- Overview metrics
-- Code variant analysis
-- Complexity distribution
-- Dependency visualization
-- Documentation coverage
-
-## Advanced Usage
-
-### 1. Large Projects
-```bash
-# Analyze specific directories
-./analyze_codebase.sh \
-    --project-dir ./src \
-    --exclude "tests/.*,docs/.*,*.pyc"
-```
-
-### 2. CI/CD Integration
-
-```yaml
-# .github/workflows/code-analysis.yml
-name: Code Analysis
-on: [push, pull_request]
-
-jobs:
-  analyze:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - name: Run Analysis
-        run: |
-          ./analyze_codebase.sh --project-dir .
-      - uses: actions/upload-artifact@v2
-        with:
-          name: code-analysis
-          path: code_analysis/
-```
-
-### 3. Pre-commit Hook
-```bash
-#!/bin/bash
-# .git/hooks/pre-commit
-
-./analyze_codebase.sh --project-dir .
-if [ $? -ne 0 ]; then
-    echo "Code analysis failed"
-    exit 1
-fi
+# Generate a report on variable usage
+analyzer.generate_variable_report(results)
 ```
 
 ## Troubleshooting
 
-### Common Issues:
+### Common Issues
 
-1. **Memory Problems**:
-```bash
-# Reduce analysis scope
-./analyze_codebase.sh \
-    --project-dir . \
-    --exclude "tests/.*,docs/.*,*.pyc,__pycache__/.*"
-```
+1. **Missing Dependencies**
+   - Ensure all Python dependencies are installed
+   - Verify Graphviz is installed correctly
 
-2. **Slow Analysis**:
-```bash
-# Focus on core directories
-./analyze_codebase.sh --project-dir ./src/core
-```
+2. **Memory Issues with Large Codebases**
+   - Analyze smaller portions of the codebase
+   - Increase available memory
 
-3. **Dashboard Issues**:
-- Check browser console
-- Verify template paths
-- Ensure all JSON files exist
+3. **Visualization Errors**
+   - Check Graphviz installation
+   - Try different output formats (PNG, SVG, PDF)
 
-### Best Practices:
+4. **Incorrect Analysis Results**
+   - Verify exclusion patterns aren't too broad
+   - Check for dynamic code generation or eval usage
 
-1. **Regular Analysis**:
-- Run on each commit/PR
-- Track metrics over time
-- Review variant reports regularly
+## Getting Help
 
-2. **Output Management**:
-- Version control analysis results
-- Archive dashboards by date
-- Track trends in metrics
+If you encounter issues or have questions:
 
-3. **Customization**:
-- Adjust similarity thresholds based on needs
-- Customize exclusion patterns
-- Modify dashboard template for specific metrics
-
-Remember to always backup your code before applying any automated changes or refactoring suggestions!
-
-__xoxo stochastic-sisyphus__
+- Check the GitHub repository for updates
+- Open an issue with detailed information about your problem
+- Consult the API documentation for advanced usage

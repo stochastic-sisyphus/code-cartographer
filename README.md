@@ -1,4 +1,5 @@
 # Code Cartographer  
+
 ## Deep Multilayer Static Analyzer for Python Projects  
 
 ---
@@ -17,7 +18,8 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 
 ---
 
-# Code Cartographer 
+# Code Cartographer
+>
 > *"If Git is for branches, this is for forks of forks."*
 
 ---
@@ -62,6 +64,7 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 ## Setup & Installation
 
 ### Prerequisites
+
 - Python 3.8+
 - (Optional) Graphviz for dependency visualization
 
@@ -76,18 +79,21 @@ pip install code-cartographer
 For development installation:
 
 1. **Clone the Repository**
+
 ```bash
 git clone https://github.com/stochastic-sisyphus/code-cartographer.git
 cd code-cartographer
 ```
 
 2. **Create Virtual Environment**
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
 3. **Install in Development Mode**
+
 ```bash
 pip install -e ".[dev]"
 ```
@@ -119,6 +125,7 @@ project_analyzer.generate_dependency_graph("dependencies.dot")
 ### Advanced Usage
 
 #### 1. Deep Code Analysis
+
 ```python
 from code_cartographer import ProjectAnalyzer
 
@@ -136,6 +143,7 @@ analyzer.generate_dependency_graph("deps.dot")
 ```
 
 #### 2. Code Variant Analysis
+
 ```python
 from code_cartographer import VariantAnalyzer
 
@@ -154,6 +162,7 @@ analyzer.apply_merged_variants(backup=True)
 ```
 
 #### 3. CLI Variant Management
+
 ```bash
 # Analyze and merge variants with backups
 code-cartographer variants -d /path/to/project --apply-merges
@@ -179,6 +188,7 @@ analyzed-project/
 ```
 
 ### Key Metrics
+
 - Code complexity metrics
 - Import dependencies
 - Function/class definitions
@@ -191,6 +201,7 @@ analyzed-project/
 ## Best Practices
 
 ### 1. Regular Analysis
+
 ```python
 from code_cartographer import ProjectAnalyzer
 import datetime
@@ -203,6 +214,7 @@ analyzer.generate_markdown(f"analysis-{date_str}.md")
 ```
 
 ### 2. Large Projects
+
 ```python
 from code_cartographer import ProjectAnalyzer
 
@@ -224,16 +236,19 @@ results = analyzer.analyze()
 ## Troubleshooting
 
 ### Memory Issues
+
 - Reduce analysis scope using exclude patterns
 - Process directories sequentially for large projects
 - Use the similarity threshold in VariantAnalyzer to limit comparisons
 
 ### Performance Tips
+
 - Focus analysis on specific directories
 - Use appropriate similarity thresholds
 - Leverage code normalization options
 
 ### Common Issues
+
 - Ensure Python 3.8+ is being used
 - Check file permissions for output directories
 - Verify Graphviz installation for dependency graphs
@@ -246,6 +261,7 @@ This tool exists to reconcile broken, duplicated, or ghost-forked Python project
 It helps you detect what's salvageable, refactor what's duplicated, and visualize the mess you made.
 
 Whether you're dealing with:
+
 - Fragmented directories
 - Local edits lost to time
 - Abandoned branches and reanimated scripts
@@ -257,5 +273,6 @@ Or at least, for the version of you that still wants to fix it.
 
 ---
 
-## License 
-MIT License. See LICENSE file for details. 
+## License
+
+MIT License. See LICENSE file for details.
