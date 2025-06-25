@@ -9,8 +9,15 @@ import os
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Set, Tuple
 
-from jinja2 import Environment, FileSystemLoader
-import markdown
+try:
+    from jinja2 import Environment, FileSystemLoader
+    import markdown  # type: ignore
+    HAS_JINJA = True
+except Exception:  # pragma: no cover - allow running without optional deps
+    Environment = None
+    FileSystemLoader = None
+    markdown = None
+    HAS_JINJA = False
 
 
 class ReportGenerator:
@@ -288,13 +295,20 @@ class ReportGenerator:
         """
         if output_path is None:
             output_path = self.output_dir / "code_analysis_report.html"
-        
+
         # Read the Markdown content
         with open(markdown_path, "r") as f:
             markdown_content = f.read()
+
+        if markdown is None:
+            with open(output_path, "w") as f:
+                f.write(markdown_content)
+            return output_path
         
         # Convert Markdown to HTML
-        html_content = markdown.markdown(markdown_content, extensions=['tables', 'fenced_code'])
+        html_content = markdown.markdown(
+            markdown_content, extensions=["tables", "fenced_code"]
+        )
         
         # Create a simple HTML template
         html_template = f"""
@@ -419,7 +433,11 @@ class ReportGenerator:
         """
         if output_path is None:
             output_path = self.output_dir / "dashboard.html"
-        
+
+        if not HAS_JINJA:
+            output_path.write_text("<html><body><h1>Dashboard unavailable</h1></body></html>")
+            return output_path
+
         # Use default template if not provided
         if template_path is None:
             template_path = self._create_default_template()
