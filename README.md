@@ -35,14 +35,23 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 - **Advanced Variant Detection & Merging**  
   Automatically identifies and merges similar code blocks with semantic analysis
 
-- **Auto-patching System**  
+- **Auto-patching System**
   Safely applies merged variants with automatic backup creation
 
-- **Function/class SHA-256 hashes**  
+- **Convenient CLI and helper**
+  Run `code-cartographer` or call `quick_analyze()` in your own scripts
+
+- **Function/class SHA-256 hashes**
   Detects variants, clones, and partial rewrites across versions
 
-- **Cyclomatic complexity & maintainability index analysis (via `radon`)**  
+- **Cyclomatic complexity & maintainability index analysis (via `radon`)**
   Flags "at-risk" code with CC > 10 or MI < 65
+
+- **Environment variable usage detection**
+  Finds `os.getenv` calls or `os.environ` lookups
+
+- **External API usage detection**
+  Flags HTTP requests and URL constants
 
 - **Auto-generated LLM refactor prompts**  
   Variant grouping, inline diffs, rewrite guidance
@@ -104,22 +113,20 @@ pip install -e ".[dev]"
 
 ### Quick Start
 
-The code-cartographer package provides tools for analyzing Python codebases:
+Install the package and run the built-in CLI:
+
+```bash
+pip install code-cartographer
+code-cartographer analyze -d /path/to/project
+```
+
+You can also trigger analysis from Python with a single helper:
 
 ```python
-from code_cartographer import ProjectAnalyzer, VariantAnalyzer
+from code_cartographer import quick_analyze
 
-# Initialize analyzers
-project_analyzer = ProjectAnalyzer("/path/to/your/project")
-variant_analyzer = VariantAnalyzer()
-
-# Run analysis
-analysis_results = project_analyzer.analyze()
-variant_results = variant_analyzer.analyze(analysis_results)
-
-# Generate reports
-project_analyzer.generate_markdown("analysis.md")
-project_analyzer.generate_dependency_graph("dependencies.dot")
+# Creates analysis_output/analysis.json
+quick_analyze("/path/to/project")
 ```
 
 ### Advanced Usage
