@@ -215,7 +215,11 @@ def test_code_analyzer(codebase_dir):
     print(f"Call graph entries: {len(call_graph)}")
     print(f"Reverse call graph entries: {len(reverse_call_graph)}")
     
-    return analysis_results, output_dir
+    assert len(analysis_results.get('files', [])) > 0
+
+    # Expose results for dependent tests via globals if needed
+    globals()['ANALYSIS_RESULTS'] = analysis_results
+    globals()['OUTPUT_DIR'] = output_dir
 
 
 def test_variable_analyzer(codebase_dir, output_dir):
@@ -239,8 +243,7 @@ def test_variable_analyzer(codebase_dir, output_dir):
     
     # Generate a report
     report = analyzer.generate_variable_report()
-    
-    return variable_results, report
+    assert report
 
 
 def test_dependency_analyzer(codebase_dir, output_dir, call_graph, variable_results):
@@ -272,8 +275,8 @@ def test_dependency_analyzer(codebase_dir, output_dir, call_graph, variable_resu
     seq_path = output_dir / "sequential_order"
     analyzer.generate_sequential_order_graph(seq_path)
     print(f"Sequential order graph generated: {seq_path}.png")
-    
-    return dependency_results
+
+    assert dependency_results
 
 
 def test_visualizer(output_dir, analysis_results, variable_results, dependency_results):
@@ -332,15 +335,13 @@ def test_visualizer(output_dir, analysis_results, variable_results, dependency_r
     init_order = dependency_results.get('initialization_order', [])
     init_seq_path = visualizer.generate_initialization_sequence(init_order)
     print(f"Initialization sequence generated: {init_seq_path}")
-    
-    return {
-        'call_graph': call_graph_path,
-        'class_hierarchy': class_hierarchy_path,
-        'variable_usage': variable_chart_path,
-        'orphan_analysis': orphan_chart_path,
-        'prerequisite_graph': prereq_graph_path,
-        'initialization_sequence': init_seq_path
-    }
+
+    assert call_graph_path.exists()
+    assert class_hierarchy_path.exists()
+    assert variable_chart_path.exists()
+    assert orphan_chart_path.exists()
+    assert prereq_graph_path.exists()
+    assert init_seq_path.exists()
 
 
 def test_reporter(output_dir, analysis_results, variable_results, dependency_results):
@@ -377,12 +378,10 @@ def test_reporter(output_dir, analysis_results, variable_results, dependency_res
     # Generate interactive dashboard
     dashboard_path = reporter.generate_interactive_dashboard(combined_data)
     print(f"Interactive dashboard generated: {dashboard_path}")
-    
-    return {
-        'markdown_report': md_report_path,
-        'html_report': html_report_path,
-        'dashboard': dashboard_path
-    }
+
+    assert md_report_path.exists()
+    assert html_report_path.exists()
+    assert dashboard_path.exists()
 
 
 def main():
