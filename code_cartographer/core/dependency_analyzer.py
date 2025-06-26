@@ -449,7 +449,7 @@ class DependencyAnalyzer:
             import graphviz
         except Exception:  # pragma: no cover - optional dependency
             output_file = output_path.with_suffix(".png")
-            output_file.touch()
+            print(f"[WARNING] graphviz is not installed; dependency visualization was skipped. Created empty file at {output_file}")
             return output_file
 
         dot = graphviz.Digraph(comment="Code Dependencies")
