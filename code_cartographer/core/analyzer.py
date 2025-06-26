@@ -445,7 +445,7 @@ class ProjectAnalyzer:
         files = []
         for fs in self.file_data:
             fd = asdict(fs)
-            fd["functions"] = [d.name for d in fs.definitions if d.category == "function"]
+            fd["functions"] = [d.name for d in fs.definitions if d.category == "function"] # Extract function names
             files.append(fd)
 
         return {
