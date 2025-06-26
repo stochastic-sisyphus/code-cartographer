@@ -274,9 +274,8 @@ class CodeInspector(ast.NodeVisitor):
     def _detect_api_usage(self, func: ast.AST, args: List[ast.AST]) -> Set[str]:
         """Return detected API calls or URLs from a function call."""
         hits: Set[str] = set()
-        if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
-            if func.value.id in {"requests", "httpx", "aiohttp"}:
-                hits.add(f"{func.value.id}.{func.attr}")
+        if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name) and func.value.id in {"requests", "httpx", "aiohttp"}:
+            hits.add(f"{func.value.id}.{func.attr}")
         if isinstance(func, ast.Name) and func.id in {"urlopen", "urlretrieve"}:
             hits.add(func.id)
         for a in args:
