@@ -431,20 +431,20 @@ class SemanticAnalyzer:
             ValueError: If the inputs are not flat numeric iterables when
                 numpy is unavailable.
         """
-        if np is None:
-            for vec, name in ((v1, "v1"), (v2, "v2")):
-                if not hasattr(vec, "__iter__"):
-                    raise ValueError(f"{name} must be an iterable of numbers")
-                for x in vec:
-                    if not isinstance(x, (int, float)):
-                        raise ValueError(
-                            f"All elements of {name} must be numeric, got {type(x)}"
-                        )
-            dot = sum(float(a) * float(b) for a, b in zip(v1, v2))
-            norm1 = sum(float(a) ** 2 for a in v1) ** 0.5
-            norm2 = sum(float(b) ** 2 for b in v2) ** 0.5
-            return dot / (norm1 * norm2) if norm1 and norm2 else 0.0
-        return float(v1 @ v2 / ((v1 ** 2).sum() ** 0.5 * (v2 ** 2).sum() ** 0.5))
+        if np is not None:
+            return float(v1 @ v2 / ((v1 ** 2).sum() ** 0.5 * (v2 ** 2).sum() ** 0.5))
+        for vec, name in ((v1, "v1"), (v2, "v2")):
+            if not hasattr(vec, "__iter__"):
+                raise ValueError(f"{name} must be an iterable of numbers")
+            for x in vec:
+                if not isinstance(x, (int, float)):
+                    raise ValueError(
+                        f"All elements of {name} must be numeric, got {type(x)}"
+                    )
+        dot = sum(float(a) * float(b) for a, b in zip(v1, v2))
+        norm1 = sum(float(a) ** 2 for a in v1) ** 0.5
+        norm2 = sum(float(b) ** 2 for b in v2) ** 0.5
+        return dot / (norm1 * norm2) if norm1 and norm2 else 0.0
 
 
 @dataclass
