@@ -700,7 +700,7 @@ class ProjectAnalyzer:
             for defn in file_meta.definitions:
                 if defn.is_orphan:
                     entry = {"name": defn.name, "file": file_meta.path, "line": defn.start_line}
-                    if defn.category == "function" or defn.category == "method":
+                    if defn.category in ["function", "method"]:
                         result["functions"].append(entry)
                     elif defn.category == "class":
                         result["classes"].append(entry)
