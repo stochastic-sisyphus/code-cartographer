@@ -54,6 +54,9 @@ Repository = "https://github.com/stochastic-sisyphus/code-cartographer"
 Documentation = "https://github.com/stochastic-sisyphus/code-cartographer#readme"
 "Bug Tracker" = "https://github.com/stochastic-sisyphus/code-cartographer/issues"
 
+[project.scripts]
+code-cartographer = "code_cartographer.cli:main"
+
 [tool.hatch.build.targets.wheel]
 packages = ["code_cartographer"]
 

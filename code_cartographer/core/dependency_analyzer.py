@@ -5,11 +5,132 @@ Analyzes sequential dependencies and prerequisites between code elements.
 """
 
 import ast
-import networkx as nx
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple, Any
+from typing import Any, Dict, List, Optional, Set, Tuple
+
+try:
+    import networkx as nx  # type: ignore
+except ImportError:  # pragma: no cover - fallback when networkx unavailable
+    class _DiGraph:
+        def __init__(self) -> None:
+            self.adj: Dict[str, Set[str]] = defaultdict(set)
+
+        def add_node(self, node: str, **_: Any) -> None:
+            self.adj.setdefault(node, set())
+
+        def add_edge(self, u: str, v: str) -> None:
+            self.add_node(u)
+            self.add_node(v)
+            self.adj[u].add(v)
+
+        def copy(self) -> "_DiGraph":
+            new = _DiGraph()
+            for k, vs in self.adj.items():
+                new.adj[k] = set(vs)
+            return new
+
+        def has_edge(self, u: str, v: str) -> bool:
+            return v in self.adj.get(u, set())
+
+        def remove_edge(self, u: str, v: str) -> None:
+            self.adj.get(u, set()).discard(v)
+
+        def successors(self, n: str):
+            return list(self.adj.get(n, set()))
+
+        def edges(self):
+            for u, vs in self.adj.items():
+                for v in vs:
+                    yield (u, v)
+
+    class _NX:
+        DiGraph = _DiGraph
+
+        class NetworkXNoCycle(Exception):
+            pass
+
+        class NetworkXUnfeasible(Exception):
+            pass
+
+        @staticmethod
+        def simple_cycles(graph: _DiGraph):
+            cycles: List[List[str]] = []
+
+            def dfs(node: str, start: str, path: List[str]):
+                path.append(node)
+                for neigh in graph.adj.get(node, set()):
+                    if neigh == start:
+                        cycles.append(path.copy())
+                    elif neigh not in path:
+                        dfs(neigh, start, path)
+                path.pop()
+
+            for n in graph.adj:
+                dfs(n, n, [])
+            if not cycles:
+                raise _NX.NetworkXNoCycle()
+            return cycles
+
+        @staticmethod
+        def topological_sort(graph: _DiGraph):
+            indegree: Dict[str, int] = defaultdict(int)
+            for u, vs in graph.adj.items():
+                indegree.setdefault(u, 0)
+                for v in vs:
+                    indegree[v] += 1
+            queue = [n for n, d in indegree.items() if d == 0]
+            result: List[str] = []
+            while queue:
+                n = queue.pop(0)
+                result.append(n)
+                for v in graph.adj.get(n, set()):
+                    indegree[v] -= 1
+                    if indegree[v] == 0:
+                        queue.append(v)
+            if len(result) != len(indegree):
+                raise _NX.NetworkXUnfeasible()
+            return result
+
+        @staticmethod
+        def strongly_connected_components(graph: _DiGraph):
+            index = 0
+            indices: Dict[str, int] = {}
+            lowlinks: Dict[str, int] = {}
+            stack: List[str] = []
+            on_stack: Set[str] = set()
+            result: List[Set[str]] = []
+
+            def strongconnect(v: str):
+                nonlocal index
+                indices[v] = index
+                lowlinks[v] = index
+                index += 1
+                stack.append(v)
+                on_stack.add(v)
+                for w in graph.adj.get(v, set()):
+                    if w not in indices:
+                        strongconnect(w)
+                        lowlinks[v] = min(lowlinks[v], lowlinks[w])
+                    elif w in on_stack:
+                        lowlinks[v] = min(lowlinks[v], indices[w])
+                if lowlinks[v] == indices[v]:
+                    comp: Set[str] = set()
+                    while True:
+                        w = stack.pop()
+                        on_stack.remove(w)
+                        comp.add(w)
+                        if w == v:
+                            break
+                    result.append(comp)
+
+            for node in list(graph.adj):
+                if node not in indices:
+                    strongconnect(node)
+            return result
+
+    nx = _NX()  # type: ignore
 
 from code_cartographer.core.variable_analyzer import VariableAnalyzer
 
@@ -324,8 +445,14 @@ class DependencyAnalyzer:
     
     def generate_dependency_graph(self, output_path: Path):
         """Generate a Graphviz DOT file of the dependency graph."""
-        import graphviz
-        
+        try:
+            import graphviz
+        except Exception as e:  # pragma: no cover - optional dependency
+            raise RuntimeError(
+                "graphviz is required to generate dependency graphs" 
+                f"but is not installed: {e}"
+            )
+
         dot = graphviz.Digraph(comment="Code Dependencies")
         
         # Add nodes
@@ -351,13 +478,19 @@ class DependencyAnalyzer:
         
         # Save to file
         dot.render(output_path, format="png", cleanup=True)
-        
+
         return output_path
     
     def generate_sequential_order_graph(self, output_path: Path):
         """Generate a graph showing the sequential initialization order."""
-        import graphviz
-        
+        try:
+            import graphviz
+        except Exception as e:  # pragma: no cover
+            raise RuntimeError(
+                "graphviz is required to generate dependency graphs"
+                f" but is not installed: {e}"
+            )
+
         dot = graphviz.Digraph(comment="Sequential Initialization Order")
         
         # Get initialization order
