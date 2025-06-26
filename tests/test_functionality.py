@@ -217,6 +217,12 @@ def test_code_analyzer(codebase_dir):
     
     assert len(analysis_results.get('files', [])) > 0
 
+    # Assert that required keys are present in the analysis results
+    assert 'files' in analysis_results, "Expected 'files' key in analysis results"
+    assert 'functions' in analysis_results, "Expected 'functions' key in analysis results"
+    assert isinstance(analysis_results['files'], list), "'files' should be a list"
+    assert isinstance(analysis_results['functions'], dict), "'functions' should be a dict"
+
     # Expose results for dependent tests via globals if needed
     globals()['ANALYSIS_RESULTS'] = analysis_results
     globals()['OUTPUT_DIR'] = output_dir
