@@ -301,8 +301,21 @@ class ReportGenerator:
             markdown_content = f.read()
 
         if markdown is None:
+            warning_html = (
+                "<!DOCTYPE html>\n"
+                "<html><head><meta charset='utf-8'><title>Code Analysis Report</title></head>"
+                "<body>"
+                "<div style='background: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 16px; margin-bottom: 24px;'>"
+                "<strong>Warning:</strong> The <code>markdown</code> library is not installed. "
+                "This report is shown as raw Markdown and may not be fully rendered."
+                "</div>"
+                "<pre style='background: #f8f9fa; padding: 16px; border-radius: 4px;'>"
+                f"{markdown_content}"
+                "</pre>"
+                "</body></html>"
+            )
             with open(output_path, "w") as f:
-                f.write(markdown_content)
+                f.write(warning_html)
             return output_path
         
         # Convert Markdown to HTML
