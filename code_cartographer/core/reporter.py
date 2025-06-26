@@ -9,8 +9,15 @@ import os
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Set, Tuple
 
-from jinja2 import Environment, FileSystemLoader
-import markdown
+try:
+    from jinja2 import Environment, FileSystemLoader
+    import markdown  # type: ignore
+    HAS_JINJA = True
+except Exception:  # pragma: no cover - allow running without optional deps
+    Environment = None
+    FileSystemLoader = None
+    markdown = None
+    HAS_JINJA = False
 
 
 class ReportGenerator:
@@ -288,13 +295,33 @@ class ReportGenerator:
         """
         if output_path is None:
             output_path = self.output_dir / "code_analysis_report.html"
-        
+
         # Read the Markdown content
         with open(markdown_path, "r") as f:
             markdown_content = f.read()
+
+        if markdown is None:
+            warning_html = (
+                "<!DOCTYPE html>\n"
+                "<html><head><meta charset='utf-8'><title>Code Analysis Report</title></head>"
+                "<body>"
+                "<div style='background: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 16px; margin-bottom: 24px;'>"
+                "<strong>Warning:</strong> The <code>markdown</code> library is not installed. "
+                "This report is shown as raw Markdown and may not be fully rendered."
+                "</div>"
+                "<pre style='background: #f8f9fa; padding: 16px; border-radius: 4px;'>"
+                f"{markdown_content}"
+                "</pre>"
+                "</body></html>"
+            )
+            with open(output_path, "w") as f:
+                f.write(warning_html)
+            return output_path
         
         # Convert Markdown to HTML
-        html_content = markdown.markdown(markdown_content, extensions=['tables', 'fenced_code'])
+        html_content = markdown.markdown(
+            markdown_content, extensions=["tables", "fenced_code"]
+        )
         
         # Create a simple HTML template
         html_template = f"""
@@ -419,7 +446,11 @@ class ReportGenerator:
         """
         if output_path is None:
             output_path = self.output_dir / "dashboard.html"
-        
+
+        if not HAS_JINJA:
+            output_path.write_text("<html><body><h1>Dashboard unavailable</h1></body></html>")
+            return output_path
+
         # Use default template if not provided
         if template_path is None:
             template_path = self._create_default_template()

@@ -9,12 +9,26 @@ import os
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Set, Tuple
 
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import networkx as nx
-import numpy as np
-from matplotlib.colors import Normalize
-from matplotlib_venn import venn2, venn3
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.cm as cm
+    import numpy as np
+    from matplotlib.colors import Normalize
+    from matplotlib_venn import venn2, venn3
+    HAS_MPL = True
+except Exception:  # pragma: no cover - allow running without matplotlib
+    plt = None
+    cm = None
+    np = None
+    Normalize = None
+    venn2 = None
+    venn3 = None
+    HAS_MPL = False
+
+try:
+    import networkx as nx  # type: ignore
+except Exception:  # pragma: no cover - handled in dependency analyzer
+    from code_cartographer.core.dependency_analyzer import nx
 
 
 class CodeVisualizer:
@@ -29,8 +43,13 @@ class CodeVisualizer:
         """
         self.output_dir = output_dir
         self.output_dir.mkdir(parents=True, exist_ok=True)
+
+    def _ensure_placeholder(self, path: Path) -> Path:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.touch()
+        return path
     
-    def generate_function_call_graph(self, call_graph: Dict[str, List[str]], 
+    def generate_function_call_graph(self, call_graph: Dict[str, List[str]],
                                     output_path: Optional[Path] = None) -> Path:
         """
         Generate a visualization of the function call graph.
@@ -44,6 +63,9 @@ class CodeVisualizer:
         """
         if output_path is None:
             output_path = self.output_dir / "function_call_graph.png"
+
+        if not HAS_MPL:
+            return self._ensure_placeholder(output_path)
         
         # Create a directed graph
         G = nx.DiGraph()
@@ -103,6 +125,9 @@ class CodeVisualizer:
         """
         if output_path is None:
             output_path = self.output_dir / "class_hierarchy.png"
+
+        if not HAS_MPL:
+            return self._ensure_placeholder(output_path)
         
         # Create a directed graph
         G = nx.DiGraph()
@@ -153,6 +178,9 @@ class CodeVisualizer:
         """
         if output_path is None:
             output_path = self.output_dir / "dependency_heatmap.png"
+
+        if not HAS_MPL:
+            return self._ensure_placeholder(output_path)
         
         # Extract module names
         modules = list(dependency_matrix.keys())
@@ -200,6 +228,9 @@ class CodeVisualizer:
         """
         if output_path is None:
             output_path = self.output_dir / "variable_usage.png"
+
+        if not HAS_MPL:
+            return self._ensure_placeholder(output_path)
         
         # Extract data for visualization
         variables = []
@@ -259,6 +290,9 @@ class CodeVisualizer:
         """
         if output_path is None:
             output_path = self.output_dir / "orphan_analysis.png"
+
+        if not HAS_MPL:
+            return self._ensure_placeholder(output_path)
         
         # Extract counts
         function_count = len(orphans.get('functions', []))
@@ -300,6 +334,9 @@ class CodeVisualizer:
         """
         if output_path is None:
             output_path = self.output_dir / "prerequisite_graph.png"
+
+        if not HAS_MPL:
+            return self._ensure_placeholder(output_path)
         
         # Create a directed graph
         G = nx.DiGraph()
@@ -355,6 +392,9 @@ class CodeVisualizer:
         """
         if output_path is None:
             output_path = self.output_dir / "initialization_sequence.png"
+
+        if not HAS_MPL:
+            return self._ensure_placeholder(output_path)
         
         # Set up the figure
         plt.figure(figsize=(14, 10))
@@ -409,8 +449,10 @@ class CodeVisualizer:
         """
         if output_path is None:
             output_path = self.output_dir / "dashboard.html"
-        
-        from jinja2 import Environment, FileSystemLoader
+        try:
+            from jinja2 import Environment, FileSystemLoader
+        except Exception:
+            return self._ensure_placeholder(output_path)
         import datetime
         
         # Prepare data for the dashboard
