@@ -1,6 +1,6 @@
 # Code Cartographer  
 
-## Deep Multilayer Static Analyzer for Python Projects  
+## Automated Deep Multilayer Code Analysis and Optimization for Large Scale Codebases 
 
 ---
 
