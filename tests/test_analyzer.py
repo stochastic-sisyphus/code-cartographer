@@ -50,3 +50,22 @@ def test_project_analyzer_execute(sample_code):
     file_info = result["files"][0]
     assert file_info["path"] == str(sample_code.relative_to(sample_code.parent))
     assert file_info["functions"] == ["hello", "goodbye"]
+
+
+def test_api_and_env_detection(tmp_path):
+    code = """
+import os
+import requests
+
+def fetch():
+    token = os.getenv('API_TOKEN')
+    return requests.get('https://example.com').text
+"""
+    py_file = tmp_path / "api.py"
+    py_file.write_text(code)
+
+    analyzer = ProjectAnalyzer(root=tmp_path)
+    result = analyzer.execute()
+    info = result["files"][0]
+    assert "API_TOKEN" in info.get("env_vars", [])
+    assert any("requests.get" in api for api in info.get("api_calls", []))
