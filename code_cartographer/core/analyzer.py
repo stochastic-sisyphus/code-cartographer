@@ -20,7 +20,6 @@ import textwrap
 import tokenize
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
-from functools import cached_property
 from io import StringIO
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -60,7 +59,9 @@ class DefinitionMetadata:
     inbound_calls: Set[str] = field(default_factory=set)  # Who calls this definition
     is_orphan: bool = True  # Default to True, will be updated during analysis
     prerequisites: Set[str] = field(default_factory=set)  # Definitions this depends on
-    variable_uses: Set[str] = field(default_factory=set)  # Variables used by this definition
+    variable_uses: Set[str] = field(
+        default_factory=set
+    )  # Variables used by this definition
 
 
 @dataclass
@@ -102,14 +103,14 @@ class FileMetadata:
 
 class VariableTracker(ast.NodeVisitor):
     """Track variable definitions and usages."""
-    
+
     def __init__(self, source: str, file_path: str):
         self.source = source
         self.file_path = file_path
         self.variables: List[VariableMetadata] = []
         self.current_definition: Optional[str] = None
         self.variable_uses: Dict[str, Set[str]] = defaultdict(set)
-        
+
     def visit_Name(self, node):
         if isinstance(node.ctx, ast.Store):
             # Variable definition
@@ -125,11 +126,11 @@ class VariableTracker(ast.NodeVisitor):
             if self.current_definition:
                 self.variable_uses[node.id].add(self.current_definition)
         self.generic_visit(node)
-        
+
     def visit_FunctionDef(self, node):
         old_definition = self.current_definition
         self.current_definition = node.name
-        
+
         # Track parameters as variables
         for arg in node.args.args:
             var_meta = VariableMetadata(
@@ -137,22 +138,22 @@ class VariableTracker(ast.NodeVisitor):
                 defined_in=self.current_definition,
                 line_number=node.lineno,
                 is_parameter=True,
-                type_hint=ast.unparse(arg.annotation) if arg.annotation else None
+                type_hint=ast.unparse(arg.annotation) if arg.annotation else None,
             )
             self.variables.append(var_meta)
-            
+
         self.generic_visit(node)
         self.current_definition = old_definition
-        
+
     def visit_AsyncFunctionDef(self, node):
         self.visit_FunctionDef(node)  # Reuse the same logic
-        
+
     def visit_ClassDef(self, node):
         old_definition = self.current_definition
         self.current_definition = node.name
         self.generic_visit(node)
         self.current_definition = old_definition
-        
+
     def visit_Import(self, node):
         for alias in node.names:
             var_meta = VariableMetadata(
@@ -160,11 +161,11 @@ class VariableTracker(ast.NodeVisitor):
                 defined_in=self.file_path,
                 line_number=node.lineno,
                 is_global=True,
-                is_imported=True
+                is_imported=True,
             )
             self.variables.append(var_meta)
         self.generic_visit(node)
-        
+
     def visit_ImportFrom(self, node):
         for alias in node.names:
             var_meta = VariableMetadata(
@@ -172,11 +173,11 @@ class VariableTracker(ast.NodeVisitor):
                 defined_in=self.file_path,
                 line_number=node.lineno,
                 is_global=True,
-                is_imported=True
+                is_imported=True,
             )
             self.variables.append(var_meta)
         self.generic_visit(node)
-        
+
     def finalize(self):
         """Update variable usage information."""
         for var in self.variables:
@@ -207,10 +208,10 @@ class CodeInspector(ast.NodeVisitor):
         self.oop_flags = {"inheritance": False, "polymorphism": False, "dunder": False}
         self.concurrent_libs: Set[str] = set()
         self.definitions: List[DefinitionMetadata] = []
-        
+
         # Track all function/method calls for bidirectional mapping
         self.all_calls: Dict[str, Set[str]] = defaultdict(set)
-        
+
         # Track variable definitions and usages
         self.variable_tracker = None
 
@@ -317,7 +318,7 @@ class CodeInspector(ast.NodeVisitor):
         """Extract all function/method calls from an AST node."""
         calls = set()
         caller_name = getattr(node, "name", "<unknown>")
-        
+
         for n in ast.walk(node):
             if isinstance(n, ast.Call):
                 if isinstance(n.func, ast.Attribute):
@@ -370,7 +371,7 @@ class CodeInspector(ast.NodeVisitor):
 
         # Extract outbound calls
         outbound_calls = self._extract_calls(node)
-        
+
         # Extract variable uses
         variable_uses = set()
         for var_name in self.variable_tracker.variable_uses:
@@ -394,7 +395,7 @@ class CodeInspector(ast.NodeVisitor):
                 source_hash=source_hash,
                 has_type_hints=has_hints,
                 metrics=metrics,
-                variable_uses=variable_uses
+                variable_uses=variable_uses,
             )
         )
 
@@ -405,7 +406,7 @@ class ProjectAnalyzer:
     def __init__(self, root: Path, exclude_patterns: List[str] = None):
         self.root = root
         self.exclude = []
-        
+
         # Handle exclude patterns safely - convert glob patterns to regex if needed
         if exclude_patterns:
             for pattern in exclude_patterns:
@@ -414,9 +415,11 @@ class ProjectAnalyzer:
                     self.exclude.append(re.compile(pattern))
                 except re.error:
                     # If it fails, treat as glob pattern and convert to regex
-                    regex_pattern = pattern.replace(".", "\\.").replace("*", ".*").replace("?", ".")
+                    regex_pattern = (
+                        pattern.replace(".", "\\.").replace("*", ".*").replace("?", ".")
+                    )
                     self.exclude.append(re.compile(regex_pattern))
-        
+
         self.file_data: List[FileMetadata] = []
         self.definition_index: Dict[str, Dict[str, Tuple[str, str]]] = defaultdict(dict)
         self.dependency_graph: Set[Tuple[str, str]] = set()
@@ -444,11 +447,15 @@ class ProjectAnalyzer:
             "variants": self._generate_variant_report(),
             "dependencies": list(self.dependency_graph),
             "call_graph": {k: list(v) for k, v in self.call_graph.items()},
-            "reverse_call_graph": {k: list(v) for k, v in self.reverse_call_graph.items()},
+            "reverse_call_graph": {
+                k: list(v) for k, v in self.reverse_call_graph.items()
+            },
             "orphans": self._get_orphans(),
-            "variables": {k: [asdict(v) for v in vars] for k, vars in self.variable_index.items()},
+            "variables": {
+                k: [asdict(v) for v in vars] for k, vars in self.variable_index.items()
+            },
             # Add backward compatibility for tests
-            "functions": self._get_function_list()
+            "functions": self._get_function_list(),
         }
 
     def _find_python_files(self):
@@ -462,24 +469,24 @@ class ProjectAnalyzer:
         """Perform deep analysis of a single Python file."""
         source = path.read_text(encoding="utf-8")
         tree = ast.parse(source)
-        
+
         # First track variables
         variable_tracker = VariableTracker(source, str(path.relative_to(self.root)))
         variable_tracker.visit(tree)
         variable_tracker.finalize()
-        
+
         # Store variables in the index
         for var in variable_tracker.variables:
             self.variable_index[var.name].append(var)
-        
+
         # Then do full code inspection
         inspector = CodeInspector(source, self.root)
         inspector.variable_tracker = variable_tracker
         inspector.visit(tree)
-        
+
         # Extract module docstring
         module_docstring = ast.get_docstring(tree)
-        
+
         # Count comments
         comment_count = 0
         try:
@@ -488,7 +495,7 @@ class ProjectAnalyzer:
                 comment_count = sum(1 for tok in tokens if tok.type == tokenize.COMMENT)
         except Exception:
             pass
-        
+
         # Compute file-level metrics
         metrics = ComplexityMetrics()
         if _HAS_METRICS:
@@ -498,14 +505,16 @@ class ProjectAnalyzer:
                 metrics.risk_flag = mi < 65
             except Exception:
                 pass
-        
+
         # Create file metadata
         rel_path = str(path.relative_to(self.root))
         file_meta = FileMetadata(
             path=rel_path,
             imports=inspector.imports,
             internal_imports=inspector.internal_imports,
-            stdlib_imports=[i for i in inspector.imports if i in sys.stdlib_module_names],
+            stdlib_imports=[
+                i for i in inspector.imports if i in sys.stdlib_module_names
+            ],
             comprehension_patterns=dict(inspector.comprehension_patterns),
             loop_count=inspector.loop_count,
             branch_count=inspector.branch_count,
@@ -520,15 +529,20 @@ class ProjectAnalyzer:
             comment_count=comment_count,
             definitions=inspector.definitions,
             metrics=metrics,
-            declared_variables=[v for v in variable_tracker.variables if not v.is_imported]
+            declared_variables=[
+                v for v in variable_tracker.variables if not v.is_imported
+            ],
         )
-        
+
         self.file_data.append(file_meta)
-        
+
         # Index definitions for cross-referencing
         for defn in inspector.definitions:
-            self.definition_index[defn.name][rel_path] = (defn.category, defn.source_hash)
-            
+            self.definition_index[defn.name][rel_path] = (
+                defn.category,
+                defn.source_hash,
+            )
+
             # Record outbound calls for dependency graph
             for call in defn.outbound_calls:
                 self.dependency_graph.add((defn.name, call))
@@ -537,7 +551,7 @@ class ProjectAnalyzer:
     def _build_call_graphs(self):
         """Build bidirectional call graphs."""
         # Forward call graph is already built during analysis
-        
+
         # Build reverse call graph
         for caller, callees in self.call_graph.items():
             for callee in callees:
@@ -550,15 +564,15 @@ class ProjectAnalyzer:
             for defn in file_meta.definitions:
                 if defn.name in self.reverse_call_graph:
                     defn.is_orphan = False
-                    
+
                     # Also update inbound calls
                     defn.inbound_calls = self.reverse_call_graph[defn.name]
-        
+
         # Identify orphaned variables
         for var_list in self.variable_index.values():
             for var in var_list:
                 var.is_orphan = len(var.used_in) == 0
-        
+
         # Update file metadata with orphaned code
         for file_meta in self.file_data:
             file_meta.orphaned_code = [
@@ -571,7 +585,7 @@ class ProjectAnalyzer:
             for defn in file_meta.definitions:
                 # Add outbound calls as prerequisites
                 defn.prerequisites.update(defn.outbound_calls)
-                
+
                 # Add variable dependencies
                 for var_name in defn.variable_uses:
                     if var_name in self.variable_index:
@@ -591,38 +605,44 @@ class ProjectAnalyzer:
         for file_meta in self.file_data:
             orphans.extend(file_meta.orphaned_code)
         return orphans
-    
+
     def _get_function_list(self):
         """Get a list of all functions for backward compatibility with tests."""
         result = []
         for file_meta in self.file_data:
-            functions = [d.name for d in file_meta.definitions if d.category == "function"]
+            functions = [
+                d.name for d in file_meta.definitions if d.category == "function"
+            ]
             result.append({"path": file_meta.path, "functions": functions})
         return result
 
 
 class CodeAnalyzer:
     """Main entry point for code analysis."""
-    
-    def __init__(self, project_path: str, output_dir: str = None, exclude: List[str] = None):
+
+    def __init__(
+        self, project_path: str, output_dir: str = None, exclude: List[str] = None
+    ):
         self.project_path = Path(project_path).absolute()
         self.output_dir = Path(output_dir or self.project_path / "analysis_output")
         self.exclude = exclude or ["__pycache__", "*.pyc", "venv", ".git", ".venv"]
-        
+
     def analyze(self):
         """Run the analysis and generate reports."""
         # Create output directory
         self.output_dir.mkdir(exist_ok=True, parents=True)
-        
+
         # Run the analysis
         analyzer = ProjectAnalyzer(self.project_path, self.exclude)
         results = analyzer.execute()
-        
+
         # Save raw results
         with open(self.output_dir / "analysis_data.json", "w") as f:
             json.dump(results, f, indent=2, default=str)
-        
+
         return results
+
+
 """
 Advanced Code Analysis Engine
 ============================
@@ -630,25 +650,8 @@ A sophisticated static analysis engine that performs deep inspection of Python c
 to generate rich structural and qualitative insights.
 """
 
-from __future__ import annotations
-
-import argparse
 import ast
-import contextlib
-import difflib
-import hashlib
-import json
-import os
-import re
-import sys
-import textwrap
-import tokenize
-from collections import defaultdict
-from dataclasses import asdict, dataclass
-from functools import cached_property
-from io import StringIO
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from dataclasses import dataclass
 
 # Optional advanced metrics
 try:

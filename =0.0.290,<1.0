@@ -1,0 +1,27 @@
+Defaulting to user installation because normal site-packages is not writeable
+Collecting black
+  Downloading black-25.9.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl.metadata (83 kB)
+Collecting ruff
+  Downloading ruff-0.14.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (25 kB)
+Requirement already satisfied: click>=8.0.0 in /home/ubuntu/.local/lib/python3.13/site-packages (from black) (8.3.0)
+Collecting mypy-extensions>=0.4.3 (from black)
+  Downloading mypy_extensions-1.1.0-py3-none-any.whl.metadata (1.1 kB)
+Requirement already satisfied: packaging>=22.0 in /home/ubuntu/.local/lib/python3.13/site-packages (from black) (25.0)
+Collecting pathspec>=0.9.0 (from black)
+  Downloading pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
+Collecting platformdirs>=2 (from black)
+  Downloading platformdirs-4.5.0-py3-none-any.whl.metadata (12 kB)
+Collecting pytokens>=0.1.10 (from black)
+  Downloading pytokens-0.1.10-py3-none-any.whl.metadata (2.0 kB)
+Downloading black-25.9.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl (1.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 109.3 MB/s eta 0:00:00
+
+Downloading ruff-0.14.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (13.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.4/13.4 MB 263.4 MB/s eta 0:00:00
+
+Downloading mypy_extensions-1.1.0-py3-none-any.whl (5.0 kB)
+Downloading pathspec-0.12.1-py3-none-any.whl (31 kB)
+Downloading platformdirs-4.5.0-py3-none-any.whl (18 kB)
+Downloading pytokens-0.1.10-py3-none-any.whl (12 kB)
+Installing collected packages: ruff, pytokens, platformdirs, pathspec, mypy-extensions, black
+Successfully installed black-25.9.0 mypy-extensions-1.1.0 pathspec-0.12.1 platformdirs-4.5.0 pytokens-0.1.10 ruff-0.14.0

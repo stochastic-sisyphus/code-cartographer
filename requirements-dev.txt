@@ -1,0 +1,6 @@
+black>=23.0.0,<24.0  # Code formatting
+mypy>=1.5.0,<2.0  # Type checking
+pre-commit>=3.0.0,<4.0  # Pre-commit hooks
+pytest>=7.4.0,<8.0  # Testing framework
+pytest-cov>=4.1.0,<5.0  # Coverage reporting
+ruff>=0.0.290,<1.0  # Fast Python linter
