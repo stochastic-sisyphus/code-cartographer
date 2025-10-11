@@ -54,16 +54,23 @@ class ReportGenerator:
         # Add summary statistics
         files_count = len(analysis_data.get("files", []))
         definitions_count = sum(len(f.get("definitions", [])) for f in analysis_data.get("files", []))
-        orphan_functions = len(analysis_data.get("orphans", {}).get("functions", []))
-        orphan_classes = len(analysis_data.get("orphans", {}).get("classes", []))
-        orphan_variables = len(analysis_data.get("orphans", {}).get("variables", []))
+        
+        # Handle orphans - can be dict or list
+        orphans = analysis_data.get("orphans", [])
+        if isinstance(orphans, dict):
+            orphan_functions = len(orphans.get("functions", []))
+            orphan_classes = len(orphans.get("classes", []))
+            orphan_variables = len(orphans.get("variables", []))
+        else:
+            # It's a list of orphan names
+            orphan_functions = len([o for o in orphans if not o.startswith('__') and '.' not in o])
+            orphan_classes = 0
+            orphan_variables = 0
         
         report_lines.extend([
             f"- **Total Files**: {files_count}",
             f"- **Total Definitions**: {definitions_count}",
-            f"- **Orphaned Functions**: {orphan_functions}",
-            f"- **Orphaned Classes**: {orphan_classes}",
-            f"- **Orphaned Variables**: {orphan_variables}",
+            f"- **Orphaned Code Elements**: {len(orphans) if isinstance(orphans, list) else orphan_functions + orphan_classes + orphan_variables}",
             "\n"
         ])
         
@@ -111,20 +118,29 @@ class ReportGenerator:
         if "orphans" in analysis_data:
             orphans = analysis_data["orphans"]
             
-            report_lines.append("### Orphaned Functions\n")
-            for func in orphans.get("functions", []):
-                report_lines.append(f"- **{func['name']}** in {func['file']}:{func['line']}")
-            
-            report_lines.append("\n### Orphaned Classes\n")
-            for cls in orphans.get("classes", []):
-                report_lines.append(f"- **{cls['name']}** in {cls['file']}:{cls['line']}")
-            
-            report_lines.append("\n### Orphaned Variables\n")
-            for var in orphans.get("variables", [])[:20]:  # Limit to 20 to avoid excessive length
-                report_lines.append(f"- **{var['name']}** in {var['file']}:{var['line']}")
-            
-            if len(orphans.get("variables", [])) > 20:
-                report_lines.append(f"- ... and {len(orphans['variables']) - 20} more")
+            if isinstance(orphans, dict):
+                # Dictionary format with functions, classes, variables
+                report_lines.append("### Orphaned Functions\n")
+                for func in orphans.get("functions", []):
+                    report_lines.append(f"- **{func['name']}** in {func['file']}:{func['line']}")
+                
+                report_lines.append("\n### Orphaned Classes\n")
+                for cls in orphans.get("classes", []):
+                    report_lines.append(f"- **{cls['name']}** in {cls['file']}:{cls['line']}")
+                
+                report_lines.append("\n### Orphaned Variables\n")
+                for var in orphans.get("variables", [])[:20]:  # Limit to 20 to avoid excessive length
+                    report_lines.append(f"- **{var['name']}** in {var['file']}:{var['line']}")
+                
+                if len(orphans.get("variables", [])) > 20:
+                    report_lines.append(f"- ... and {len(orphans['variables']) - 20} more")
+            else:
+                # List format with orphan names
+                report_lines.append("### Orphaned Code Elements\n")
+                for orphan in orphans[:50]:  # Limit to 50
+                    report_lines.append(f"- **{orphan}**")
+                if len(orphans) > 50:
+                    report_lines.append(f"- ... and {len(orphans) - 50} more")
             
             report_lines.append("\n")
         
@@ -135,18 +151,32 @@ class ReportGenerator:
                 "This section shows how variables are defined and used across the codebase.\n"
             ])
             
-            # Find variables with multiple definitions
-            multi_defined = []
-            for var_name, var_data in analysis_data["variables"].items():
-                if var_data.get("definition_count", 0) > 1:
-                    multi_defined.append((var_name, var_data))
-            
-            if multi_defined:
-                report_lines.append("### Variables with Multiple Definitions\n")
-                for var_name, var_data in sorted(multi_defined, key=lambda x: x[1].get("definition_count", 0), reverse=True)[:15]:
-                    def_count = var_data.get("definition_count", 0)
-                    use_count = var_data.get("usage_count", 0)
-                    report_lines.append(f"- **{var_name}**: Defined {def_count} times, used {use_count} times")
+            # Handle list-based variable data
+            variables = analysis_data["variables"]
+            if variables and isinstance(list(variables.values())[0], list):
+                # Find variables with multiple definitions
+                multi_defined = []
+                for var_name, var_list in variables.items():
+                    if len(var_list) > 1:
+                        multi_defined.append((var_name, len(var_list)))
+                
+                if multi_defined:
+                    report_lines.append("### Variables with Multiple Definitions\n")
+                    for var_name, count in sorted(multi_defined, key=lambda x: x[1], reverse=True)[:15]:
+                        report_lines.append(f"- **{var_name}**: Defined {count} times")
+            else:
+                # Handle dict-based variable data (older format)
+                multi_defined = []
+                for var_name, var_data in variables.items():
+                    if isinstance(var_data, dict) and var_data.get("definition_count", 0) > 1:
+                        multi_defined.append((var_name, var_data))
+                
+                if multi_defined:
+                    report_lines.append("### Variables with Multiple Definitions\n")
+                    for var_name, var_data in sorted(multi_defined, key=lambda x: x[1].get("definition_count", 0), reverse=True)[:15]:
+                        def_count = var_data.get("definition_count", 0)
+                        use_count = var_data.get("usage_count", 0)
+                        report_lines.append(f"- **{var_name}**: Defined {def_count} times, used {use_count} times")
             
             report_lines.append("\n")
         

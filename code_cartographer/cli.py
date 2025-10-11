@@ -11,7 +11,6 @@ from pathlib import Path
 
 from code_cartographer.core.analyzer import ProjectAnalyzer
 from code_cartographer.core.reporter import ReportGenerator
-from code_cartographer.core.variant_analyzer import VariantAnalyzer
 
 
 def analyze_command(args: argparse.Namespace) -> None:
@@ -49,6 +48,14 @@ def analyze_command(args: argparse.Namespace) -> None:
 
 def variants_command(args: argparse.Namespace) -> None:
     """Run variant analysis."""
+    # Lazy import to avoid requiring all dependencies
+    try:
+        from code_cartographer.core.variant_analyzer import VariantAnalyzer
+    except ImportError as e:
+        print(f"Error: Variant analysis requires additional dependencies: {e}", file=sys.stderr)
+        print("Install them with: pip install -r requirements.txt", file=sys.stderr)
+        sys.exit(1)
+    
     # Create output directory
     output_dir = args.output.parent
     output_dir.mkdir(parents=True, exist_ok=True)
