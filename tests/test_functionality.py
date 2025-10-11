@@ -82,30 +82,30 @@ from .utils import process_data
 
 class BaseModel:
     \"\"\"Base model class.\"\"\"
-    
+
     def __init__(self, data: Dict[str, Any]):
         self.data = data
-    
+
     def to_dict(self) -> Dict[str, Any]:
         \"\"\"Convert model to dictionary.\"\"\"
         return self.data
-    
+
     def validate(self) -> bool:
         \"\"\"Validate the model data.\"\"\"
         return 'id' in self.data
 
 class UserModel(BaseModel):
     \"\"\"User model class.\"\"\"
-    
+
     def __init__(self, data: Dict[str, Any]):
         super().__init__(data)
         self.username = data.get('username', '')
         self.email = data.get('email', '')
-    
+
     def is_valid_email(self) -> bool:
         \"\"\"Check if the email is valid.\"\"\"
         return '@' in self.email
-    
+
     # This method is defined but never used (orphan)
     def unused_method(self) -> None:
         \"\"\"This method is never called.\"\"\"
@@ -114,7 +114,7 @@ class UserModel(BaseModel):
 # This class is defined but never used (orphan)
 class UnusedModel(BaseModel):
     \"\"\"This class is never instantiated.\"\"\"
-    
+
     def __init__(self, data: Dict[str, Any]):
         super().__init__(data)
         self.name = data.get('name', '')
@@ -138,33 +138,33 @@ from .models import BaseModel, UserModel
 
 class Application:
     \"\"\"Main application class.\"\"\"
-    
+
     def __init__(self, config_file: Optional[str] = None):
         self.config = get_config()
         if config_file and os.path.exists(config_file):
             with open(config_file, 'r') as f:
                 self.config.update(json.load(f))
         self.users = []
-    
+
     def load_users(self, filename: str) -> None:
         \"\"\"Load users from a file.\"\"\"
         content = read_file(filename)
         data = json.loads(content)
         self.users = [UserModel(user_data) for user_data in data]
-    
+
     def save_users(self, filename: str) -> None:
         \"\"\"Save users to a file.\"\"\"
         data = [user.to_dict() for user in self.users]
         content = json.dumps(data)
         write_file(filename, content)
-    
+
     def add_user(self, user_data: Dict[str, Any]) -> UserModel:
         \"\"\"Add a new user.\"\"\"
         user = UserModel(user_data)
         if user.validate() and user.is_valid_email():
             self.users.append(user)
         return user
-    
+
     def get_user_by_username(self, username: str) -> Optional[UserModel]:
         \"\"\"Get a user by username.\"\"\"
         for user in self.users:

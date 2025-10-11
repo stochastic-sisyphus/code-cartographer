@@ -616,7 +616,7 @@ class ReportGenerator:
             <div class="container">
                 <h1 class="mb-4">Code Analysis Dashboard</h1>
                 <p class="text-muted">Generated on {{ generation_time }}</p>
-                
+
                 <!-- Metrics Overview -->
                 <div class="row mb-4">
                     <div class="col-md-3">
@@ -644,7 +644,7 @@ class ReportGenerator:
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Main Tabs -->
                 <ul class="nav nav-tabs" id="mainTabs" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -666,7 +666,7 @@ class ReportGenerator:
                         <button class="nav-link" id="variants-tab" data-bs-toggle="tab" data-bs-target="#variants" type="button" role="tab">Variants</button>
                     </li>
                 </ul>
-                
+
                 <!-- Tab Content -->
                 <div class="tab-content" id="mainTabsContent">
                     <!-- Overview Tab -->
@@ -725,7 +725,7 @@ class ReportGenerator:
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Complexity Tab -->
                     <div class="tab-pane fade" id="complexity" role="tabpanel">
                         <div class="row">
@@ -758,7 +758,7 @@ class ReportGenerator:
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Dependencies Tab -->
                     <div class="tab-pane fade" id="dependencies" role="tabpanel">
                         <div class="row">
@@ -805,7 +805,7 @@ class ReportGenerator:
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="card">
@@ -832,7 +832,7 @@ class ReportGenerator:
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Orphans Tab -->
                     <div class="tab-pane fade" id="orphans" role="tabpanel">
                         <div class="row">
@@ -875,7 +875,7 @@ class ReportGenerator:
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Variables Tab -->
                     <div class="tab-pane fade" id="variables" role="tabpanel">
                         <div class="row">
@@ -918,7 +918,7 @@ class ReportGenerator:
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Variants Tab -->
                     <div class="tab-pane fade" id="variants" role="tabpanel">
                         <div class="row">
@@ -940,7 +940,7 @@ class ReportGenerator:
                                                     <div class="accordion-body">
                                                         <h6>Base Implementation:</h6>
                                                         <div class="code-block mb-3">{{ group.base_code }}</div>
-                                                        
+
                                                         <h6>Variants:</h6>
                                                         {% for variant in group.variants %}
                                                         <div class="card mb-2">
@@ -965,7 +965,7 @@ class ReportGenerator:
                     </div>
                 </div>
             </div>
-            
+
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
             <script>
                 // Initialize charts when DOM is loaded
@@ -1003,7 +1003,7 @@ class ReportGenerator:
                             }
                         }
                     });
-                    
+
                     // Complexity Chart
                     const complexityCtx = document.getElementById('complexityChart').getContext('2d');
                     new Chart(complexityCtx, {
@@ -1036,7 +1036,7 @@ class ReportGenerator:
                             }
                         }
                     });
-                    
+
                     // Orphan Chart
                     const orphanCtx = document.getElementById('orphanChart').getContext('2d');
                     new Chart(orphanCtx, {
@@ -1060,7 +1060,7 @@ class ReportGenerator:
                             responsive: true
                         }
                     });
-                    
+
                     // Variable Chart
                     const variableCtx = document.getElementById('variableChart').getContext('2d');
                     new Chart(variableCtx, {
