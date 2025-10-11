@@ -45,6 +45,8 @@ variant_analysis.json
 code_analysis.json
 *.dot
 analysis_reports/
+artifacts/
+analysis_output/
 
 # OS
 .DS_Store
