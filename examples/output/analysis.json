@@ -1,0 +1,1221 @@
+{
+  "files": [
+    {
+      "path": "processor.py",
+      "imports": [
+        "typing"
+      ],
+      "internal_imports": [],
+      "stdlib_imports": [
+        "typing"
+      ],
+      "comprehension_patterns": {},
+      "loop_count": 0,
+      "branch_count": 0,
+      "exception_blocks": 0,
+      "exception_raises": 0,
+      "regex_patterns": 0,
+      "generator_count": 0,
+      "uses_async": false,
+      "oop_patterns": {
+        "inheritance": false,
+        "polymorphism": false,
+        "dunder": false
+      },
+      "concurrent_libs": "set()",
+      "module_docstring": "Data processing module for the mini example package.",
+      "comment_count": 0,
+      "definitions": [
+        {
+          "name": "DataProcessor",
+          "category": "class",
+          "start_line": 8,
+          "end_line": 26,
+          "line_count": 19,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Process data in various ways.",
+          "outbound_calls": "{'append', 'len'}",
+          "source_text": "class DataProcessor:\n    \"\"\"Process data in various ways.\"\"\"\n    \n    def __init__(self, name: str):\n        \"\"\"Initialize the data processor.\"\"\"\n        self.name = name\n        self.data = []\n    \n    def add_data(self, item: Any) -> None:\n        \"\"\"Add an item to the data collection.\"\"\"\n        self.data.append(item)\n    \n    def get_count(self) -> int:\n        \"\"\"Get the count of items.\"\"\"\n        return len(self.data)\n    \n    def clear(self) -> None:\n        \"\"\"Clear all data.\"\"\"\n        self.data = []",
+          "source_hash": "7b2ca0480c253b558ef7194bb60efd17777dd34d62f4f1480109e1654039e206",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "{'run_example'}",
+          "is_orphan": false,
+          "prerequisites": "{'append', 'len'}",
+          "variable_uses": "set()"
+        },
+        {
+          "name": "DataProcessor.__init__",
+          "category": "method",
+          "start_line": 11,
+          "end_line": 14,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Initialize the data processor.",
+          "outbound_calls": "set()",
+          "source_text": "def __init__(self, name: str):\n        \"\"\"Initialize the data processor.\"\"\"\n        self.name = name\n        self.data = []",
+          "source_hash": "64641ec687f5d65cf4bd8749936ebee50ecd6a5e0956deeb55fef193be793040",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "set()",
+          "is_orphan": true,
+          "prerequisites": "set()",
+          "variable_uses": "set()"
+        },
+        {
+          "name": "DataProcessor.add_data",
+          "category": "method",
+          "start_line": 16,
+          "end_line": 18,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Add an item to the data collection.",
+          "outbound_calls": "{'append'}",
+          "source_text": "def add_data(self, item: Any) -> None:\n        \"\"\"Add an item to the data collection.\"\"\"\n        self.data.append(item)",
+          "source_hash": "ce45b1e6849f798e037db80da1f6709dfb47f67cbb6b5865ffc8f7d0e8e3f882",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "set()",
+          "is_orphan": true,
+          "prerequisites": "{'append'}",
+          "variable_uses": "set()"
+        },
+        {
+          "name": "DataProcessor.get_count",
+          "category": "method",
+          "start_line": 20,
+          "end_line": 22,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get the count of items.",
+          "outbound_calls": "{'len'}",
+          "source_text": "def get_count(self) -> int:\n        \"\"\"Get the count of items.\"\"\"\n        return len(self.data)",
+          "source_hash": "7e51a2ac3e49f9db69297f28eda2ebefe4c2c7545956570840b5d856cc2160e4",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "set()",
+          "is_orphan": true,
+          "prerequisites": "{'len'}",
+          "variable_uses": "set()"
+        },
+        {
+          "name": "DataProcessor.clear",
+          "category": "method",
+          "start_line": 24,
+          "end_line": 26,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Clear all data.",
+          "outbound_calls": "set()",
+          "source_text": "def clear(self) -> None:\n        \"\"\"Clear all data.\"\"\"\n        self.data = []",
+          "source_hash": "dea51a16c722c9c96ed5dcedc1dc5859e2425bdedae663887a58cde25d717b04",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "set()",
+          "is_orphan": true,
+          "prerequisites": "set()",
+          "variable_uses": "set()"
+        },
+        {
+          "name": "__init__",
+          "category": "function",
+          "start_line": 11,
+          "end_line": 14,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Initialize the data processor.",
+          "outbound_calls": "set()",
+          "source_text": "def __init__(self, name: str):\n        \"\"\"Initialize the data processor.\"\"\"\n        self.name = name\n        self.data = []",
+          "source_hash": "64641ec687f5d65cf4bd8749936ebee50ecd6a5e0956deeb55fef193be793040",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "set()",
+          "is_orphan": true,
+          "prerequisites": "{'clear', 'get_count', 'add_data'}",
+          "variable_uses": "{'name', 'str', 'self'}"
+        },
+        {
+          "name": "add_data",
+          "category": "function",
+          "start_line": 16,
+          "end_line": 18,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Add an item to the data collection.",
+          "outbound_calls": "{'append'}",
+          "source_text": "def add_data(self, item: Any) -> None:\n        \"\"\"Add an item to the data collection.\"\"\"\n        self.data.append(item)",
+          "source_hash": "ce45b1e6849f798e037db80da1f6709dfb47f67cbb6b5865ffc8f7d0e8e3f882",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "{'run_example'}",
+          "is_orphan": false,
+          "prerequisites": "{'clear', 'append', 'processor.py', 'get_count', '__init__'}",
+          "variable_uses": "{'Any', 'item', 'self'}"
+        },
+        {
+          "name": "get_count",
+          "category": "function",
+          "start_line": 20,
+          "end_line": 22,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get the count of items.",
+          "outbound_calls": "{'len'}",
+          "source_text": "def get_count(self) -> int:\n        \"\"\"Get the count of items.\"\"\"\n        return len(self.data)",
+          "source_hash": "7e51a2ac3e49f9db69297f28eda2ebefe4c2c7545956570840b5d856cc2160e4",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "{'run_example'}",
+          "is_orphan": false,
+          "prerequisites": "{'clear', 'len', '__init__', 'add_data'}",
+          "variable_uses": "{'len', 'self', 'int'}"
+        },
+        {
+          "name": "clear",
+          "category": "function",
+          "start_line": 24,
+          "end_line": 26,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Clear all data.",
+          "outbound_calls": "set()",
+          "source_text": "def clear(self) -> None:\n        \"\"\"Clear all data.\"\"\"\n        self.data = []",
+          "source_hash": "dea51a16c722c9c96ed5dcedc1dc5859e2425bdedae663887a58cde25d717b04",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "set()",
+          "is_orphan": true,
+          "prerequisites": "{'__init__', 'get_count', 'add_data'}",
+          "variable_uses": "{'self'}"
+        },
+        {
+          "name": "process_list",
+          "category": "function",
+          "start_line": 29,
+          "end_line": 44,
+          "line_count": 16,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Process a list of numbers and return statistics.",
+          "outbound_calls": "{'sum', 'len', 'max', 'min'}",
+          "source_text": "def process_list(items: List[int]) -> Dict[str, Any]:\n    \"\"\"Process a list of numbers and return statistics.\"\"\"\n    if not items:\n        return {\"count\": 0, \"sum\": 0, \"average\": 0}\n    \n    total = sum(items)\n    count = len(items)\n    average = total / count\n    \n    return {\n        \"count\": count,\n        \"sum\": total,\n        \"average\": average,\n        \"min\": min(items),\n        \"max\": max(items)\n    }",
+          "source_hash": "f8b663c5119df2c821edc17eaa1376b7e496285c3328d51c53348962ee3fac97",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "{'run_example'}",
+          "is_orphan": false,
+          "prerequisites": "{'processor.py', 'len', 'sum', 'min', 'max'}",
+          "variable_uses": "{'average', 'items', 'len', 'count', 'str', 'total', 'List', 'sum', 'min', 'Dict', 'Any', 'max', 'int'}"
+        }
+      ],
+      "metrics": {
+        "cyclomatic": null,
+        "maintainability_index": null,
+        "risk_flag": false
+      },
+      "declared_variables": [
+        {
+          "name": "self",
+          "defined_in": "__init__",
+          "line_number": 11,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'clear', 'get_count', '__init__', 'add_data'}",
+          "is_orphan": false
+        },
+        {
+          "name": "name",
+          "defined_in": "__init__",
+          "line_number": 11,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": "str",
+          "used_in": "{'__init__'}",
+          "is_orphan": false
+        },
+        {
+          "name": "self",
+          "defined_in": "add_data",
+          "line_number": 16,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'clear', 'get_count', '__init__', 'add_data'}",
+          "is_orphan": false
+        },
+        {
+          "name": "item",
+          "defined_in": "add_data",
+          "line_number": 16,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": "Any",
+          "used_in": "{'add_data'}",
+          "is_orphan": false
+        },
+        {
+          "name": "self",
+          "defined_in": "get_count",
+          "line_number": 20,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'clear', 'get_count', '__init__', 'add_data'}",
+          "is_orphan": false
+        },
+        {
+          "name": "self",
+          "defined_in": "clear",
+          "line_number": 24,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'clear', 'get_count', '__init__', 'add_data'}",
+          "is_orphan": false
+        },
+        {
+          "name": "items",
+          "defined_in": "process_list",
+          "line_number": 29,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": "List[int]",
+          "used_in": "{'process_list'}",
+          "is_orphan": false
+        },
+        {
+          "name": "total",
+          "defined_in": "process_list",
+          "line_number": 34,
+          "is_global": false,
+          "is_parameter": false,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'process_list'}",
+          "is_orphan": false
+        },
+        {
+          "name": "count",
+          "defined_in": "process_list",
+          "line_number": 35,
+          "is_global": false,
+          "is_parameter": false,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'process_list'}",
+          "is_orphan": false
+        },
+        {
+          "name": "average",
+          "defined_in": "process_list",
+          "line_number": 36,
+          "is_global": false,
+          "is_parameter": false,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'process_list'}",
+          "is_orphan": false
+        }
+      ],
+      "orphaned_code": [
+        "DataProcessor.__init__",
+        "DataProcessor.add_data",
+        "DataProcessor.get_count",
+        "DataProcessor.clear",
+        "__init__",
+        "clear"
+      ]
+    },
+    {
+      "path": "utils.py",
+      "imports": [],
+      "internal_imports": [],
+      "stdlib_imports": [],
+      "comprehension_patterns": {},
+      "loop_count": 0,
+      "branch_count": 0,
+      "exception_blocks": 0,
+      "exception_raises": 0,
+      "regex_patterns": 0,
+      "generator_count": 0,
+      "uses_async": false,
+      "oop_patterns": {
+        "inheritance": false,
+        "polymorphism": false,
+        "dunder": false
+      },
+      "concurrent_libs": "set()",
+      "module_docstring": "Utility functions for the mini example package.",
+      "comment_count": 0,
+      "definitions": [
+        {
+          "name": "calculate_sum",
+          "category": "function",
+          "start_line": 6,
+          "end_line": 8,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Calculate the sum of two numbers.",
+          "outbound_calls": "set()",
+          "source_text": "def calculate_sum(a: int, b: int) -> int:\n    \"\"\"Calculate the sum of two numbers.\"\"\"\n    return a + b",
+          "source_hash": "4ca3195418726b7a23d2616cd633493357ca1c2af353216208194feb066d2123",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "{'run_example'}",
+          "is_orphan": false,
+          "prerequisites": "{'calculate_product'}",
+          "variable_uses": "{'b', 'a', 'int'}"
+        },
+        {
+          "name": "calculate_product",
+          "category": "function",
+          "start_line": 11,
+          "end_line": 13,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Calculate the product of two numbers.",
+          "outbound_calls": "set()",
+          "source_text": "def calculate_product(a: int, b: int) -> int:\n    \"\"\"Calculate the product of two numbers.\"\"\"\n    return a * b",
+          "source_hash": "f101d3b9194e3c593a1de45eeba5a5f933739c83a040ede7de3e6d965a293a48",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "set()",
+          "is_orphan": true,
+          "prerequisites": "{'calculate_sum'}",
+          "variable_uses": "{'b', 'a', 'int'}"
+        },
+        {
+          "name": "format_output",
+          "category": "function",
+          "start_line": 16,
+          "end_line": 18,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Format an integer value as a string.",
+          "outbound_calls": "set()",
+          "source_text": "def format_output(value: int) -> str:\n    \"\"\"Format an integer value as a string.\"\"\"\n    return f\"Result: {value}\"",
+          "source_hash": "e9366dcd2c44332d7ca932bafadb58aad73f07dd0571a21a51a8b5731eb2e06e",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "{'run_example'}",
+          "is_orphan": false,
+          "prerequisites": "set()",
+          "variable_uses": "{'int', 'str', 'value'}"
+        }
+      ],
+      "metrics": {
+        "cyclomatic": null,
+        "maintainability_index": null,
+        "risk_flag": false
+      },
+      "declared_variables": [
+        {
+          "name": "a",
+          "defined_in": "calculate_sum",
+          "line_number": 6,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": "int",
+          "used_in": "{'calculate_sum', 'calculate_product'}",
+          "is_orphan": false
+        },
+        {
+          "name": "b",
+          "defined_in": "calculate_sum",
+          "line_number": 6,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": "int",
+          "used_in": "{'calculate_sum', 'calculate_product'}",
+          "is_orphan": false
+        },
+        {
+          "name": "a",
+          "defined_in": "calculate_product",
+          "line_number": 11,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": "int",
+          "used_in": "{'calculate_sum', 'calculate_product'}",
+          "is_orphan": false
+        },
+        {
+          "name": "b",
+          "defined_in": "calculate_product",
+          "line_number": 11,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": "int",
+          "used_in": "{'calculate_sum', 'calculate_product'}",
+          "is_orphan": false
+        },
+        {
+          "name": "value",
+          "defined_in": "format_output",
+          "line_number": 16,
+          "is_global": false,
+          "is_parameter": true,
+          "is_imported": false,
+          "type_hint": "int",
+          "used_in": "{'format_output'}",
+          "is_orphan": false
+        }
+      ],
+      "orphaned_code": [
+        "calculate_product"
+      ]
+    },
+    {
+      "path": "main.py",
+      "imports": [
+        "mini_repo.utils",
+        "mini_repo.processor"
+      ],
+      "internal_imports": [],
+      "stdlib_imports": [],
+      "comprehension_patterns": {},
+      "loop_count": 0,
+      "branch_count": 1,
+      "exception_blocks": 0,
+      "exception_raises": 0,
+      "regex_patterns": 0,
+      "generator_count": 0,
+      "uses_async": false,
+      "oop_patterns": {
+        "inheritance": false,
+        "polymorphism": false,
+        "dunder": false
+      },
+      "concurrent_libs": "set()",
+      "module_docstring": "Main application module.",
+      "comment_count": 3,
+      "definitions": [
+        {
+          "name": "run_example",
+          "category": "function",
+          "start_line": 9,
+          "end_line": 26,
+          "line_count": 18,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Run a simple example.",
+          "outbound_calls": "{'process_list', 'calculate_sum', 'get_count', 'DataProcessor', 'format_output', 'print', 'add_data'}",
+          "source_text": "def run_example():\n    \"\"\"Run a simple example.\"\"\"\n    # Basic calculations\n    result = calculate_sum(10, 20)\n    print(format_output(result))\n    \n    # Data processing\n    processor = DataProcessor(\"example\")\n    processor.add_data(1)\n    processor.add_data(2)\n    processor.add_data(3)\n    \n    print(f\"Processor has {processor.get_count()} items\")\n    \n    # List processing\n    numbers = [1, 2, 3, 4, 5]\n    stats = process_list(numbers)\n    print(f\"Statistics: {stats}\")",
+          "source_hash": "6588c2bfb12f33b1800e8c3ab88f1dfafe045b6011d3060d6ce3846ac066de98",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": null,
+            "maintainability_index": null,
+            "risk_flag": false
+          },
+          "inbound_calls": "set()",
+          "is_orphan": true,
+          "prerequisites": "{'process_list', 'calculate_sum', 'get_count', 'DataProcessor', 'main.py', 'format_output', 'print', 'add_data'}",
+          "variable_uses": "{'numbers', 'process_list', 'stats', 'calculate_sum', 'DataProcessor', 'processor', 'result', 'format_output', 'print'}"
+        }
+      ],
+      "metrics": {
+        "cyclomatic": null,
+        "maintainability_index": null,
+        "risk_flag": false
+      },
+      "declared_variables": [
+        {
+          "name": "result",
+          "defined_in": "run_example",
+          "line_number": 12,
+          "is_global": false,
+          "is_parameter": false,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'run_example'}",
+          "is_orphan": false
+        },
+        {
+          "name": "processor",
+          "defined_in": "run_example",
+          "line_number": 16,
+          "is_global": false,
+          "is_parameter": false,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'run_example'}",
+          "is_orphan": false
+        },
+        {
+          "name": "numbers",
+          "defined_in": "run_example",
+          "line_number": 24,
+          "is_global": false,
+          "is_parameter": false,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'run_example'}",
+          "is_orphan": false
+        },
+        {
+          "name": "stats",
+          "defined_in": "run_example",
+          "line_number": 25,
+          "is_global": false,
+          "is_parameter": false,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "{'run_example'}",
+          "is_orphan": false
+        }
+      ],
+      "orphaned_code": [
+        "run_example"
+      ]
+    },
+    {
+      "path": "__init__.py",
+      "imports": [],
+      "internal_imports": [],
+      "stdlib_imports": [],
+      "comprehension_patterns": {},
+      "loop_count": 0,
+      "branch_count": 0,
+      "exception_blocks": 0,
+      "exception_raises": 0,
+      "regex_patterns": 0,
+      "generator_count": 0,
+      "uses_async": false,
+      "oop_patterns": {
+        "inheritance": false,
+        "polymorphism": false,
+        "dunder": false
+      },
+      "concurrent_libs": "set()",
+      "module_docstring": "Mini example package for demonstrating code-cartographer.",
+      "comment_count": 0,
+      "definitions": [],
+      "metrics": {
+        "cyclomatic": null,
+        "maintainability_index": null,
+        "risk_flag": false
+      },
+      "declared_variables": [
+        {
+          "name": "__version__",
+          "defined_in": "__init__.py",
+          "line_number": 5,
+          "is_global": true,
+          "is_parameter": false,
+          "is_imported": false,
+          "type_hint": null,
+          "used_in": "set()",
+          "is_orphan": true
+        }
+      ],
+      "orphaned_code": []
+    }
+  ],
+  "variants": {},
+  "dependencies": [
+    [
+      "add_data",
+      "append"
+    ],
+    [
+      "run_example",
+      "process_list"
+    ],
+    [
+      "get_count",
+      "len"
+    ],
+    [
+      "process_list",
+      "max"
+    ],
+    [
+      "run_example",
+      "DataProcessor"
+    ],
+    [
+      "run_example",
+      "add_data"
+    ],
+    [
+      "process_list",
+      "len"
+    ],
+    [
+      "DataProcessor",
+      "len"
+    ],
+    [
+      "DataProcessor.get_count",
+      "len"
+    ],
+    [
+      "process_list",
+      "min"
+    ],
+    [
+      "run_example",
+      "calculate_sum"
+    ],
+    [
+      "run_example",
+      "get_count"
+    ],
+    [
+      "run_example",
+      "format_output"
+    ],
+    [
+      "process_list",
+      "sum"
+    ],
+    [
+      "DataProcessor",
+      "append"
+    ],
+    [
+      "run_example",
+      "print"
+    ],
+    [
+      "DataProcessor.add_data",
+      "append"
+    ]
+  ],
+  "call_graph": {
+    "DataProcessor": [
+      "append",
+      "len"
+    ],
+    "DataProcessor.add_data": [
+      "append"
+    ],
+    "DataProcessor.get_count": [
+      "len"
+    ],
+    "add_data": [
+      "append"
+    ],
+    "get_count": [
+      "len"
+    ],
+    "process_list": [
+      "sum",
+      "len",
+      "max",
+      "min"
+    ],
+    "run_example": [
+      "process_list",
+      "calculate_sum",
+      "get_count",
+      "DataProcessor",
+      "format_output",
+      "print",
+      "add_data"
+    ]
+  },
+  "reverse_call_graph": {
+    "append": [
+      "DataProcessor.add_data",
+      "DataProcessor",
+      "add_data"
+    ],
+    "len": [
+      "process_list",
+      "DataProcessor.get_count",
+      "DataProcessor",
+      "get_count"
+    ],
+    "sum": [
+      "process_list"
+    ],
+    "max": [
+      "process_list"
+    ],
+    "min": [
+      "process_list"
+    ],
+    "process_list": [
+      "run_example"
+    ],
+    "calculate_sum": [
+      "run_example"
+    ],
+    "get_count": [
+      "run_example"
+    ],
+    "DataProcessor": [
+      "run_example"
+    ],
+    "format_output": [
+      "run_example"
+    ],
+    "print": [
+      "run_example"
+    ],
+    "add_data": [
+      "run_example"
+    ]
+  },
+  "orphans": [
+    "DataProcessor.__init__",
+    "DataProcessor.add_data",
+    "DataProcessor.get_count",
+    "DataProcessor.clear",
+    "__init__",
+    "clear",
+    "calculate_product",
+    "run_example"
+  ],
+  "variables": {
+    "List": [
+      {
+        "name": "List",
+        "defined_in": "processor.py",
+        "line_number": 5,
+        "is_global": true,
+        "is_parameter": false,
+        "is_imported": true,
+        "type_hint": null,
+        "used_in": "{'process_list'}",
+        "is_orphan": false
+      }
+    ],
+    "Dict": [
+      {
+        "name": "Dict",
+        "defined_in": "processor.py",
+        "line_number": 5,
+        "is_global": true,
+        "is_parameter": false,
+        "is_imported": true,
+        "type_hint": null,
+        "used_in": "{'process_list'}",
+        "is_orphan": false
+      }
+    ],
+    "Any": [
+      {
+        "name": "Any",
+        "defined_in": "processor.py",
+        "line_number": 5,
+        "is_global": true,
+        "is_parameter": false,
+        "is_imported": true,
+        "type_hint": null,
+        "used_in": "{'process_list', 'add_data'}",
+        "is_orphan": false
+      }
+    ],
+    "self": [
+      {
+        "name": "self",
+        "defined_in": "__init__",
+        "line_number": 11,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'clear', 'get_count', '__init__', 'add_data'}",
+        "is_orphan": false
+      },
+      {
+        "name": "self",
+        "defined_in": "add_data",
+        "line_number": 16,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'clear', 'get_count', '__init__', 'add_data'}",
+        "is_orphan": false
+      },
+      {
+        "name": "self",
+        "defined_in": "get_count",
+        "line_number": 20,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'clear', 'get_count', '__init__', 'add_data'}",
+        "is_orphan": false
+      },
+      {
+        "name": "self",
+        "defined_in": "clear",
+        "line_number": 24,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'clear', 'get_count', '__init__', 'add_data'}",
+        "is_orphan": false
+      }
+    ],
+    "name": [
+      {
+        "name": "name",
+        "defined_in": "__init__",
+        "line_number": 11,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": "str",
+        "used_in": "{'__init__'}",
+        "is_orphan": false
+      }
+    ],
+    "item": [
+      {
+        "name": "item",
+        "defined_in": "add_data",
+        "line_number": 16,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": "Any",
+        "used_in": "{'add_data'}",
+        "is_orphan": false
+      }
+    ],
+    "items": [
+      {
+        "name": "items",
+        "defined_in": "process_list",
+        "line_number": 29,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": "List[int]",
+        "used_in": "{'process_list'}",
+        "is_orphan": false
+      }
+    ],
+    "total": [
+      {
+        "name": "total",
+        "defined_in": "process_list",
+        "line_number": 34,
+        "is_global": false,
+        "is_parameter": false,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'process_list'}",
+        "is_orphan": false
+      }
+    ],
+    "count": [
+      {
+        "name": "count",
+        "defined_in": "process_list",
+        "line_number": 35,
+        "is_global": false,
+        "is_parameter": false,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'process_list'}",
+        "is_orphan": false
+      }
+    ],
+    "average": [
+      {
+        "name": "average",
+        "defined_in": "process_list",
+        "line_number": 36,
+        "is_global": false,
+        "is_parameter": false,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'process_list'}",
+        "is_orphan": false
+      }
+    ],
+    "a": [
+      {
+        "name": "a",
+        "defined_in": "calculate_sum",
+        "line_number": 6,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": "int",
+        "used_in": "{'calculate_sum', 'calculate_product'}",
+        "is_orphan": false
+      },
+      {
+        "name": "a",
+        "defined_in": "calculate_product",
+        "line_number": 11,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": "int",
+        "used_in": "{'calculate_sum', 'calculate_product'}",
+        "is_orphan": false
+      }
+    ],
+    "b": [
+      {
+        "name": "b",
+        "defined_in": "calculate_sum",
+        "line_number": 6,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": "int",
+        "used_in": "{'calculate_sum', 'calculate_product'}",
+        "is_orphan": false
+      },
+      {
+        "name": "b",
+        "defined_in": "calculate_product",
+        "line_number": 11,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": "int",
+        "used_in": "{'calculate_sum', 'calculate_product'}",
+        "is_orphan": false
+      }
+    ],
+    "value": [
+      {
+        "name": "value",
+        "defined_in": "format_output",
+        "line_number": 16,
+        "is_global": false,
+        "is_parameter": true,
+        "is_imported": false,
+        "type_hint": "int",
+        "used_in": "{'format_output'}",
+        "is_orphan": false
+      }
+    ],
+    "calculate_sum": [
+      {
+        "name": "calculate_sum",
+        "defined_in": "main.py",
+        "line_number": 5,
+        "is_global": true,
+        "is_parameter": false,
+        "is_imported": true,
+        "type_hint": null,
+        "used_in": "{'run_example'}",
+        "is_orphan": false
+      }
+    ],
+    "format_output": [
+      {
+        "name": "format_output",
+        "defined_in": "main.py",
+        "line_number": 5,
+        "is_global": true,
+        "is_parameter": false,
+        "is_imported": true,
+        "type_hint": null,
+        "used_in": "{'run_example'}",
+        "is_orphan": false
+      }
+    ],
+    "DataProcessor": [
+      {
+        "name": "DataProcessor",
+        "defined_in": "main.py",
+        "line_number": 6,
+        "is_global": true,
+        "is_parameter": false,
+        "is_imported": true,
+        "type_hint": null,
+        "used_in": "{'run_example'}",
+        "is_orphan": false
+      }
+    ],
+    "process_list": [
+      {
+        "name": "process_list",
+        "defined_in": "main.py",
+        "line_number": 6,
+        "is_global": true,
+        "is_parameter": false,
+        "is_imported": true,
+        "type_hint": null,
+        "used_in": "{'run_example'}",
+        "is_orphan": false
+      }
+    ],
+    "result": [
+      {
+        "name": "result",
+        "defined_in": "run_example",
+        "line_number": 12,
+        "is_global": false,
+        "is_parameter": false,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'run_example'}",
+        "is_orphan": false
+      }
+    ],
+    "processor": [
+      {
+        "name": "processor",
+        "defined_in": "run_example",
+        "line_number": 16,
+        "is_global": false,
+        "is_parameter": false,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'run_example'}",
+        "is_orphan": false
+      }
+    ],
+    "numbers": [
+      {
+        "name": "numbers",
+        "defined_in": "run_example",
+        "line_number": 24,
+        "is_global": false,
+        "is_parameter": false,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'run_example'}",
+        "is_orphan": false
+      }
+    ],
+    "stats": [
+      {
+        "name": "stats",
+        "defined_in": "run_example",
+        "line_number": 25,
+        "is_global": false,
+        "is_parameter": false,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "{'run_example'}",
+        "is_orphan": false
+      }
+    ],
+    "__version__": [
+      {
+        "name": "__version__",
+        "defined_in": "__init__.py",
+        "line_number": 5,
+        "is_global": true,
+        "is_parameter": false,
+        "is_imported": false,
+        "type_hint": null,
+        "used_in": "set()",
+        "is_orphan": true
+      }
+    ]
+  },
+  "functions": [
+    {
+      "path": "processor.py",
+      "functions": [
+        "__init__",
+        "add_data",
+        "get_count",
+        "clear",
+        "process_list"
+      ]
+    },
+    {
+      "path": "utils.py",
+      "functions": [
+        "calculate_sum",
+        "calculate_product",
+        "format_output"
+      ]
+    },
+    {
+      "path": "main.py",
+      "functions": [
+        "run_example"
+      ]
+    },
+    {
+      "path": "__init__.py",
+      "functions": []
+    }
+  ]
+}

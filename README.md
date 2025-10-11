@@ -26,6 +26,12 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 
 ## Features
 
+- **Complete CLI Interface**  
+  Four commands: `analyze`, `variants`, `report`, `visualize` with sensible defaults
+
+- **Self-Contained HTML Reports**  
+  Browser-viewable reports with inline CSS, no external dependencies, works offline
+
 - **Full file and definition level metadata**  
   Class/function blocks, line counts, docstrings, decorators, async flags, calls, type hints
 
@@ -102,9 +108,62 @@ pip install -e ".[dev]"
 
 ## Usage Guide
 
-### Quick Start
+### Quick Start with CLI
 
-The code-cartographer package provides tools for analyzing Python codebases:
+The easiest way to use code-cartographer is through the command-line interface:
+
+```bash
+# Analyze current directory (outputs to artifacts/)
+codecart analyze
+
+# Analyze a specific directory
+codecart analyze -d /path/to/your/project
+
+# Analyze with custom output location
+codecart analyze -d /path/to/project -o results/analysis.json
+
+# Exclude specific patterns
+codecart analyze -d /path/to/project -e "tests/.*" -e "build/.*"
+```
+
+The `analyze` command generates three outputs:
+- **JSON file** - Raw analysis data
+- **Markdown report** - Human-readable summary
+- **HTML report** - Self-contained, browser-viewable report with inline styles
+
+### Additional CLI Commands
+
+```bash
+# Generate report from existing analysis JSON
+codecart report results/analysis.json
+
+# Create interactive visualization dashboard
+codecart visualize results/analysis.json -o dashboard.html
+
+# Analyze code variants and find duplicates
+codecart variants -d /path/to/project
+
+# Get help on any command
+codecart analyze --help
+```
+
+### Examples
+
+Check out the `examples/` directory for:
+- **mini_repo/** - A small example Python package
+- **output/** - Sample analysis reports (JSON, Markdown, HTML)
+
+To run analysis on the example:
+
+```bash
+codecart analyze -d examples/mini_repo -o examples/output/analysis.json
+```
+
+Then open `examples/output/code_analysis_report.html` in your browser!
+
+### Programmatic Usage
+
+You can also use code-cartographer as a Python library:
 
 ```python
 from code_cartographer import ProjectAnalyzer, VariantAnalyzer
@@ -178,16 +237,26 @@ code-cartographer variants -d /path/to/project --semantic-threshold 0.9
 
 ## Output Structure
 
-After analysis, you'll find:
+After running `codecart analyze`, you'll find (by default in `artifacts/`):
 
 ```
-analyzed-project/
-├── analysis.md         # Human-readable summary
-├── dependencies.dot    # Dependency graph (if Graphviz is installed)
-└── variants.md        # Code variant analysis report
+artifacts/
+├── code_analysis.json           # Complete raw analysis data
+├── code_analysis_report.md      # Markdown summary report
+├── code_analysis_report.html    # Self-contained HTML report
+└── templates/                   # Dashboard templates (if using visualize)
 ```
 
-### Key Metrics
+### HTML Report Features
+
+The HTML report is completely self-contained:
+- ✓ Opens directly in any browser (no server needed)
+- ✓ Works offline (no CDN dependencies)
+- ✓ Inline CSS styling
+- ✓ Table of contents for easy navigation
+- ✓ Responsive design
+
+### Key Metrics in Reports
 
 - Code complexity metrics
 - Import dependencies

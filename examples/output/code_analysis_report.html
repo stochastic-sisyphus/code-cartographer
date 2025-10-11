@@ -1,0 +1,219 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Code Analysis Report</title>
+            <style>
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+                h1, h2, h3, h4 {
+                    color: #2c3e50;
+                    margin-top: 1.5em;
+                }
+                h1 {
+                    border-bottom: 2px solid #eaecef;
+                    padding-bottom: 0.3em;
+                }
+                h2 {
+                    border-bottom: 1px solid #eaecef;
+                    padding-bottom: 0.3em;
+                }
+                pre {
+                    background-color: #f6f8fa;
+                    border-radius: 3px;
+                    padding: 16px;
+                    overflow: auto;
+                }
+                code {
+                    background-color: #f6f8fa;
+                    border-radius: 3px;
+                    padding: 0.2em 0.4em;
+                    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+                }
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                    margin-bottom: 1em;
+                }
+                th, td {
+                    border: 1px solid #dfe2e5;
+                    padding: 8px 12px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #f6f8fa;
+                }
+                .risk {
+                    color: #e74c3c;
+                }
+                .orphan {
+                    color: #f39c12;
+                }
+                .toc {
+                    background-color: #f8f9fa;
+                    border: 1px solid #eaecef;
+                    border-radius: 3px;
+                    padding: 1em;
+                    margin-bottom: 1em;
+                }
+                .toc ul {
+                    list-style-type: none;
+                    padding-left: 1em;
+                }
+                .toc li {
+                    margin: 0.5em 0;
+                }
+                .toc a {
+                    text-decoration: none;
+                    color: #0366d6;
+                }
+                .toc a:hover {
+                    text-decoration: underline;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="toc">
+                <h2>Table of Contents</h2>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#call-graph-analysis">Call Graph Analysis</a></li>
+                    <li><a href="#orphaned-code-analysis">Orphaned Code Analysis</a></li>
+                    <li><a href="#variable-usage-analysis">Variable Usage Analysis</a></li>
+                    <li><a href="#prerequisite-and-dependency-analysis">Prerequisite and Dependency Analysis</a></li>
+                    <li><a href="#file-analysis">File Analysis</a></li>
+                    <li><a href="#code-variant-analysis">Code Variant Analysis</a></li>
+                </ul>
+            </div>
+            <h1>Code Analysis Report</h1>
+<h2>Overview</h2>
+<ul>
+<li><strong>Total Files</strong>: 4</li>
+<li><strong>Total Definitions</strong>: 14</li>
+<li><strong>Orphaned Code Elements</strong>: 8</li>
+</ul>
+<h2>Call Graph Analysis</h2>
+<p>The following analysis shows the relationships between functions and methods in the codebase.</p>
+<h3>Function Call Relationships</h3>
+<h4>Most Called Functions</h4>
+<ul>
+<li><strong>len</strong>: Called by 4 functions</li>
+<li><strong>append</strong>: Called by 3 functions</li>
+<li><strong>min</strong>: Called by 1 functions</li>
+<li><strong>sum</strong>: Called by 1 functions</li>
+<li><strong>max</strong>: Called by 1 functions</li>
+<li><strong>calculate_sum</strong>: Called by 1 functions</li>
+<li><strong>print</strong>: Called by 1 functions</li>
+<li><strong>add_data</strong>: Called by 1 functions</li>
+<li><strong>DataProcessor</strong>: Called by 1 functions</li>
+<li><strong>get_count</strong>: Called by 1 functions</li>
+</ul>
+<h4>Functions with Most Dependencies</h4>
+<ul>
+<li><strong>run_example</strong>: Calls 7 other functions</li>
+<li><strong>process_list</strong>: Calls 4 other functions</li>
+<li><strong>DataProcessor</strong>: Calls 2 other functions</li>
+<li><strong>DataProcessor.add_data</strong>: Calls 1 other functions</li>
+<li><strong>DataProcessor.get_count</strong>: Calls 1 other functions</li>
+<li><strong>add_data</strong>: Calls 1 other functions</li>
+<li><strong>get_count</strong>: Calls 1 other functions</li>
+</ul>
+<h2>Orphaned Code Analysis</h2>
+<p>The following code elements are defined but never used in the codebase.</p>
+<h3>Orphaned Code Elements</h3>
+<ul>
+<li><strong>DataProcessor.<strong>init</strong></strong></li>
+<li><strong>DataProcessor.add_data</strong></li>
+<li><strong>DataProcessor.get_count</strong></li>
+<li><strong>DataProcessor.clear</strong></li>
+<li><strong><strong>init</strong></strong></li>
+<li><strong>clear</strong></li>
+<li><strong>calculate_product</strong></li>
+<li><strong>run_example</strong></li>
+</ul>
+<h2>Variable Usage Analysis</h2>
+<p>This section shows how variables are defined and used across the codebase.</p>
+<h3>Variables with Multiple Definitions</h3>
+<ul>
+<li><strong>self</strong>: Defined 4 times</li>
+<li><strong>a</strong>: Defined 2 times</li>
+<li><strong>b</strong>: Defined 2 times</li>
+</ul>
+<h2>File Analysis</h2>
+<p>This section provides detailed analysis for each file in the codebase.</p>
+<h3>processor.py</h3>
+<h4>Definitions</h4>
+<ul>
+<li><strong>DataProcessor</strong> (class, 19 lines)</li>
+<li>Called by: run_example</li>
+<li>Prerequisites: len, append</li>
+<li><strong>DataProcessor.<strong>init</strong></strong> (method, 4 lines) (🔕 Orphan)</li>
+<li><strong>DataProcessor.add_data</strong> (method, 3 lines) (🔕 Orphan)</li>
+<li>Prerequisites: append</li>
+<li><strong>DataProcessor.get_count</strong> (method, 3 lines) (🔕 Orphan)</li>
+<li>Prerequisites: len</li>
+<li><strong>DataProcessor.clear</strong> (method, 3 lines) (🔕 Orphan)</li>
+<li><strong><strong>init</strong></strong> (function, 4 lines) (🔕 Orphan)</li>
+<li>Prerequisites: clear, get_count, add_data</li>
+<li><strong>add_data</strong> (function, 3 lines)</li>
+<li>Called by: run_example</li>
+<li>Prerequisites: processor.py, append, <strong>init</strong>, clear, get_count</li>
+<li><strong>get_count</strong> (function, 3 lines)</li>
+<li>Called by: run_example</li>
+<li>Prerequisites: <strong>init</strong>, len, clear, add_data</li>
+<li><strong>clear</strong> (function, 3 lines) (🔕 Orphan)</li>
+<li>Prerequisites: <strong>init</strong>, get_count, add_data</li>
+<li><strong>process_list</strong> (function, 16 lines)</li>
+<li>Called by: run_example</li>
+<li>Prerequisites: sum, processor.py, min, len, max</li>
+</ul>
+<h4>Orphaned Code</h4>
+<p>The following definitions are never called:</p>
+<ul>
+<li>DataProcessor.<strong>init</strong></li>
+<li>DataProcessor.add_data</li>
+<li>DataProcessor.get_count</li>
+<li>DataProcessor.clear</li>
+<li><strong>init</strong></li>
+<li>clear</li>
+</ul>
+<h3>utils.py</h3>
+<h4>Definitions</h4>
+<ul>
+<li><strong>calculate_sum</strong> (function, 3 lines)</li>
+<li>Called by: run_example</li>
+<li>Prerequisites: calculate_product</li>
+<li><strong>calculate_product</strong> (function, 3 lines) (🔕 Orphan)</li>
+<li>Prerequisites: calculate_sum</li>
+<li><strong>format_output</strong> (function, 3 lines)</li>
+<li>Called by: run_example</li>
+</ul>
+<h4>Orphaned Code</h4>
+<p>The following definitions are never called:</p>
+<ul>
+<li>calculate_product</li>
+</ul>
+<h3>main.py</h3>
+<h4>Definitions</h4>
+<ul>
+<li><strong>run_example</strong> (function, 18 lines) (🔕 Orphan)</li>
+<li>Prerequisites: main.py, print, calculate_sum, add_data, DataProcessor and 3 more</li>
+</ul>
+<h4>Orphaned Code</h4>
+<p>The following definitions are never called:</p>
+<ul>
+<li>run_example</li>
+</ul>
+<h3><strong>init</strong>.py</h3>
+<h4>Definitions</h4>
+        </body>
+        </html>
+        
