@@ -23,9 +23,7 @@ def calculate_total(values: List[Union[int, float]]) -> float:
 
 def calculate_average(values: List[Union[int, float]]) -> float:
     """Calculate the average of a list of numeric values."""
-    if not values:
-        return 0.0
-    return calculate_total(values) / len(values)
+    return 0.0 if not values else calculate_total(values) / len(values)
 
 
 def filter_by_type(items: List[dict], item_type: str) -> List[dict]:

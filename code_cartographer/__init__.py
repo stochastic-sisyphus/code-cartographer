@@ -8,7 +8,8 @@ from code_cartographer.core.analyzer import (
     ComplexityMetrics,
     DefinitionMetadata,
     FileMetadata,
-    CodeAnalyzer,
+    generate_markdown,
+    generate_dependency_graph,
 )
 
 from code_cartographer.core.variable_analyzer import (
@@ -23,6 +24,14 @@ from code_cartographer.core.dependency_analyzer import (
     DependencyNode,
 )
 
+from code_cartographer.core.variant_analyzer import (
+    VariantAnalyzer,
+    CodeNormalizer,
+    SemanticAnalyzer,
+    VariantGroup,
+    VariantMatch,
+)
+
 from code_cartographer.core.visualizer import CodeVisualizer
 
 from code_cartographer.core.reporter import ReportGenerator
@@ -33,44 +42,19 @@ __all__ = [
     "ComplexityMetrics",
     "DefinitionMetadata",
     "FileMetadata",
-    "CodeAnalyzer",
+    "generate_markdown",
+    "generate_dependency_graph",
     "VariableAnalyzer",
     "VariableDefinition",
     "VariableUsage",
     "VariableFlow",
     "DependencyAnalyzer",
     "DependencyNode",
-    "CodeVisualizer",
-    "ReportGenerator",
-]
-"""Code Cartographer - A tool for visualizing and analyzing code repositories."""
-
-__version__ = "0.2.1"
-
-from code_cartographer.core.analyzer import (
-    generate_markdown,
-    generate_dependency_graph,
-)
-
-from code_cartographer.core.variant_analyzer import (
-    VariantAnalyzer,
-    CodeNormalizer,
-    SemanticAnalyzer,
-    VariantGroup,
-    VariantMatch,
-)
-
-__all__ = [
-    "ProjectAnalyzer",
-    "CodeInspector",
-    "ComplexityMetrics",
-    "DefinitionMetadata",
-    "FileMetadata",
-    "generate_markdown",
-    "generate_dependency_graph",
     "VariantAnalyzer",
     "CodeNormalizer",
     "SemanticAnalyzer",
     "VariantGroup",
     "VariantMatch",
+    "CodeVisualizer",
+    "ReportGenerator",
 ]

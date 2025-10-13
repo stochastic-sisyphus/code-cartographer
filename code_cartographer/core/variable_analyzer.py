@@ -273,7 +273,7 @@ class VariableVisitor(ast.NodeVisitor):
 
     def visit_AnnAssign(self, node):
         """Process annotated assignments."""
-        if isinstance(target, ast.Name):
+        if isinstance(node.target, ast.Name):
             type_hint = ast.unparse(node.annotation) if node.annotation else None
 
             # Try to extract the assigned value as source code

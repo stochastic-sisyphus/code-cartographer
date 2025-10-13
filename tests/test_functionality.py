@@ -11,7 +11,7 @@ from pathlib import Path
 # Add the code-cartographer package to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from code_cartographer.core.analyzer import CodeAnalyzer
+from code_cartographer.core.analyzer import ProjectAnalyzer
 from code_cartographer.core.variable_analyzer import VariableAnalyzer
 from code_cartographer.core.dependency_analyzer import DependencyAnalyzer
 from code_cartographer.core.visualizer import CodeVisualizer
