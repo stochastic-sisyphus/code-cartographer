@@ -11,7 +11,7 @@ from pathlib import Path
 # Add the code-cartographer package to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from code_cartographer.core.analyzer import CodeAnalyzer
+from code_cartographer.core.analyzer import ProjectAnalyzer
 from code_cartographer.core.variable_analyzer import VariableAnalyzer
 from code_cartographer.core.dependency_analyzer import DependencyAnalyzer
 from code_cartographer.core.visualizer import CodeVisualizer
@@ -22,15 +22,16 @@ def create_sample_codebase():
     """Create a sample Python codebase for testing."""
     temp_dir = Path(tempfile.mkdtemp())
     print(f"Creating sample codebase in {temp_dir}")
-    
+
     # Create a simple package structure
     package_dir = temp_dir / "sample_package"
     package_dir.mkdir()
     (package_dir / "__init__.py").touch()
-    
+
     # Create a module with some functions
     with open(package_dir / "utils.py", "w") as f:
-        f.write("""
+        f.write(
+            """
 # Utility functions module
 import os
 import sys
@@ -68,11 +69,13 @@ def get_config() -> Dict[str, Any]:
 
 # Variable that depends on another variable
 config = {'debug': True}  # Redefined
-""")
-    
+"""
+        )
+
     # Create a module with some classes
     with open(package_dir / "models.py", "w") as f:
-        f.write("""
+        f.write(
+            """
 # Models module
 from typing import List, Dict, Any, Optional
 from .utils import process_data
@@ -119,11 +122,13 @@ class UnusedModel(BaseModel):
 # Variables with dependencies
 default_user = {'username': 'admin', 'email': 'admin@example.com'}
 admin_model = UserModel(default_user)
-""")
-    
+"""
+        )
+
     # Create a main application module
     with open(package_dir / "app.py", "w") as f:
-        f.write("""
+        f.write(
+            """
 # Main application module
 import os
 import json
@@ -181,264 +186,270 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-""")
-    
+"""
+        )
+
     return temp_dir
 
 
 def test_code_analyzer(codebase_dir):
     """Test the CodeAnalyzer on the sample codebase."""
     print("\n=== Testing CodeAnalyzer ===")
-    
+
     # Create output directory
     output_dir = codebase_dir / "analysis_output"
     output_dir.mkdir(exist_ok=True)
-    
+
     # Initialize and run the analyzer
     analyzer = CodeAnalyzer(codebase_dir, output_dir)
     analysis_results = analyzer.analyze()
-    
+
     # Print some basic stats
     print(f"Files analyzed: {len(analysis_results.get('files', []))}")
-    print(f"Functions found: {sum(1 for f in analysis_results.get('files', []) for d in f.get('definitions', []) if d.get('category') == 'function')}")
-    print(f"Classes found: {sum(1 for f in analysis_results.get('files', []) for d in f.get('definitions', []) if d.get('category') == 'class')}")
-    print(f"Methods found: {sum(1 for f in analysis_results.get('files', []) for d in f.get('definitions', []) if d.get('category') == 'method')}")
-    
+    print(
+        f"Functions found: {sum(1 for f in analysis_results.get('files', []) for d in f.get('definitions', []) if d.get('category') == 'function')}"
+    )
+    print(
+        f"Classes found: {sum(1 for f in analysis_results.get('files', []) for d in f.get('definitions', []) if d.get('category') == 'class')}"
+    )
+    print(
+        f"Methods found: {sum(1 for f in analysis_results.get('files', []) for d in f.get('definitions', []) if d.get('category') == 'method')}"
+    )
+
     # Check for orphans
-    orphans = analysis_results.get('orphans', {})
+    orphans = analysis_results.get("orphans", {})
     print(f"Orphaned functions: {len(orphans.get('functions', []))}")
     print(f"Orphaned classes: {len(orphans.get('classes', []))}")
-    
+
     # Check bidirectional call graph
-    call_graph = analysis_results.get('call_graph', {})
-    reverse_call_graph = analysis_results.get('reverse_call_graph', {})
+    call_graph = analysis_results.get("call_graph", {})
+    reverse_call_graph = analysis_results.get("reverse_call_graph", {})
     print(f"Call graph entries: {len(call_graph)}")
     print(f"Reverse call graph entries: {len(reverse_call_graph)}")
-    
+
     return analysis_results, output_dir
 
 
 def test_variable_analyzer(codebase_dir, output_dir):
     """Test the VariableAnalyzer on the sample codebase."""
     print("\n=== Testing VariableAnalyzer ===")
-    
+
     # Initialize and run the analyzer
     analyzer = VariableAnalyzer(codebase_dir)
     variable_results = analyzer.analyze()
-    
+
     # Print some basic stats
     print(f"Variables analyzed: {len(variable_results)}")
     print(f"Orphaned variables: {len(analyzer.get_orphaned_variables())}")
     print(f"Undefined variables: {len(analyzer.get_undefined_variables())}")
-    
+
     # Check for variables with multiple definitions
-    multi_defined = [name for name, flow in variable_results.items() if flow.is_redefined]
+    multi_defined = [
+        name for name, flow in variable_results.items() if flow.is_redefined
+    ]
     print(f"Variables with multiple definitions: {len(multi_defined)}")
     if multi_defined:
         print(f"Examples: {', '.join(multi_defined[:3])}")
-    
+
     # Generate a report
     report = analyzer.generate_variable_report()
-    
+
     return variable_results, report
 
 
 def test_dependency_analyzer(codebase_dir, output_dir, call_graph, variable_results):
     """Test the DependencyAnalyzer on the sample codebase."""
     print("\n=== Testing DependencyAnalyzer ===")
-    
+
     # Initialize and run the analyzer
     analyzer = DependencyAnalyzer(codebase_dir)
     dependency_results = analyzer.analyze(call_graph, variable_results)
-    
+
     # Print some basic stats
     print(f"Nodes analyzed: {len(dependency_results.get('nodes', {}))}")
     print(f"Entry points: {len(dependency_results.get('entry_points', []))}")
     print(f"Leaf nodes: {len(dependency_results.get('leaf_nodes', []))}")
     print(f"Cycles detected: {len(dependency_results.get('cycles', []))}")
-    
+
     # Check initialization order
-    init_order = dependency_results.get('initialization_order', [])
+    init_order = dependency_results.get("initialization_order", [])
     print(f"Initialization order length: {len(init_order)}")
     if init_order:
         print(f"First 5 items in initialization order: {', '.join(init_order[:5])}")
-    
+
     # Generate dependency graph
     graph_path = output_dir / "dependency_graph"
     analyzer.generate_dependency_graph(graph_path)
     print(f"Dependency graph generated: {graph_path}.png")
-    
+
     # Generate sequential order graph
     seq_path = output_dir / "sequential_order"
     analyzer.generate_sequential_order_graph(seq_path)
     print(f"Sequential order graph generated: {seq_path}.png")
-    
+
     return dependency_results
 
 
 def test_visualizer(output_dir, analysis_results, variable_results, dependency_results):
     """Test the CodeVisualizer on the analysis results."""
     print("\n=== Testing CodeVisualizer ===")
-    
+
     # Initialize the visualizer
     visualizer = CodeVisualizer(output_dir)
-    
+
     # Generate function call graph
     call_graph_path = visualizer.generate_function_call_graph(
-        analysis_results.get('call_graph', {})
+        analysis_results.get("call_graph", {})
     )
     print(f"Function call graph generated: {call_graph_path}")
-    
+
     # Generate class hierarchy
     class_data = {}
-    for file_data in analysis_results.get('files', []):
-        for definition in file_data.get('definitions', []):
-            if definition.get('category') == 'class':
-                class_name = definition.get('name', '')
-                parents = definition.get('inherits_from', [])
-                class_data[class_name] = {'parents': parents}
-    
+    for file_data in analysis_results.get("files", []):
+        for definition in file_data.get("definitions", []):
+            if definition.get("category") == "class":
+                class_name = definition.get("name", "")
+                parents = definition.get("inherits_from", [])
+                class_data[class_name] = {"parents": parents}
+
     class_hierarchy_path = visualizer.generate_class_hierarchy(class_data)
     print(f"Class hierarchy generated: {class_hierarchy_path}")
-    
+
     # Generate variable usage chart
     variable_data = {
         name: {
-            'definition_count': flow.definition_count,
-            'usage_count': flow.usage_count,
-            'is_orphan': flow.is_orphan
+            "definition_count": flow.definition_count,
+            "usage_count": flow.usage_count,
+            "is_orphan": flow.is_orphan,
         }
         for name, flow in variable_results.items()
     }
-    
+
     variable_chart_path = visualizer.generate_variable_usage_chart(variable_data)
     print(f"Variable usage chart generated: {variable_chart_path}")
-    
+
     # Generate orphan analysis
-    orphans = analysis_results.get('orphans', {})
+    orphans = analysis_results.get("orphans", {})
     orphan_chart_path = visualizer.generate_orphan_analysis(orphans)
     print(f"Orphan analysis chart generated: {orphan_chart_path}")
-    
+
     # Generate prerequisite graph
     prerequisites = {
-        name: node.get('dependencies', set())
-        for name, node in dependency_results.get('nodes', {}).items()
+        name: node.get("dependencies", set())
+        for name, node in dependency_results.get("nodes", {}).items()
     }
-    
+
     prereq_graph_path = visualizer.generate_prerequisite_graph(prerequisites)
     print(f"Prerequisite graph generated: {prereq_graph_path}")
-    
+
     # Generate initialization sequence
-    init_order = dependency_results.get('initialization_order', [])
+    init_order = dependency_results.get("initialization_order", [])
     init_seq_path = visualizer.generate_initialization_sequence(init_order)
     print(f"Initialization sequence generated: {init_seq_path}")
-    
+
     return {
-        'call_graph': call_graph_path,
-        'class_hierarchy': class_hierarchy_path,
-        'variable_usage': variable_chart_path,
-        'orphan_analysis': orphan_chart_path,
-        'prerequisite_graph': prereq_graph_path,
-        'initialization_sequence': init_seq_path
+        "call_graph": call_graph_path,
+        "class_hierarchy": class_hierarchy_path,
+        "variable_usage": variable_chart_path,
+        "orphan_analysis": orphan_chart_path,
+        "prerequisite_graph": prereq_graph_path,
+        "initialization_sequence": init_seq_path,
     }
 
 
 def test_reporter(output_dir, analysis_results, variable_results, dependency_results):
     """Test the ReportGenerator on the analysis results."""
     print("\n=== Testing ReportGenerator ===")
-    
+
     # Initialize the reporter
     reporter = ReportGenerator(output_dir)
-    
+
     # Prepare combined analysis data
     combined_data = analysis_results.copy()
-    combined_data['variables'] = {
+    combined_data["variables"] = {
         name: {
-            'definition_count': flow.definition_count,
-            'usage_count': flow.usage_count,
-            'is_orphan': flow.is_orphan,
-            'is_redefined': flow.is_redefined,
-            'definition_locations': flow.definition_locations,
-            'usage_locations': flow.usage_locations
+            "definition_count": flow.definition_count,
+            "usage_count": flow.usage_count,
+            "is_orphan": flow.is_orphan,
+            "is_redefined": flow.is_redefined,
+            "definition_locations": flow.definition_locations,
+            "usage_locations": flow.usage_locations,
         }
         for name, flow in variable_results.items()
     }
-    
+
     combined_data.update(dependency_results)
-    
+
     # Generate Markdown report
     md_report_path = reporter.generate_markdown_report(combined_data)
     print(f"Markdown report generated: {md_report_path}")
-    
+
     # Generate HTML report
     html_report_path = reporter.generate_html_report(combined_data, md_report_path)
     print(f"HTML report generated: {html_report_path}")
-    
+
     # Generate interactive dashboard
     dashboard_path = reporter.generate_interactive_dashboard(combined_data)
     print(f"Interactive dashboard generated: {dashboard_path}")
-    
+
     return {
-        'markdown_report': md_report_path,
-        'html_report': html_report_path,
-        'dashboard': dashboard_path
+        "markdown_report": md_report_path,
+        "html_report": html_report_path,
+        "dashboard": dashboard_path,
     }
 
 
 def main():
     """Main test function."""
     print("Starting code-cartographer validation tests...")
-    
+
     # Create sample codebase
     codebase_dir = create_sample_codebase()
-    
+
     try:
         # Test code analyzer
         analysis_results, output_dir = test_code_analyzer(codebase_dir)
-        
+
         # Test variable analyzer
-        variable_results, variable_report = test_variable_analyzer(codebase_dir, output_dir)
-        
+        variable_results, variable_report = test_variable_analyzer(
+            codebase_dir, output_dir
+        )
+
         # Test dependency analyzer
         dependency_results = test_dependency_analyzer(
-            codebase_dir, 
-            output_dir, 
-            analysis_results.get('call_graph', {}), 
-            variable_results
+            codebase_dir,
+            output_dir,
+            analysis_results.get("call_graph", {}),
+            variable_results,
         )
-        
+
         # Test visualizer
         visualization_results = test_visualizer(
-            output_dir, 
-            analysis_results, 
-            variable_results, 
-            dependency_results
+            output_dir, analysis_results, variable_results, dependency_results
         )
-        
+
         # Test reporter
         report_results = test_reporter(
-            output_dir, 
-            analysis_results, 
-            variable_results, 
-            dependency_results
+            output_dir, analysis_results, variable_results, dependency_results
         )
-        
+
         print("\n=== Validation Tests Completed Successfully ===")
         print(f"All output files are available in: {output_dir}")
-        
+
         return {
-            'codebase_dir': codebase_dir,
-            'output_dir': output_dir,
-            'analysis_results': analysis_results,
-            'variable_results': variable_results,
-            'dependency_results': dependency_results,
-            'visualization_results': visualization_results,
-            'report_results': report_results
+            "codebase_dir": codebase_dir,
+            "output_dir": output_dir,
+            "analysis_results": analysis_results,
+            "variable_results": variable_results,
+            "dependency_results": dependency_results,
+            "visualization_results": visualization_results,
+            "report_results": report_results,
         }
-        
+
     except Exception as e:
         print(f"Error during validation tests: {e}")
         import traceback
+
         traceback.print_exc()
         return None
 

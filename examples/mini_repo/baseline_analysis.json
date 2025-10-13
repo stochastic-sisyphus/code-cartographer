@@ -1,0 +1,1132 @@
+{
+  "files": [
+    {
+      "path": "config.py",
+      "imports": [],
+      "internal_imports": [],
+      "stdlib_imports": [],
+      "declared_variables": [
+        "APP_NAME",
+        "DATABASE_CONFIG",
+        "DEBUG",
+        "DEFAULT_TIMEOUT",
+        "INCLUDE_TIMESTAMP",
+        "MAX_BATCH_SIZE",
+        "OUTPUT_FORMAT",
+        "REQUIRED_FIELDS",
+        "UNUSED_SETTING",
+        "VALID_TYPES",
+        "VERSION"
+      ],
+      "comprehension_patterns": {},
+      "loop_count": 0,
+      "branch_count": 0,
+      "exception_blocks": 0,
+      "exception_raises": 0,
+      "regex_patterns": 0,
+      "generator_count": 0,
+      "uses_async": false,
+      "oop_patterns": {
+        "inheritance": false,
+        "polymorphism": false,
+        "dunder": false
+      },
+      "concurrent_libs": [],
+      "module_docstring": "Configuration module.\n====================\nApplication configuration and constants.",
+      "comment_count": 6,
+      "definitions": [
+        {
+          "name": "get_config",
+          "category": "function",
+          "start_line": 34,
+          "end_line": 46,
+          "line_count": 13,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get the current configuration as a dictionary.",
+          "outbound_calls": [],
+          "source_text": "def get_config() -> dict:\n    \"\"\"Get the current configuration as a dictionary.\"\"\"\n    return {\n        'app_name': APP_NAME,\n        'version': VERSION,\n        'debug': DEBUG,\n        'max_batch_size': MAX_BATCH_SIZE,\n        'default_timeout': DEFAULT_TIMEOUT,\n        'required_fields': REQUIRED_FIELDS,\n        'valid_types': VALID_TYPES,\n        'output_format': OUTPUT_FORMAT,\n        'include_timestamp': INCLUDE_TIMESTAMP\n    }",
+          "source_hash": "645b169e1c70f3e5c8aca94cf44c08ef796d52faa2822cf94c9571fd38168ba4",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        }
+      ],
+      "metrics": {
+        "cyclomatic": 1,
+        "maintainability_index": 100.0,
+        "risk_flag": false
+      }
+    },
+    {
+      "path": "main.py",
+      "imports": [
+        "utils",
+        "data_processor"
+      ],
+      "internal_imports": [
+        "utils.py",
+        "data_processor.py"
+      ],
+      "stdlib_imports": [],
+      "declared_variables": [],
+      "comprehension_patterns": {},
+      "loop_count": 0,
+      "branch_count": 1,
+      "exception_blocks": 0,
+      "exception_raises": 0,
+      "regex_patterns": 0,
+      "generator_count": 0,
+      "uses_async": false,
+      "oop_patterns": {
+        "inheritance": false,
+        "polymorphism": false,
+        "dunder": false
+      },
+      "concurrent_libs": [],
+      "module_docstring": "Main application module.\n========================\nEntry point for the mini application with basic functionality.",
+      "comment_count": 2,
+      "definitions": [
+        {
+          "name": "Application",
+          "category": "class",
+          "start_line": 11,
+          "end_line": 38,
+          "line_count": 28,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Main application class.",
+          "outbound_calls": [
+            "len",
+            "get",
+            "process_batch",
+            "format_message",
+            "print",
+            "process_data",
+            "calculate_total",
+            "DataProcessor",
+            "append"
+          ],
+          "source_text": "class Application:\n    \"\"\"Main application class.\"\"\"\n    \n    def __init__(self, name: str):\n        self.name = name\n        self.processor = DataProcessor()\n        self.data = []\n    \n    def add_data(self, item: dict) -> None:\n        \"\"\"Add data item to the application.\"\"\"\n        self.data.append(item)\n        print(format_message(f\"Added item: {item}\"))\n    \n    def process_data(self) -> list:\n        \"\"\"Process all data items.\"\"\"\n        return self.processor.process_batch(self.data)\n    \n    def get_summary(self) -> dict:\n        \"\"\"Get application summary.\"\"\"\n        processed = self.process_data()\n        total = calculate_total([item.get('value', 0) for item in processed])\n        \n        return {\n            'name': self.name,\n            'total_items': len(self.data),\n            'processed_items': len(processed),\n            'total_value': total\n        }",
+          "source_hash": "70cc1a51f258038718e8f71073e2a7bad44547461ec79b71ac02ec8a44ec16f7",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "Application.__init__",
+          "category": "method",
+          "start_line": 14,
+          "end_line": 17,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": null,
+          "outbound_calls": [
+            "DataProcessor"
+          ],
+          "source_text": "def __init__(self, name: str):\n        self.name = name\n        self.processor = DataProcessor()\n        self.data = []",
+          "source_hash": "7ad5be124e165ecccd60e85ad41e9b869c4564755923005de49cd1c31532d397",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "Application.add_data",
+          "category": "method",
+          "start_line": 19,
+          "end_line": 22,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Add data item to the application.",
+          "outbound_calls": [
+            "append",
+            "print",
+            "format_message"
+          ],
+          "source_text": "def add_data(self, item: dict) -> None:\n        \"\"\"Add data item to the application.\"\"\"\n        self.data.append(item)\n        print(format_message(f\"Added item: {item}\"))",
+          "source_hash": "cc820f7a043af1555c5fc6085a09b0e625d04ffc06f6557672a7507d3019ed96",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "Application.process_data",
+          "category": "method",
+          "start_line": 24,
+          "end_line": 26,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Process all data items.",
+          "outbound_calls": [
+            "process_batch"
+          ],
+          "source_text": "def process_data(self) -> list:\n        \"\"\"Process all data items.\"\"\"\n        return self.processor.process_batch(self.data)",
+          "source_hash": "3b176c072b3ba99ae17296167fcdbb4943b4ac8bb3b5e55094303619a1ce86d7",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "Application.get_summary",
+          "category": "method",
+          "start_line": 28,
+          "end_line": 38,
+          "line_count": 11,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get application summary.",
+          "outbound_calls": [
+            "len",
+            "process_data",
+            "get",
+            "calculate_total"
+          ],
+          "source_text": "def get_summary(self) -> dict:\n        \"\"\"Get application summary.\"\"\"\n        processed = self.process_data()\n        total = calculate_total([item.get('value', 0) for item in processed])\n        \n        return {\n            'name': self.name,\n            'total_items': len(self.data),\n            'processed_items': len(processed),\n            'total_value': total\n        }",
+          "source_hash": "ab480cbf78fb32ccad257a706e96b910501b708abcb7b22427693ee4c669cb1c",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "__init__",
+          "category": "function",
+          "start_line": 14,
+          "end_line": 17,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": null,
+          "outbound_calls": [
+            "DataProcessor"
+          ],
+          "source_text": "def __init__(self, name: str):\n        self.name = name\n        self.processor = DataProcessor()\n        self.data = []",
+          "source_hash": "7ad5be124e165ecccd60e85ad41e9b869c4564755923005de49cd1c31532d397",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "add_data",
+          "category": "function",
+          "start_line": 19,
+          "end_line": 22,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Add data item to the application.",
+          "outbound_calls": [
+            "append",
+            "print",
+            "format_message"
+          ],
+          "source_text": "def add_data(self, item: dict) -> None:\n        \"\"\"Add data item to the application.\"\"\"\n        self.data.append(item)\n        print(format_message(f\"Added item: {item}\"))",
+          "source_hash": "cc820f7a043af1555c5fc6085a09b0e625d04ffc06f6557672a7507d3019ed96",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "process_data",
+          "category": "function",
+          "start_line": 24,
+          "end_line": 26,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Process all data items.",
+          "outbound_calls": [
+            "process_batch"
+          ],
+          "source_text": "def process_data(self) -> list:\n        \"\"\"Process all data items.\"\"\"\n        return self.processor.process_batch(self.data)",
+          "source_hash": "3b176c072b3ba99ae17296167fcdbb4943b4ac8bb3b5e55094303619a1ce86d7",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "get_summary",
+          "category": "function",
+          "start_line": 28,
+          "end_line": 38,
+          "line_count": 11,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get application summary.",
+          "outbound_calls": [
+            "len",
+            "process_data",
+            "get",
+            "calculate_total"
+          ],
+          "source_text": "def get_summary(self) -> dict:\n        \"\"\"Get application summary.\"\"\"\n        processed = self.process_data()\n        total = calculate_total([item.get('value', 0) for item in processed])\n        \n        return {\n            'name': self.name,\n            'total_items': len(self.data),\n            'processed_items': len(processed),\n            'total_value': total\n        }",
+          "source_hash": "ab480cbf78fb32ccad257a706e96b910501b708abcb7b22427693ee4c669cb1c",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "main",
+          "category": "function",
+          "start_line": 41,
+          "end_line": 52,
+          "line_count": 12,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Main entry point.",
+          "outbound_calls": [
+            "add_data",
+            "get_summary",
+            "Application",
+            "print"
+          ],
+          "source_text": "def main():\n    \"\"\"Main entry point.\"\"\"\n    app = Application(\"Mini App\")\n    \n    # Add some sample data\n    app.add_data({'id': 1, 'value': 10, 'type': 'A'})\n    app.add_data({'id': 2, 'value': 20, 'type': 'B'})\n    app.add_data({'id': 3, 'value': 15, 'type': 'A'})\n    \n    # Get and display summary\n    summary = app.get_summary()\n    print(f\"Application Summary: {summary}\")",
+          "source_hash": "25e557fa96b59fc8edf4d6f95c30dabcad3cb58f54612d731910a6be1b6994e7",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        }
+      ],
+      "metrics": {
+        "cyclomatic": 1,
+        "maintainability_index": 84.01558446517716,
+        "risk_flag": false
+      }
+    },
+    {
+      "path": "utils.py",
+      "imports": [
+        "datetime",
+        "typing"
+      ],
+      "internal_imports": [],
+      "stdlib_imports": [
+        "datetime",
+        "typing"
+      ],
+      "declared_variables": [],
+      "comprehension_patterns": {},
+      "loop_count": 0,
+      "branch_count": 0,
+      "exception_blocks": 0,
+      "exception_raises": 0,
+      "regex_patterns": 0,
+      "generator_count": 0,
+      "uses_async": false,
+      "oop_patterns": {
+        "inheritance": false,
+        "polymorphism": false,
+        "dunder": false
+      },
+      "concurrent_libs": [],
+      "module_docstring": "Utility functions module.\n=========================\nCommon utility functions used across the application.",
+      "comment_count": 1,
+      "definitions": [
+        {
+          "name": "format_message",
+          "category": "function",
+          "start_line": 11,
+          "end_line": 16,
+          "line_count": 6,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Format a message with optional timestamp.",
+          "outbound_calls": [
+            "strftime",
+            "now"
+          ],
+          "source_text": "def format_message(message: str, timestamp: bool = True) -> str:\n    \"\"\"Format a message with optional timestamp.\"\"\"\n    if timestamp:\n        now = datetime.datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\")\n        return f\"[{now}] {message}\"\n    return message",
+          "source_hash": "df675da90c106bf5d296c1155e887399378e78c7602444e1887d12ec2fb734fe",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "calculate_total",
+          "category": "function",
+          "start_line": 19,
+          "end_line": 21,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Calculate the total of a list of numeric values.",
+          "outbound_calls": [
+            "sum"
+          ],
+          "source_text": "def calculate_total(values: List[Union[int, float]]) -> float:\n    \"\"\"Calculate the total of a list of numeric values.\"\"\"\n    return sum(values)",
+          "source_hash": "79fc413de057d1205190a8d9db5ff7222da524fd26cab896ea1e292ffda470ac",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "calculate_average",
+          "category": "function",
+          "start_line": 24,
+          "end_line": 28,
+          "line_count": 5,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Calculate the average of a list of numeric values.",
+          "outbound_calls": [
+            "len",
+            "calculate_total"
+          ],
+          "source_text": "def calculate_average(values: List[Union[int, float]]) -> float:\n    \"\"\"Calculate the average of a list of numeric values.\"\"\"\n    if not values:\n        return 0.0\n    return calculate_total(values) / len(values)",
+          "source_hash": "53d4a0f18c62b59cf02bae2ce9a9f32c584e806be163350fe300319245c33f84",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 77.02781257964013,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "filter_by_type",
+          "category": "function",
+          "start_line": 31,
+          "end_line": 33,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Filter items by their type field.",
+          "outbound_calls": [
+            "get"
+          ],
+          "source_text": "def filter_by_type(items: List[dict], item_type: str) -> List[dict]:\n    \"\"\"Filter items by their type field.\"\"\"\n    return [item for item in items if item.get('type') == item_type]",
+          "source_hash": "cc6ff667f221c0d8b980f1c5b1e35d2bf92cc6380b5c6bcde299aea0ed2ba544",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 3,
+            "maintainability_index": 84.44724042799471,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "validate_item",
+          "category": "function",
+          "start_line": 36,
+          "end_line": 39,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Validate that an item has required fields.",
+          "outbound_calls": [
+            "all"
+          ],
+          "source_text": "def validate_item(item: dict) -> bool:\n    \"\"\"Validate that an item has required fields.\"\"\"\n    required_fields = ['id', 'value', 'type']\n    return all(field in item for field in required_fields)",
+          "source_hash": "a482feb11a1923deb5abf502ef2170461d7d661739dd4fe94adb868a8cdc31c6",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 81.85633424453339,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "unused_helper_function",
+          "category": "function",
+          "start_line": 43,
+          "end_line": 45,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "This function is not used anywhere in the codebase.",
+          "outbound_calls": [],
+          "source_text": "def unused_helper_function():\n    \"\"\"This function is not used anywhere in the codebase.\"\"\"\n    return \"This is orphaned\"",
+          "source_hash": "19169e42124074be5a60cf25cfff6b2176d6c6fc03bf6026ed508b9385be95c6",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        }
+      ],
+      "metrics": {
+        "cyclomatic": 2,
+        "maintainability_index": 82.06097647779083,
+        "risk_flag": false
+      }
+    },
+    {
+      "path": "data_processor.py",
+      "imports": [
+        "typing",
+        "utils"
+      ],
+      "internal_imports": [
+        "utils.py"
+      ],
+      "stdlib_imports": [
+        "typing"
+      ],
+      "declared_variables": [],
+      "comprehension_patterns": {},
+      "loop_count": 0,
+      "branch_count": 0,
+      "exception_blocks": 0,
+      "exception_raises": 0,
+      "regex_patterns": 0,
+      "generator_count": 0,
+      "uses_async": false,
+      "oop_patterns": {
+        "inheritance": true,
+        "polymorphism": false,
+        "dunder": false
+      },
+      "concurrent_libs": [],
+      "module_docstring": "Data processing module.\n=======================\nHandles data processing and validation operations.",
+      "comment_count": 2,
+      "definitions": [
+        {
+          "name": "DataProcessor",
+          "category": "class",
+          "start_line": 11,
+          "end_line": 58,
+          "line_count": 48,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Processes and validates data items.",
+          "outbound_calls": [
+            "validate_item",
+            "len",
+            "print",
+            "copy",
+            "clear",
+            "ValueError",
+            "append",
+            "process_item"
+          ],
+          "source_text": "class DataProcessor:\n    \"\"\"Processes and validates data items.\"\"\"\n    \n    def __init__(self):\n        self.processed_count = 0\n        self.errors = []\n    \n    def process_item(self, item: Dict[str, Any]) -> Dict[str, Any]:\n        \"\"\"Process a single data item.\"\"\"\n        if not validate_item(item):\n            error_msg = f\"Invalid item: {item}\"\n            self.errors.append(error_msg)\n            raise ValueError(error_msg)\n        \n        # Process the item (add some computed fields)\n        processed_item = item.copy()\n        processed_item['processed'] = True\n        processed_item['double_value'] = item['value'] * 2\n        \n        self.processed_count += 1\n        return processed_item\n    \n    def process_batch(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:\n        \"\"\"Process a batch of items.\"\"\"\n        processed_items = []\n        \n        for item in items:\n            try:\n                processed_item = self.process_item(item)\n                processed_items.append(processed_item)\n            except ValueError as e:\n                print(f\"Error processing item: {e}\")\n                continue\n        \n        return processed_items\n    \n    def get_stats(self) -> Dict[str, Any]:\n        \"\"\"Get processing statistics.\"\"\"\n        return {\n            'processed_count': self.processed_count,\n            'error_count': len(self.errors),\n            'errors': self.errors.copy()\n        }\n    \n    def reset(self) -> None:\n        \"\"\"Reset processor state.\"\"\"\n        self.processed_count = 0\n        self.errors.clear()",
+          "source_hash": "95db97f66d93116af1995d3dc90d0e78b242a344d771cb96677de17bad824138",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 55.44297162927612,
+            "risk_flag": true
+          }
+        },
+        {
+          "name": "DataProcessor.__init__",
+          "category": "method",
+          "start_line": 14,
+          "end_line": 16,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": null,
+          "outbound_calls": [],
+          "source_text": "def __init__(self):\n        self.processed_count = 0\n        self.errors = []",
+          "source_hash": "6c4bde4506cbb20989b28eda9e2a41a57f60a6d3dd1d03a031ee6bfc4c47cc4f",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "DataProcessor.process_item",
+          "category": "method",
+          "start_line": 18,
+          "end_line": 31,
+          "line_count": 14,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Process a single data item.",
+          "outbound_calls": [
+            "validate_item",
+            "append",
+            "ValueError",
+            "copy"
+          ],
+          "source_text": "def process_item(self, item: Dict[str, Any]) -> Dict[str, Any]:\n        \"\"\"Process a single data item.\"\"\"\n        if not validate_item(item):\n            error_msg = f\"Invalid item: {item}\"\n            self.errors.append(error_msg)\n            raise ValueError(error_msg)\n        \n        # Process the item (add some computed fields)\n        processed_item = item.copy()\n        processed_item['processed'] = True\n        processed_item['double_value'] = item['value'] * 2\n        \n        self.processed_count += 1\n        return processed_item",
+          "source_hash": "249181ebf4e7301435d5399676d9e2aa12e704d5a6de074880f4041d9c45c9f7",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 67.34983430576436,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "DataProcessor.process_batch",
+          "category": "method",
+          "start_line": 33,
+          "end_line": 45,
+          "line_count": 13,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Process a batch of items.",
+          "outbound_calls": [
+            "append",
+            "print",
+            "process_item"
+          ],
+          "source_text": "def process_batch(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:\n        \"\"\"Process a batch of items.\"\"\"\n        processed_items = []\n        \n        for item in items:\n            try:\n                processed_item = self.process_item(item)\n                processed_items.append(processed_item)\n            except ValueError as e:\n                print(f\"Error processing item: {e}\")\n                continue\n        \n        return processed_items",
+          "source_hash": "15a3a67718364697769461e9effec3c529c87d1fee814c02976e980902dbe07d",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 3,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "DataProcessor.get_stats",
+          "category": "method",
+          "start_line": 47,
+          "end_line": 53,
+          "line_count": 7,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get processing statistics.",
+          "outbound_calls": [
+            "len",
+            "copy"
+          ],
+          "source_text": "def get_stats(self) -> Dict[str, Any]:\n        \"\"\"Get processing statistics.\"\"\"\n        return {\n            'processed_count': self.processed_count,\n            'error_count': len(self.errors),\n            'errors': self.errors.copy()\n        }",
+          "source_hash": "78e7bcea81011067d82e195b8e5d03a241ea655a3f6d9d2f250ade9f1d4dae27",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "DataProcessor.reset",
+          "category": "method",
+          "start_line": 55,
+          "end_line": 58,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Reset processor state.",
+          "outbound_calls": [
+            "clear"
+          ],
+          "source_text": "def reset(self) -> None:\n        \"\"\"Reset processor state.\"\"\"\n        self.processed_count = 0\n        self.errors.clear()",
+          "source_hash": "2932d47745258b7887640465d0b0e646ecb0d5437ef6573d08788d55796f4a00",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "__init__",
+          "category": "function",
+          "start_line": 14,
+          "end_line": 16,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": null,
+          "outbound_calls": [],
+          "source_text": "def __init__(self):\n        self.processed_count = 0\n        self.errors = []",
+          "source_hash": "6c4bde4506cbb20989b28eda9e2a41a57f60a6d3dd1d03a031ee6bfc4c47cc4f",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "process_item",
+          "category": "function",
+          "start_line": 18,
+          "end_line": 31,
+          "line_count": 14,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Process a single data item.",
+          "outbound_calls": [
+            "validate_item",
+            "append",
+            "ValueError",
+            "copy"
+          ],
+          "source_text": "def process_item(self, item: Dict[str, Any]) -> Dict[str, Any]:\n        \"\"\"Process a single data item.\"\"\"\n        if not validate_item(item):\n            error_msg = f\"Invalid item: {item}\"\n            self.errors.append(error_msg)\n            raise ValueError(error_msg)\n        \n        # Process the item (add some computed fields)\n        processed_item = item.copy()\n        processed_item['processed'] = True\n        processed_item['double_value'] = item['value'] * 2\n        \n        self.processed_count += 1\n        return processed_item",
+          "source_hash": "249181ebf4e7301435d5399676d9e2aa12e704d5a6de074880f4041d9c45c9f7",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 67.34983430576436,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "process_batch",
+          "category": "function",
+          "start_line": 33,
+          "end_line": 45,
+          "line_count": 13,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Process a batch of items.",
+          "outbound_calls": [
+            "append",
+            "print",
+            "process_item"
+          ],
+          "source_text": "def process_batch(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:\n        \"\"\"Process a batch of items.\"\"\"\n        processed_items = []\n        \n        for item in items:\n            try:\n                processed_item = self.process_item(item)\n                processed_items.append(processed_item)\n            except ValueError as e:\n                print(f\"Error processing item: {e}\")\n                continue\n        \n        return processed_items",
+          "source_hash": "15a3a67718364697769461e9effec3c529c87d1fee814c02976e980902dbe07d",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 3,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "get_stats",
+          "category": "function",
+          "start_line": 47,
+          "end_line": 53,
+          "line_count": 7,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get processing statistics.",
+          "outbound_calls": [
+            "len",
+            "copy"
+          ],
+          "source_text": "def get_stats(self) -> Dict[str, Any]:\n        \"\"\"Get processing statistics.\"\"\"\n        return {\n            'processed_count': self.processed_count,\n            'error_count': len(self.errors),\n            'errors': self.errors.copy()\n        }",
+          "source_hash": "78e7bcea81011067d82e195b8e5d03a241ea655a3f6d9d2f250ade9f1d4dae27",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "reset",
+          "category": "function",
+          "start_line": 55,
+          "end_line": 58,
+          "line_count": 4,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Reset processor state.",
+          "outbound_calls": [
+            "clear"
+          ],
+          "source_text": "def reset(self) -> None:\n        \"\"\"Reset processor state.\"\"\"\n        self.processed_count = 0\n        self.errors.clear()",
+          "source_hash": "2932d47745258b7887640465d0b0e646ecb0d5437ef6573d08788d55796f4a00",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "AdvancedProcessor",
+          "category": "class",
+          "start_line": 61,
+          "end_line": 78,
+          "line_count": 18,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Advanced data processor with additional features.",
+          "outbound_calls": [
+            "process_batch",
+            "filter_by_type",
+            "get_stats",
+            "super",
+            "__init__"
+          ],
+          "source_text": "class AdvancedProcessor(DataProcessor):\n    \"\"\"Advanced data processor with additional features.\"\"\"\n    \n    def __init__(self):\n        super().__init__()\n        self.filters_applied = 0\n    \n    def filter_and_process(self, items: List[Dict[str, Any]], item_type: str) -> List[Dict[str, Any]]:\n        \"\"\"Filter items by type and then process them.\"\"\"\n        filtered_items = filter_by_type(items, item_type)\n        self.filters_applied += 1\n        return self.process_batch(filtered_items)\n    \n    def get_stats(self) -> Dict[str, Any]:\n        \"\"\"Get enhanced processing statistics.\"\"\"\n        base_stats = super().get_stats()\n        base_stats['filters_applied'] = self.filters_applied\n        return base_stats",
+          "source_hash": "b483b7a31ecbab2966d5a1cd452303e5d10bedae83380eb96aa08964b42a8dab",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 69.06543096516874,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "AdvancedProcessor.__init__",
+          "category": "method",
+          "start_line": 64,
+          "end_line": 66,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": null,
+          "outbound_calls": [
+            "__init__",
+            "super"
+          ],
+          "source_text": "def __init__(self):\n        super().__init__()\n        self.filters_applied = 0",
+          "source_hash": "b829ad81fd6a21f441a8d1065c8d9c330bb18adc783867b398b704a69dd3e607",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "AdvancedProcessor.filter_and_process",
+          "category": "method",
+          "start_line": 68,
+          "end_line": 72,
+          "line_count": 5,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Filter items by type and then process them.",
+          "outbound_calls": [
+            "process_batch",
+            "filter_by_type"
+          ],
+          "source_text": "def filter_and_process(self, items: List[Dict[str, Any]], item_type: str) -> List[Dict[str, Any]]:\n        \"\"\"Filter items by type and then process them.\"\"\"\n        filtered_items = filter_by_type(items, item_type)\n        self.filters_applied += 1\n        return self.process_batch(filtered_items)",
+          "source_hash": "d3346234834d60ddbffa7803ebb09ea746a318a4c38fe1355d446b83d8846f18",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 79.87684562974381,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "AdvancedProcessor.get_stats",
+          "category": "method",
+          "start_line": 74,
+          "end_line": 78,
+          "line_count": 5,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get enhanced processing statistics.",
+          "outbound_calls": [
+            "get_stats",
+            "super"
+          ],
+          "source_text": "def get_stats(self) -> Dict[str, Any]:\n        \"\"\"Get enhanced processing statistics.\"\"\"\n        base_stats = super().get_stats()\n        base_stats['filters_applied'] = self.filters_applied\n        return base_stats",
+          "source_hash": "25074decdf39dd7c2f90339c88c0eb97b13cad8c3dd07e5560619237518f3020",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "__init__",
+          "category": "function",
+          "start_line": 64,
+          "end_line": 66,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": null,
+          "outbound_calls": [
+            "__init__",
+            "super"
+          ],
+          "source_text": "def __init__(self):\n        super().__init__()\n        self.filters_applied = 0",
+          "source_hash": "b829ad81fd6a21f441a8d1065c8d9c330bb18adc783867b398b704a69dd3e607",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "filter_and_process",
+          "category": "function",
+          "start_line": 68,
+          "end_line": 72,
+          "line_count": 5,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Filter items by type and then process them.",
+          "outbound_calls": [
+            "process_batch",
+            "filter_by_type"
+          ],
+          "source_text": "def filter_and_process(self, items: List[Dict[str, Any]], item_type: str) -> List[Dict[str, Any]]:\n        \"\"\"Filter items by type and then process them.\"\"\"\n        filtered_items = filter_by_type(items, item_type)\n        self.filters_applied += 1\n        return self.process_batch(filtered_items)",
+          "source_hash": "d3346234834d60ddbffa7803ebb09ea746a318a4c38fe1355d446b83d8846f18",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 79.87684562974381,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "get_stats",
+          "category": "function",
+          "start_line": 74,
+          "end_line": 78,
+          "line_count": 5,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "Get enhanced processing statistics.",
+          "outbound_calls": [
+            "get_stats",
+            "super"
+          ],
+          "source_text": "def get_stats(self) -> Dict[str, Any]:\n        \"\"\"Get enhanced processing statistics.\"\"\"\n        base_stats = super().get_stats()\n        base_stats['filters_applied'] = self.filters_applied\n        return base_stats",
+          "source_hash": "25074decdf39dd7c2f90339c88c0eb97b13cad8c3dd07e5560619237518f3020",
+          "has_type_hints": true,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "UnusedProcessor",
+          "category": "class",
+          "start_line": 82,
+          "end_line": 90,
+          "line_count": 9,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "This processor class is not used anywhere.",
+          "outbound_calls": [],
+          "source_text": "class UnusedProcessor:\n    \"\"\"This processor class is not used anywhere.\"\"\"\n    \n    def __init__(self):\n        self.name = \"unused\"\n    \n    def do_nothing(self):\n        \"\"\"This method does nothing useful.\"\"\"\n        pass",
+          "source_hash": "f370d86a2a5e76840b1fe6bc6daaaa78ca412b65d857fb0046e300a5d0e69e8d",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 2,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "UnusedProcessor.__init__",
+          "category": "method",
+          "start_line": 85,
+          "end_line": 86,
+          "line_count": 2,
+          "is_async": false,
+          "decorators": [],
+          "docstring": null,
+          "outbound_calls": [],
+          "source_text": "def __init__(self):\n        self.name = \"unused\"",
+          "source_hash": "4d0c4e5571fb17b56e2e3472afaf559fbce9c1461455458a2ee6ee07466fdd80",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "UnusedProcessor.do_nothing",
+          "category": "method",
+          "start_line": 88,
+          "end_line": 90,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "This method does nothing useful.",
+          "outbound_calls": [],
+          "source_text": "def do_nothing(self):\n        \"\"\"This method does nothing useful.\"\"\"\n        pass",
+          "source_hash": "35ad881ee384258adbfbb4c4c184e83ac9920382deab98fdcf7dbf1012fd8865",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "__init__",
+          "category": "function",
+          "start_line": 85,
+          "end_line": 86,
+          "line_count": 2,
+          "is_async": false,
+          "decorators": [],
+          "docstring": null,
+          "outbound_calls": [],
+          "source_text": "def __init__(self):\n        self.name = \"unused\"",
+          "source_hash": "4d0c4e5571fb17b56e2e3472afaf559fbce9c1461455458a2ee6ee07466fdd80",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        },
+        {
+          "name": "do_nothing",
+          "category": "function",
+          "start_line": 88,
+          "end_line": 90,
+          "line_count": 3,
+          "is_async": false,
+          "decorators": [],
+          "docstring": "This method does nothing useful.",
+          "outbound_calls": [],
+          "source_text": "def do_nothing(self):\n        \"\"\"This method does nothing useful.\"\"\"\n        pass",
+          "source_hash": "35ad881ee384258adbfbb4c4c184e83ac9920382deab98fdcf7dbf1012fd8865",
+          "has_type_hints": false,
+          "metrics": {
+            "cyclomatic": 1,
+            "maintainability_index": 100.0,
+            "risk_flag": false
+          }
+        }
+      ],
+      "metrics": {
+        "cyclomatic": 2,
+        "maintainability_index": 66.51486863182313,
+        "risk_flag": false
+      }
+    }
+  ],
+  "variants": {
+    "__init__": {
+      "implementations": [
+        {
+          "hash": "7ad5be124e165ecccd60e85ad41e9b869c4564755923005de49cd1c31532d397",
+          "path": "main.py",
+          "diff_from_base": []
+        },
+        {
+          "hash": "6c4bde4506cbb20989b28eda9e2a41a57f60a6d3dd1d03a031ee6bfc4c47cc4f",
+          "path": "data_processor.py",
+          "diff_from_base": [
+            "--- ",
+            "+++ ",
+            "@@ -1,4 +1,3 @@",
+            "-def __init__(self, name: str):",
+            "-        self.name = name",
+            "-        self.processor = DataProcessor()",
+            "-        self.data = []",
+            "+def __init__(self):",
+            "+        self.processed_count = 0",
+            "+        self.errors = []"
+          ]
+        },
+        {
+          "hash": "b829ad81fd6a21f441a8d1065c8d9c330bb18adc783867b398b704a69dd3e607",
+          "path": "data_processor.py",
+          "diff_from_base": [
+            "--- ",
+            "+++ ",
+            "@@ -1,4 +1,3 @@",
+            "-def __init__(self, name: str):",
+            "-        self.name = name",
+            "-        self.processor = DataProcessor()",
+            "-        self.data = []",
+            "+def __init__(self):",
+            "+        super().__init__()",
+            "+        self.filters_applied = 0"
+          ]
+        },
+        {
+          "hash": "4d0c4e5571fb17b56e2e3472afaf559fbce9c1461455458a2ee6ee07466fdd80",
+          "path": "data_processor.py",
+          "diff_from_base": [
+            "--- ",
+            "+++ ",
+            "@@ -1,4 +1,2 @@",
+            "-def __init__(self, name: str):",
+            "-        self.name = name",
+            "-        self.processor = DataProcessor()",
+            "-        self.data = []",
+            "+def __init__(self):",
+            "+        self.name = \"unused\""
+          ]
+        }
+      ],
+      "refactor_prompt": "Multiple implementations of `__init__` detected across the codebase.\nRecommended action: Refactor into a single canonical implementation.\nStrategy:\n1. Review all variants and their differences\n2. Identify superset of functionality\n3. Merge implementations preserving all edge cases\n4. Add comprehensive tests covering all use cases\n5. Update all call sites to use new implementation"
+    },
+    "get_stats": {
+      "implementations": [
+        {
+          "hash": "78e7bcea81011067d82e195b8e5d03a241ea655a3f6d9d2f250ade9f1d4dae27",
+          "path": "data_processor.py",
+          "diff_from_base": []
+        },
+        {
+          "hash": "25074decdf39dd7c2f90339c88c0eb97b13cad8c3dd07e5560619237518f3020",
+          "path": "data_processor.py",
+          "diff_from_base": [
+            "--- ",
+            "+++ ",
+            "@@ -1,7 +1,5 @@",
+            " def get_stats(self) -> Dict[str, Any]:",
+            "-        \"\"\"Get processing statistics.\"\"\"",
+            "-        return {",
+            "-            'processed_count': self.processed_count,",
+            "-            'error_count': len(self.errors),",
+            "-            'errors': self.errors.copy()",
+            "-        }",
+            "+        \"\"\"Get enhanced processing statistics.\"\"\"",
+            "+        base_stats = super().get_stats()",
+            "+        base_stats['filters_applied'] = self.filters_applied",
+            "+        return base_stats"
+          ]
+        }
+      ],
+      "refactor_prompt": "Multiple implementations of `get_stats` detected across the codebase.\nRecommended action: Refactor into a single canonical implementation.\nStrategy:\n1. Review all variants and their differences\n2. Identify superset of functionality\n3. Merge implementations preserving all edge cases\n4. Add comprehensive tests covering all use cases\n5. Update all call sites to use new implementation"
+    }
+  },
+  "dependencies": [
+    [
+      "main.py",
+      "utils.py"
+    ],
+    [
+      "main.py",
+      "data_processor.py"
+    ],
+    [
+      "data_processor.py",
+      "utils.py"
+    ]
+  ]
+}

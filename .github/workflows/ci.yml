@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y graphviz graphviz-dev
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+
+    - name: Lint with ruff
+      run: |
+        ruff check code_cartographer/ tests/
+
+    - name: Format check with black
+      run: |
+        black --check code_cartographer/ tests/
+
+    - name: Type check with mypy
+      run: |
+        mypy code_cartographer/ --ignore-missing-imports
+      continue-on-error: true  # Don't fail CI on mypy errors for now
+
+    - name: Test with pytest
+      run: |
+        pytest tests/ -v --cov=code_cartographer --cov-report=xml
+
+    - name: Test CLI functionality
+      run: |
+        # Test CLI help
+        python -m code_cartographer.cli --help
+        python -m code_cartographer.cli analyze --help
+        python -m code_cartographer.cli variants --help
+        
+        # Test CLI on example repository
+        python -m code_cartographer.cli analyze --dir examples/mini_repo --output test_analysis.json
+        
+        # Verify output file was created and is valid JSON
+        python -c "import json; json.load(open('test_analysis.json'))"
+        
+        # Test variants command
+        python -m code_cartographer.cli variants --dir examples/mini_repo --output test_variants.json
+        
+        # Verify variants output
+        python -c "import json; json.load(open('test_variants.json'))"
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
