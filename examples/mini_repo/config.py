@@ -46,5 +46,3 @@ def get_config() -> dict:
     }
 
 
-# Orphaned variable - not used anywhere
-UNUSED_SETTING = "This setting is never referenced"

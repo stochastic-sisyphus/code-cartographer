@@ -37,7 +37,3 @@ def validate_item(item: dict) -> bool:
     return all(field in item for field in required_fields)
 
 
-# Orphaned function - not used anywhere
-def unused_helper_function():
-    """This function is not used anywhere in the codebase."""
-    return "This is orphaned"

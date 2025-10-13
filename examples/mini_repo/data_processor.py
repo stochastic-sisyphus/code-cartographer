@@ -80,13 +80,3 @@ class AdvancedProcessor(DataProcessor):
         return base_stats
 
 
-# Orphaned class - not used anywhere
-class UnusedProcessor:
-    """This processor class is not used anywhere."""
-
-    def __init__(self):
-        self.name = "unused"
-
-    def do_nothing(self):
-        """This method does nothing useful."""
-        pass
