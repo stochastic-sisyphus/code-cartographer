@@ -49,3 +49,8 @@ analysis_reports/
 # OS
 .DS_Store
 Thumbs.db 
+
+# Whatnot
+.github/workflows/claude-code-review.yml
+.github/workflows/claude.yml
+CLAUDE.md
