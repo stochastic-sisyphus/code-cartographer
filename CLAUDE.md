@@ -113,6 +113,7 @@ code_cartographer/
 - Line length: 88 (black)
 - Type hints required (mypy strict)
 - Import sorting: isort with black profile
+- **NEVER use emojis** in code, comments, docstrings, commit messages, or documentation
 
 ---
 
