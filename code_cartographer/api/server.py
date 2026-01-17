@@ -10,18 +10,33 @@ from datetime import datetime
 from pathlib import Path
 from typing import AsyncGenerator
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 logger = logging.getLogger(__name__)
+
+# Get paths to web assets
+_module_path = Path(__file__).parent.parent
+_static_path = _module_path / "web" / "static"
+_templates_path = _module_path / "web" / "templates"
+
+# Create templates directory if it doesn't exist
+_templates_path.mkdir(parents=True, exist_ok=True)
+_static_path.mkdir(parents=True, exist_ok=True)
+
+# Setup templates
+templates = Jinja2Templates(directory=str(_templates_path))
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator:
     """Lifecycle management for the FastAPI app."""
     logger.info("Starting Code Warp House server")
+    logger.info(f"Static files: {_static_path}")
+    logger.info(f"Templates: {_templates_path}")
     yield
     logger.info("Shutting down Code Warp House server")
 
@@ -43,84 +58,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files
+app.mount("/static", StaticFiles(directory=str(_static_path)), name="static")
+
 
 @app.get("/", response_class=HTMLResponse)
-async def root():
+async def root(request: Request):
     """Root endpoint - serves the web interface."""
-    return """
-    <html>
-        <head>
-            <title>Code Warp House</title>
-            <style>
-                body {
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-                    max-width: 800px;
-                    margin: 40px auto;
-                    padding: 20px;
-                    background: #0a0a0a;
-                    color: #e0e0e0;
-                }
-                h1 {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
-                }
-                a {
-                    color: #667eea;
-                    text-decoration: none;
-                }
-                a:hover {
-                    text-decoration: underline;
-                }
-                .endpoint {
-                    background: #1a1a1a;
-                    padding: 10px;
-                    margin: 10px 0;
-                    border-radius: 5px;
-                    border-left: 3px solid #667eea;
-                }
-                .method {
-                    display: inline-block;
-                    padding: 2px 8px;
-                    border-radius: 3px;
-                    font-weight: bold;
-                    font-size: 12px;
-                    margin-right: 10px;
-                }
-                .get { background: #28a745; color: white; }
-                .post { background: #007bff; color: white; }
-                .ws { background: #ffc107; color: black; }
-            </style>
-        </head>
-        <body>
-            <h1>🌀 Code Warp House</h1>
-            <p>Immersive temporal code visualization platform</p>
-
-            <h2>API Documentation</h2>
-            <p>Interactive API docs: <a href="/docs">/docs</a></p>
-            <p>Alternative docs: <a href="/redoc">/redoc</a></p>
-
-            <h2>Quick Start</h2>
-            <div class="endpoint">
-                <span class="method get">GET</span>
-                <code>/api/v1/health</code> - Health check
-            </div>
-            <div class="endpoint">
-                <span class="method post">POST</span>
-                <code>/api/v1/projects/analyze</code> - Analyze a codebase
-            </div>
-            <div class="endpoint">
-                <span class="method get">GET</span>
-                <code>/api/v1/projects</code> - List analyzed projects
-            </div>
-
-            <h2>Status</h2>
-            <p>Server is running and ready to accept requests.</p>
-            <p>Frontend web interface coming soon...</p>
-        </body>
-    </html>
-    """
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/api/v1/health")
