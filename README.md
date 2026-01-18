@@ -26,7 +26,20 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 
 ## Features
 
-- **Full file and definition level metadata**  
+- **Immersive Interactive Visualization** 🎨  
+  Dynamic, force-directed graph visualization showing code as a living ecosystem with temporal evolution
+  
+  ![Immersive Visualization](https://github.com/user-attachments/assets/5cbaec9c-ec04-40dc-a533-e94599f144d8)
+  
+  [See the full visualization guide →](docs/IMMERSIVE_VISUALIZATION.md)
+
+- **Temporal Code Evolution** ⏱️  
+  Track how your codebase grows and changes over time through git history analysis
+
+- **Living Dependency Relationships** 🔗  
+  Visualize code relationships with harmony, tension, and interaction patterns
+
+- **Full file and definition level metadata** 📊  
   Class/function blocks, line counts, docstrings, decorators, async flags, calls, type hints
 
 - **Intelligent Code Normalization**  
@@ -54,7 +67,7 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
   Skimmable digest with risk flags and structure
 
 - **Interactive Dashboard**  
-  Visual analysis of code complexity, variants, and dependencies
+  Immersive D3.js-based visualization with physics simulation and temporal playback
 
 - **CLI flexibility**  
   Exclusion patterns, Git SHA tagging, output formatting, variant merging controls
@@ -108,6 +121,7 @@ The code-cartographer package provides tools for analyzing Python codebases:
 
 ```python
 from code_cartographer import ProjectAnalyzer, VariantAnalyzer
+from code_cartographer.core.immersive_dashboard import ImmersiveDashboardGenerator
 
 # Initialize analyzers
 project_analyzer = ProjectAnalyzer("/path/to/your/project")
@@ -117,10 +131,36 @@ variant_analyzer = VariantAnalyzer()
 analysis_results = project_analyzer.analyze()
 variant_results = variant_analyzer.analyze(analysis_results)
 
+# Generate immersive visualization
+dashboard_gen = ImmersiveDashboardGenerator()
+dashboard_gen.generate(analysis_results, "visualization.html")
+
 # Generate reports
 project_analyzer.generate_markdown("analysis.md")
 project_analyzer.generate_dependency_graph("dependencies.dot")
 ```
+
+### Immersive Visualization
+
+Experience your codebase as a living, breathing ecosystem:
+
+```bash
+# Generate interactive visualization
+code-cartographer visualize -d /path/to/project -o codebase.html
+
+# Include temporal evolution from git history
+code-cartographer visualize -d /path/to/project -o codebase.html --temporal --max-commits 50
+
+# Export visualization data as JSON
+code-cartographer visualize -d /path/to/project -o codebase.html --export-json
+```
+
+The immersive dashboard features:
+- **Force-directed graph** - Nodes represent code elements, edges show dependencies
+- **Temporal timeline** - Slide through your codebase's evolution
+- **Interactive exploration** - Hover, drag, zoom to explore relationships
+- **Visual metaphors** - Color and animation show harmony, tension, and complexity
+- **Physics simulation** - Code elements attract and repel based on relationships
 
 ### Advanced Usage
 

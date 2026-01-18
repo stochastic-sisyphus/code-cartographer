@@ -11,6 +11,8 @@ from pathlib import Path
 
 from code_cartographer.core.analyzer import ProjectAnalyzer
 from code_cartographer.core.variant_analyzer import VariantAnalyzer
+from code_cartographer.core.immersive_dashboard import ImmersiveDashboardGenerator
+from code_cartographer.core.temporal_analyzer import TemporalAnalyzer
 
 
 class SetEncoder(json.JSONEncoder):
@@ -53,6 +55,41 @@ def variants_command(args: argparse.Namespace) -> None:
         print("[INFO] Applying merged variants...")
         analyzer.apply_merged_variants(backup=not args.no_backup)
         print("[INFO] Variants merged successfully")
+
+
+def visualize_command(args: argparse.Namespace) -> None:
+    """Generate immersive visualization dashboard."""
+    print("[INFO] Running code analysis...")
+    analyzer = ProjectAnalyzer(root=args.dir, exclude_patterns=args.exclude or [])
+    analysis = analyzer.execute()
+    
+    temporal_data = None
+    if args.temporal:
+        print("[INFO] Analyzing temporal evolution...")
+        temporal_analyzer = TemporalAnalyzer(args.dir)
+        snapshots = temporal_analyzer.analyze_git_history(
+            max_commits=args.max_commits,
+            file_patterns=['*.py']
+        )
+        
+        temporal_data = {
+            'timeline': temporal_analyzer.get_evolution_timeline(),
+            'velocity': temporal_analyzer.calculate_code_velocity(),
+            'interactions': temporal_analyzer.get_interaction_patterns()
+        }
+    
+    print("[INFO] Generating immersive dashboard...")
+    dashboard_gen = ImmersiveDashboardGenerator()
+    output_path = dashboard_gen.generate(analysis, args.output, temporal_data)
+    
+    print(f"[INFO] Dashboard generated: {output_path.resolve()}")
+    print(f"[INFO] Open {output_path.resolve()} in your browser to explore!")
+    
+    # Also export JSON data
+    if args.export_json:
+        json_path = args.output.with_suffix('.json')
+        dashboard_gen.export_json_data(analysis, json_path, temporal_data)
+        print(f"[INFO] Visualization data exported: {json_path.resolve()}")
 
 
 def _setup_parser(subparsers, command, help_text, default_output):
@@ -134,6 +171,33 @@ def main() -> None:
         help="Don't create backup files when applying merges",
     )
 
+    # Visualize command
+    visualize_parser = _setup_parser(
+        subparsers,
+        "visualize",
+        "Generate immersive interactive visualization",
+        "codebase_visualization.html",
+    )
+    visualize_parser.add_argument(
+        "-e", "--exclude", nargs="*", help="Regex patterns for paths to exclude"
+    )
+    visualize_parser.add_argument(
+        "--temporal",
+        action="store_true",
+        help="Include temporal evolution analysis from git history",
+    )
+    visualize_parser.add_argument(
+        "--max-commits",
+        type=int,
+        default=100,
+        help="Maximum number of commits to analyze for temporal view (default: 100)",
+    )
+    visualize_parser.add_argument(
+        "--export-json",
+        action="store_true",
+        help="Export visualization data as JSON",
+    )
+
     # Parse and dispatch
     args = parser.parse_args()
 
@@ -142,6 +206,8 @@ def main() -> None:
             analyze_command(args)
         elif args.command == "variants":
             variants_command(args)
+        elif args.command == "visualize":
+            visualize_command(args)
     except KeyboardInterrupt:
         print("\nOperation cancelled by user")
         sys.exit(1)

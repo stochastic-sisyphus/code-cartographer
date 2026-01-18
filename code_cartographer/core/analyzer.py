@@ -268,7 +268,7 @@ class ProjectAnalyzer:
     """Orchestrates full-project code analysis."""
 
     def __init__(self, root: Path, exclude_patterns: List[str] = None):
-        self.root = root
+        self.root = Path(root) if not isinstance(root, Path) else root
         self.exclude_patterns = exclude_patterns or []
         self.file_data: List[FileMetadata] = []
         self.definition_index: Dict[str, Dict[str, Tuple[str, str]]] = defaultdict(dict)
