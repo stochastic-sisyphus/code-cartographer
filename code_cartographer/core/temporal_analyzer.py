@@ -5,6 +5,7 @@ Analyzes code evolution over time through git history to enable dynamic visualiz
 of how codebases grow, change, and evolve.
 """
 
+import fnmatch
 import subprocess
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -173,7 +174,6 @@ class TemporalAnalyzer:
             
             # Filter by patterns if provided
             if file_patterns:
-                import fnmatch
                 filtered_files = []
                 for file in files:
                     if any(fnmatch.fnmatch(file, pattern) 
