@@ -26,16 +26,20 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 
 ## Features
 
-- **Immersive Interactive Visualization**  
+- **Immersive Interactive Visualization** 🎨  
   Dynamic, force-directed graph visualization showing code as a living ecosystem with temporal evolution
+  
+  ![Immersive Visualization](https://github.com/user-attachments/assets/5cbaec9c-ec04-40dc-a533-e94599f144d8)
+  
+  [See the full visualization guide →](docs/IMMERSIVE_VISUALIZATION.md)
 
-- **Temporal Code Evolution**  
+- **Temporal Code Evolution** ⏱️  
   Track how your codebase grows and changes over time through git history analysis
 
-- **Living Dependency Relationships**  
+- **Living Dependency Relationships** 🔗  
   Visualize code relationships with harmony, tension, and interaction patterns
 
-- **Full file and definition level metadata**  
+- **Full file and definition level metadata** 📊  
   Class/function blocks, line counts, docstrings, decorators, async flags, calls, type hints
 
 - **Intelligent Code Normalization**  
