@@ -81,8 +81,14 @@ class ImmersiveDashboardGenerator:
         nodes = []
         links = []
         
-        # Extract files and create nodes
-        files = analysis_data.get('files', {})
+        # Extract files - handle both dict and list formats
+        files_data = analysis_data.get('files', [])
+        if isinstance(files_data, list):
+            # Convert list of file metadata to dict keyed by path
+            files = {f['path']: f for f in files_data}
+        else:
+            files = files_data
+        
         node_map = {}  # Map file paths to node indices
         
         for idx, (file_path, file_data) in enumerate(files.items()):
