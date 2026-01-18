@@ -12,6 +12,9 @@ from typing import Any, Dict, List, Optional
 
 from jinja2 import Environment, FileSystemLoader
 
+# Constants for complexity normalization
+MAX_CYCLOMATIC_COMPLEXITY = 50  # Cap for normalization to 0-100 scale
+
 
 class ImmersiveDashboardGenerator:
     """Generates immersive, interactive visualization dashboards."""
@@ -200,8 +203,8 @@ class ImmersiveDashboardGenerator:
         # Use cyclomatic complexity if available
         cyclomatic = metrics.get('cyclomatic', 0)
         
-        # Normalize to 0-100 scale (cap at 50 for cyclomatic)
-        normalized = min(100, (cyclomatic / 50) * 100)
+        # Normalize to 0-100 scale using defined constant
+        normalized = min(100, (cyclomatic / MAX_CYCLOMATIC_COMPLEXITY) * 100)
         
         return normalized
     

@@ -120,7 +120,7 @@ class TemporalAnalyzer:
                 if not line:
                     continue
                 parts = line.split('|')
-                if len(parts) >= 3:
+                if len(parts) == 3:
                     commit_hash = parts[0]
                     timestamp = datetime.fromtimestamp(int(parts[1]))
                     author = parts[2]
@@ -150,6 +150,16 @@ class TemporalAnalyzer:
         elements = {}
         
         try:
+            # Get commit timestamp
+            timestamp_result = subprocess.run(
+                ['git', 'show', '-s', '--format=%ct', commit_hash],
+                cwd=self.repo_path,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            commit_timestamp = datetime.fromtimestamp(int(timestamp_result.stdout.strip()))
+            
             # Get list of files in this commit
             result = subprocess.run(
                 ['git', 'ls-tree', '-r', '--name-only', commit_hash],
@@ -163,9 +173,10 @@ class TemporalAnalyzer:
             
             # Filter by patterns if provided
             if file_patterns:
+                import fnmatch
                 filtered_files = []
                 for file in files:
-                    if any(file.endswith(pattern.replace('*', '')) 
+                    if any(fnmatch.fnmatch(file, pattern) 
                           for pattern in file_patterns):
                         filtered_files.append(file)
                 files = filtered_files
@@ -177,8 +188,8 @@ class TemporalAnalyzer:
                         name=Path(file_path).stem,
                         element_type='module',
                         file_path=file_path,
-                        first_seen=datetime.now(),
-                        last_modified=datetime.now()
+                        first_seen=commit_timestamp,
+                        last_modified=commit_timestamp
                     )
                     elements[file_path] = element
                     

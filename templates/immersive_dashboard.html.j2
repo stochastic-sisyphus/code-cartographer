@@ -514,8 +514,12 @@
       d3.select('#stat-elements').text(nodes.length);
       d3.select('#stat-connections').text(links.length);
       
-      const avgComplexity = nodes.reduce((sum, n) => sum + (n.complexity || 0), 0) / nodes.length;
-      d3.select('#stat-complexity').text(avgComplexity.toFixed(1));
+      if (nodes.length > 0) {
+        const avgComplexity = nodes.reduce((sum, n) => sum + (n.complexity || 0), 0) / nodes.length;
+        d3.select('#stat-complexity').text(avgComplexity.toFixed(1));
+      } else {
+        d3.select('#stat-complexity').text('0');
+      }
     }
     
     // Timeline slider
