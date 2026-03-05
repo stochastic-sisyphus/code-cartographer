@@ -1,0 +1,34 @@
+[tools]
+python = "3.11"
+
+[tasks.install]
+description = "Install project dependencies"
+run = "pip install -e '.[dev]'"
+
+[tasks.analyze]
+description = "Analyze a codebase"
+run = "python -m code_cartographer analyze -d $1 -o ${2:-output.json}"
+
+[tasks.variants]
+description = "Detect code variants"
+run = "python -m code_cartographer variants -d $1 --semantic-threshold ${2:-0.8}"
+
+[tasks.serve]
+description = "Start Code Warp House web server"
+run = "python -m code_cartographer serve --reload"
+
+[tasks.test]
+description = "Run test suite"
+run = "pytest"
+
+[tasks.format]
+description = "Format code with black and isort"
+run = ["black src/ tests/", "isort src/ tests/"]
+
+[tasks.lint]
+description = "Run linters"
+run = ["mypy src/", "flake8 src/ tests/"]
+
+[tasks.pre-commit]
+description = "Run pre-commit hooks"
+run = "pre-commit run --all-files"

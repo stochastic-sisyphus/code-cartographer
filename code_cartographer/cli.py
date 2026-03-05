@@ -55,6 +55,29 @@ def variants_command(args: argparse.Namespace) -> None:
         print("[INFO] Variants merged successfully")
 
 
+def serve_command(args: argparse.Namespace) -> None:
+    """Launch Code Warp House web server."""
+    try:
+        import uvicorn
+    except ImportError:
+        print("[ERROR] uvicorn is required for the web server.")
+        print("Install with: pip install 'code-cartographer[web]' or pip install uvicorn")
+        sys.exit(1)
+
+    print(f"[INFO] Starting Code Warp House server on {args.host}:{args.port}")
+    print(f"[INFO] Web interface: http://{args.host}:{args.port}")
+    print(f"[INFO] API docs: http://{args.host}:{args.port}/docs")
+    print(f"[INFO] Press Ctrl+C to stop")
+
+    uvicorn.run(
+        "code_cartographer.api.server:app",
+        host=args.host,
+        port=args.port,
+        reload=args.reload,
+        log_level="info"
+    )
+
+
 def _setup_parser(subparsers, command, help_text, default_output):
     """Set up a subparser with common arguments."""
     parser = subparsers.add_parser(
@@ -134,6 +157,30 @@ def main() -> None:
         help="Don't create backup files when applying merges",
     )
 
+    # Serve command (Code Warp House web server)
+    serve_parser = subparsers.add_parser(
+        "serve",
+        help="Launch Code Warp House web server",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    serve_parser.add_argument(
+        "--host",
+        type=str,
+        default="127.0.0.1",
+        help="Host to bind to (default: 127.0.0.1)",
+    )
+    serve_parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port to bind to (default: 8000)",
+    )
+    serve_parser.add_argument(
+        "--reload",
+        action="store_true",
+        help="Enable auto-reload for development",
+    )
+
     # Parse and dispatch
     args = parser.parse_args()
 
@@ -142,6 +189,8 @@ def main() -> None:
             analyze_command(args)
         elif args.command == "variants":
             variants_command(args)
+        elif args.command == "serve":
+            serve_command(args)
     except KeyboardInterrupt:
         print("\nOperation cancelled by user")
         sys.exit(1)

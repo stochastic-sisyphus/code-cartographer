@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Warp House - Immersive Temporal Code Visualization</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="app-header">
+                <h1 class="app-title">🌀 Code Warp House</h1>
+                <p class="app-subtitle">Temporal Code Visualization</p>
+            </div>
+
+            <button id="analyzeBtn" class="btn btn-primary btn-full">
+                Analyze Project
+            </button>
+
+            <div class="projects-section">
+                <div class="projects-header">
+                    <h2>Projects</h2>
+                </div>
+                <div id="projectsList">
+                    <div class="empty-state">
+                        <p>Loading projects...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div id="projectView">
+                <div class="empty-state">
+                    <h2>Welcome to Code Warp House</h2>
+                    <p>Select a project from the sidebar or analyze a new one to get started</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analyze Dialog -->
+    <div id="analyzeDialog" class="dialog-overlay">
+        <div class="dialog">
+            <h2>Analyze Project</h2>
+            <form id="analyzeForm">
+                <div class="form-group">
+                    <label for="projectPath">Project Path</label>
+                    <input
+                        type="text"
+                        id="projectPath"
+                        name="projectPath"
+                        placeholder="/path/to/your/project"
+                        required
+                    />
+                </div>
+                <div class="dialog-actions">
+                    <button type="button" id="closeDialog" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Analyze</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Progress Overlay -->
+    <div id="progressOverlay" class="progress-overlay">
+        <div class="spinner"></div>
+        <p id="progressMessage">Processing...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

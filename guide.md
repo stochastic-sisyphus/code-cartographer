@@ -13,12 +13,17 @@ Code Cartographer is a comprehensive static analysis tool designed to help you u
    cd code-cartographer
    ```
 
-2. Create a virtual environment and install dependencies:
+2. Install dependencies (recommended: use mise):
 
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   pip install -r requirements.txt
+   # With mise (recommended)
+   mise trust
+   mise install
+   mise run install
+
+   # Or manually with pip
+   pip install -e .
+   pip install -e ".[dev]"  # For development
    ```
 
 3. Install system dependencies:
@@ -56,26 +61,28 @@ This will:
 For more control over the analysis process, you can use the Python module directly:
 
 ```python
-from code_cartographer.core.analyzer import CodeAnalyzer
+from code_cartographer.core.analyzer import ProjectAnalyzer, generate_markdown, generate_dependency_graph
 from pathlib import Path
 
 # Initialize the analyzer
-analyzer = CodeAnalyzer(
+analyzer = ProjectAnalyzer(
     project_root=Path("/path/to/your/project"),
-    output_dir=Path("/path/to/output")
-)
-
-# Run the analysis
-results = analyzer.analyze(
     exclude_patterns=["tests/", "venv/", "build/"]
 )
 
+# Run the analysis
+analysis = analyzer.execute()
+
 # Generate reports
-report_path = analyzer.generate_report(results)
-graph_path = analyzer.generate_call_graph(results)
+report_path = Path("/path/to/output/analysis.md")
+generate_markdown(analysis, report_path)
+
+# Generate dependency graph
+graph_path = Path("/path/to/output/dependencies.dot")
+generate_dependency_graph(analysis["dependencies"], graph_path)
 
 print(f"Report generated at: {report_path}")
-print(f"Call graph generated at: {graph_path}")
+print(f"Dependency graph generated at: {graph_path}")
 ```
 
 ## Understanding the Results

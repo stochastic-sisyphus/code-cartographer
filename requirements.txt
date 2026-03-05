@@ -1,14 +1,10 @@
-astroid>=2.15.0,<3.0  # For parsing AST
-astunparse>=1.6.3,<2.0  # For parsing AST
-graphviz>=0.20.1,<1.0  # For dependency graphs
-jinja2>=3.1.2,<4.0  # For templating
-markdown>=3.4.0,<4.0  # For markdown report generation
-matplotlib>=3.7.0,<4.0  # For visualization
-matplotlib-venn>=0.11.7,<1.0  # For Venn diagrams
-networkx>=2.8.0,<4.0  # For graph operations
-nltk>=3.8.0,<4.0  # For natural language processing
-numpy>=1.24.0,<2.0  # Required by pandas and matplotlib
-pandas>=1.5.0,<3.0  # For creating comparison matrices
-radon>=5.1.0,<6.0  # For code complexity metrics
-sentence-transformers>=2.2.0,<3.0  # For semantic similarity
-tqdm>=4.65.0,<5.0  # For progress bars
+# This project uses pyproject.toml for dependency management.
+#
+# Recommended: Use mise for automatic environment setup
+#   mise trust
+#   mise install
+#   mise run install
+#
+# Or install manually:
+#   pip install -e .
+#   pip install -e ".[dev]"
