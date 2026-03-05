@@ -134,38 +134,60 @@ class TestGitAnalyzer:
         mock_parent2 = Mock()
         mock_parent2.diff.return_value = [mock_diff2]
 
-        # Create commits with refactoring keywords
-        commit1 = Mock()
-        commit1.hexsha = "abc" * 13 + "a"
-        commit1.committed_date = 1704067200
-        commit1.author = Mock()
-        commit1.author.name = "Author 1"
-        commit1.author.email = "author1@example.com"
-        commit1.message = "Refactor authentication module"
-        commit1.stats = Mock()
-        commit1.stats.total = {"insertions": 50, "deletions": 30}
-        commit1.parents = [mock_parent2]
+        mock_diff3 = Mock()
+        mock_diff3.renamed_file = False
+        mock_diff3.a_path = "init.py"
+        mock_diff3.b_path = None
 
+        mock_parent3 = Mock()
+        mock_parent3.diff.return_value = [mock_diff3]
+
+        # Create commits - newest first (as returned by git)
+        # commit3 is newest
+        commit3 = Mock()
+        commit3.hexsha = "ghi" * 13 + "g"
+        commit3.committed_date = 1704240000
+        commit3.author = Mock()
+        commit3.author.name = "Author 3"
+        commit3.author.email = "author3@example.com"
+        commit3.message = "Add new feature"
+        commit3.stats = Mock()
+        commit3.stats.total = {"insertions": 20, "deletions": 0}
+        commit3.parents = [mock_parent1]
+
+        # commit2 has the refactoring keyword (middle commit)
         commit2 = Mock()
         commit2.hexsha = "def" * 13 + "d"
         commit2.committed_date = 1704153600
         commit2.author = Mock()
         commit2.author.name = "Author 2"
         commit2.author.email = "author2@example.com"
-        commit2.message = "Add new feature"
+        commit2.message = "Refactor authentication module"
         commit2.stats = Mock()
-        commit2.stats.total = {"insertions": 20, "deletions": 0}
-        commit2.parents = [mock_parent1]
+        commit2.stats.total = {"insertions": 50, "deletions": 30}
+        commit2.parents = [mock_parent2]
+
+        # commit1 is oldest
+        commit1 = Mock()
+        commit1.hexsha = "abc" * 13 + "a"
+        commit1.committed_date = 1704067200
+        commit1.author = Mock()
+        commit1.author.name = "Author 1"
+        commit1.author.email = "author1@example.com"
+        commit1.message = "Initial commit"
+        commit1.stats = Mock()
+        commit1.stats.total = {"insertions": 100, "deletions": 0}
+        commit1.parents = [mock_parent3]
 
         mock_repo = Mock()
         mock_repo.bare = False
-        mock_repo.iter_commits.return_value = [commit2, commit1]
+        mock_repo.iter_commits.return_value = [commit3, commit2, commit1]
         mock_repo_class.return_value = mock_repo
 
         analyzer = GitAnalyzer(tmp_path)
         events = analyzer.detect_refactoring_events(max_commits=10)
 
-        # Should detect the refactor keyword in commit1
+        # Should detect the refactor keyword in commit2 (middle commit)
         refactor_events = [e for e in events if e.event_type == "extract"]
         assert len(refactor_events) >= 1
         assert any("Refactor" in e.description for e in refactor_events)
