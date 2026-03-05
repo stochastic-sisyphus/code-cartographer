@@ -43,7 +43,7 @@ class ConnectionManager:
             "type": "connected",
             "project_id": project_id,
             "timestamp": datetime.now().isoformat(),
-            "message": "Connected to Code Warp House"
+            "message": "Connected to Temporal Topography"
         })
 
     def disconnect(self, websocket: WebSocket, project_id: str):

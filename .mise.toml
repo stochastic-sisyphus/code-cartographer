@@ -14,7 +14,7 @@ description = "Detect code variants"
 run = "python -m code_cartographer variants -d $1 --semantic-threshold ${2:-0.8}"
 
 [tasks.serve]
-description = "Start Code Warp House web server"
+description = "Start Temporal Topography web server"
 run = "python -m code_cartographer serve --reload"
 
 [tasks.test]

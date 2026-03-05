@@ -244,7 +244,7 @@ class ReportGenerator:
                 # Add indicators for risk and orphan status
                 indicators = []
                 if definition.get("metrics", {}).get("risk_flag", False):
-                    indicators.append("⚠️ High Risk")
+                    indicators.append("⚠ High Risk")
                 if definition.get("is_orphan", False):
                     indicators.append("🔕 Orphan")
 

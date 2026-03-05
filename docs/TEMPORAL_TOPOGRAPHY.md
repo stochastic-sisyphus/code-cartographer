@@ -1,8 +1,8 @@
-# Code Warp House - User Guide
+# Temporal Topography - User Guide
 
 ## Overview
 
-Code Warp House transforms Code Cartographer from a static analysis tool into an immersive, temporal code visualization platform. It enables you to explore your codebase's evolution through git history, visualize dependencies, track complexity trends, and detect refactoring patterns.
+Temporal Topography transforms Code Cartographer from a static analysis tool into an immersive, temporal code visualization platform. It enables you to explore your codebase's evolution through git history, visualize dependencies, track complexity trends, and detect refactoring patterns.
 
 ## Quick Start
 
@@ -26,13 +26,13 @@ Open your browser to `http://localhost:8000`
 ### 3. Analyze a Project
 
 1. Click "Analyze Project" in the sidebar
-2. Enter the path to your project (e.g., `/Users/you/code/myproject`)
+2. Enter the path to your project (e.g., `/path/to/your/project`)
 3. Click "Analyze" and wait for the analysis to complete
 4. Explore your codebase through the interactive interface
 
 ## Features
 
-### 🕒 Temporal Analysis
+###  Temporal Analysis
 
 Navigate through your codebase's history:
 
@@ -41,7 +41,7 @@ Navigate through your codebase's history:
 - **Refactoring Events**: Automatically detect renames, splits, merges, and extractions
 - **File Hotspots**: Identify frequently changed files that may need attention
 
-### 📊 Static Analysis
+###  Static Analysis
 
 Comprehensive code analysis:
 
@@ -49,7 +49,7 @@ Comprehensive code analysis:
 - **File Analysis**: Cyclomatic complexity, maintainability index
 - **Definition Tracking**: Functions, classes, methods with complexity scores
 
-### 🔗 Dependency Visualization
+###  Dependency Visualization
 
 Understand code relationships:
 
@@ -57,7 +57,7 @@ Understand code relationships:
 - **Call Graph**: Trace function and method calls
 - **Dependency Metrics**: Coupling and cohesion analysis
 
-### 🔍 Code Variants
+###  Code Variants
 
 Find and manage code duplication:
 
@@ -78,7 +78,7 @@ Response:
 ```json
 {
   "status": "healthy",
-  "service": "code-warp-house",
+  "service": "temporal-topography",
   "version": "0.3.0"
 }
 ```
@@ -355,7 +355,7 @@ If timeline shows no commits:
 
 ### Contributing
 
-To extend Code Warp House:
+To extend Temporal Topography:
 
 1. **Add new visualizations**: Create components in `web/static/`
 2. **New API endpoints**: Add routes in `api/routes/`

@@ -409,7 +409,7 @@ def generate_markdown(analysis: Dict[str, Any], output_path: Path):
         )
 
         for d in fs["definitions"]:
-            risk = "⚠️" if d["metrics"]["risk_flag"] else ""
+            risk = "⚠" if d["metrics"]["risk_flag"] else ""
             lines.append(
                 f"* `{d['category']}` **{d['name']}** "
                 f"({d['line_count']} lines) {risk}"

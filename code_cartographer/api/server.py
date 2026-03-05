@@ -1,5 +1,5 @@
 """
-FastAPI Server for Code Warp House
+FastAPI Server for Temporal Topography
 ===================================
 Main application entry point for the web API.
 """
@@ -34,16 +34,16 @@ templates = Jinja2Templates(directory=str(_templates_path))
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator:
     """Lifecycle management for the FastAPI app."""
-    logger.info("Starting Code Warp House server")
+    logger.info("Starting Temporal Topography server")
     logger.info(f"Static files: {_static_path}")
     logger.info(f"Templates: {_templates_path}")
     yield
-    logger.info("Shutting down Code Warp House server")
+    logger.info("Shutting down Temporal Topography server")
 
 
 # Create FastAPI application
 app = FastAPI(
-    title="Code Warp House API",
+    title="Temporal Topography API",
     description="Immersive temporal code visualization and analysis platform",
     version="0.3.0",
     lifespan=lifespan,
@@ -73,7 +73,7 @@ async def health_check():
     """Health check endpoint."""
     return {
         "status": "healthy",
-        "service": "code-warp-house",
+        "service": "temporal-topography",
         "version": "0.3.0"
     }
 

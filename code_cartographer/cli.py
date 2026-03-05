@@ -56,7 +56,7 @@ def variants_command(args: argparse.Namespace) -> None:
 
 
 def serve_command(args: argparse.Namespace) -> None:
-    """Launch Code Warp House web server."""
+    """Launch Temporal Topography web server."""
     try:
         import uvicorn
     except ImportError:
@@ -64,7 +64,7 @@ def serve_command(args: argparse.Namespace) -> None:
         print("Install with: pip install 'code-cartographer[web]' or pip install uvicorn")
         sys.exit(1)
 
-    print(f"[INFO] Starting Code Warp House server on {args.host}:{args.port}")
+    print(f"[INFO] Starting Temporal Topography server on {args.host}:{args.port}")
     print(f"[INFO] Web interface: http://{args.host}:{args.port}")
     print(f"[INFO] API docs: http://{args.host}:{args.port}/docs")
     print(f"[INFO] Press Ctrl+C to stop")
@@ -157,10 +157,10 @@ def main() -> None:
         help="Don't create backup files when applying merges",
     )
 
-    # Serve command (Code Warp House web server)
+    # Serve command (Temporal Topography web server)
     serve_parser = subparsers.add_parser(
         "serve",
-        help="Launch Code Warp House web server",
+        help="Launch Temporal Topography web server",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     serve_parser.add_argument(

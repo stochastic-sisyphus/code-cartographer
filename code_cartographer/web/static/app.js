@@ -1,5 +1,5 @@
 /**
- * Code Warp House - Frontend Application
+ * Temporal Topography - Frontend Application
  * Interactive web interface for temporal code visualization
  */
 

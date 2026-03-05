@@ -59,20 +59,20 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 - **CLI flexibility**
   Exclusion patterns, Git SHA tagging, output formatting, variant merging controls
 
-## 🌀 Code Warp House - NEW!
+## 🌀 Temporal Topography - NEW!
 
 **Immersive Temporal Code Visualization Platform**
 
-Code Cartographer now includes Code Warp House, a powerful web-based interface for exploring your codebase's evolution through time:
+Code Cartographer now includes Temporal Topography, a powerful web-based interface for exploring your codebase's evolution through time:
 
-- **🕒 Temporal Analysis**: Navigate git history and track code evolution
-- **📊 Interactive Visualizations**: Complexity trends, dependency graphs, file hotspots
+- ** Temporal Analysis**: Navigate git history and track code evolution
+- ** Interactive Visualizations**: Complexity trends, dependency graphs, file hotspots
 - **🔄 Refactoring Detection**: Automatically identify renames, splits, merges, and extractions
 - **🌐 Modern Web UI**: Fast, responsive interface built with FastAPI and vanilla JavaScript
-- **⚡ Real-time Updates**: WebSocket-based progress tracking during analysis
+- ** Real-time Updates**: WebSocket-based progress tracking during analysis
 - **📈 Complexity Evolution**: See how code complexity changes over time
 
-### Quick Start with Code Warp House
+### Quick Start with Temporal Topography
 
 ```bash
 # Start the web server
@@ -83,7 +83,7 @@ python -m code_cartographer serve
 # Explore your codebase through interactive visualizations
 ```
 
-See [Code Warp House Documentation](docs/CODE_WARP_HOUSE.md) for complete guide and API reference.
+See [Temporal Topography Documentation](docs/CODE_WARP_HOUSE.md) for complete guide and API reference.
 
 ---
 

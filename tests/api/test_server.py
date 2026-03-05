@@ -21,7 +21,7 @@ class TestBasicEndpoints:
         """Test the root endpoint returns HTML."""
         response = client.get("/")
         assert response.status_code == 200
-        assert "Code Warp House" in response.text
+        assert "Temporal Topography" in response.text
         assert "html" in response.text.lower()
 
     def test_health_check(self, client):
@@ -30,7 +30,7 @@ class TestBasicEndpoints:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "healthy"
-        assert data["service"] == "code-warp-house"
+        assert data["service"] == "temporal-topography"
         assert "version" in data
 
     def test_list_projects_empty(self, client):
@@ -58,7 +58,7 @@ class TestBasicEndpoints:
         schema = response.json()
         assert "openapi" in schema
         assert "info" in schema
-        assert schema["info"]["title"] == "Code Warp House API"
+        assert schema["info"]["title"] == "Temporal Topography API"
 
 
 class TestAnalysisEndpoints:
