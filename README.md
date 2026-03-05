@@ -59,18 +59,18 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 - **CLI flexibility**
   Exclusion patterns, Git SHA tagging, output formatting, variant merging controls
 
-## 🌀 Temporal Topography - NEW!
+## Temporal Topography - NEW!
 
 **Immersive Temporal Code Visualization Platform**
 
 Code Cartographer now includes Temporal Topography, a powerful web-based interface for exploring your codebase's evolution through time:
 
-- ** Temporal Analysis**: Navigate git history and track code evolution
-- ** Interactive Visualizations**: Complexity trends, dependency graphs, file hotspots
-- **🔄 Refactoring Detection**: Automatically identify renames, splits, merges, and extractions
-- **🌐 Modern Web UI**: Fast, responsive interface built with FastAPI and vanilla JavaScript
-- ** Real-time Updates**: WebSocket-based progress tracking during analysis
-- **📈 Complexity Evolution**: See how code complexity changes over time
+- **Temporal Analysis**: Navigate git history and track code evolution
+- **Interactive Visualizations**: Complexity trends, dependency graphs, file hotspots
+- **Refactoring Detection**: Automatically identify renames, splits, merges, and extractions
+- **Modern Web UI**: Fast, responsive interface built with FastAPI and vanilla JavaScript
+- **Real-time Updates**: WebSocket-based progress tracking during analysis
+- **Complexity Evolution**: See how code complexity changes over time
 
 ### Quick Start with Temporal Topography
 
@@ -83,7 +83,7 @@ python -m code_cartographer serve
 # Explore your codebase through interactive visualizations
 ```
 
-See [Temporal Topography Documentation](docs/CODE_WARP_HOUSE.md) for complete guide and API reference.
+See [Temporal Topography Documentation](docs/TEMPORAL_TOPOGRAPHY.md) for complete guide and API reference.
 
 ---
 
@@ -111,16 +111,21 @@ git clone https://github.com/stochastic-sisyphus/code-cartographer.git
 cd code-cartographer
 ```
 
-2. **Create Virtual Environment**
+2. **Install Dependencies**
+
+Recommended: Use mise for automatic environment setup
+
+```bash
+mise trust
+mise install
+mise run install
+```
+
+Or manually:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-```
-
-3. **Install in Development Mode**
-
-```bash
 pip install -e ".[dev]"
 ```
 
