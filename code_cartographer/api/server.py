@@ -10,11 +10,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import AsyncGenerator
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+
+from code_cartographer.api.routes import analysis, temporal
+from code_cartographer.api.services.websocket import manager
 
 logger = logging.getLogger(__name__)
 
@@ -77,11 +80,6 @@ async def health_check():
         "version": "0.3.0"
     }
 
-
-# Import and include routers
-from code_cartographer.api.routes import analysis, temporal
-from code_cartographer.api.services.websocket import manager
-from fastapi import WebSocket, WebSocketDisconnect
 
 app.include_router(analysis.router, prefix="/api/v1", tags=["analysis"])
 app.include_router(temporal.router, prefix="/api/v1", tags=["temporal"])

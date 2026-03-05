@@ -67,7 +67,7 @@ def serve_command(args: argparse.Namespace) -> None:
     print(f"[INFO] Starting Temporal Topography server on {args.host}:{args.port}")
     print(f"[INFO] Web interface: http://{args.host}:{args.port}")
     print(f"[INFO] API docs: http://{args.host}:{args.port}/docs")
-    print(f"[INFO] Press Ctrl+C to stop")
+    print("[INFO] Press Ctrl+C to stop")
 
     uvicorn.run(
         "code_cartographer.api.server:app",

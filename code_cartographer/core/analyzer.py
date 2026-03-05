@@ -5,10 +5,17 @@ A sophisticated static analysis engine that performs deep inspection of Python c
 to generate rich structural and qualitative insights.
 """
 
+import argparse
 import ast
+import contextlib
+import difflib
 import fnmatch
 import hashlib
+import json
+import os
 import re
+import sys
+import textwrap
 import tokenize
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
