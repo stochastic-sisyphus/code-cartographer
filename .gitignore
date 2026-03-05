@@ -1,8 +1,8 @@
 # Allowlist approach - ignore everything by default
 *
+*/
 
-# Then explicitly allow what we want to track
-!.gitignore
+# Explicitly allow tracked directories and their contents
 !.github/
 !.github/**
 !code_cartographer/
@@ -16,34 +16,22 @@
 !web/
 !web/**
 
-# Project files
+# Explicitly allow project files
+!.gitignore
 !pyproject.toml
 !README.md
 !LICENSE
-!MANIFEST.in
-!setup.py
 !.mise.toml
-!.python-version
-
-# Scripts
 !*.sh
 
-# Keep CLAUDE.md ignored (not in allowlist)
-# Keep these ignored
+# Standard ignores (override allowlist for these)
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
-.Python
 build/
 dist/
 *.egg-info/
-*.egg
 .venv/
-venv/
 .coverage
 .pytest_cache/
-htmlcov/
 .DS_Store
-*.swp
-*.swo
