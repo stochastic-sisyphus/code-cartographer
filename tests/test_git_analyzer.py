@@ -54,9 +54,26 @@ class TestGitAnalyzer:
             GitAnalyzer(non_git_dir)
 
     @patch("code_cartographer.core.git_analyzer.Repo")
-    def test_get_commit_history(self, mock_repo_class, mock_commit, tmp_path):
+    def test_get_commit_history(self, mock_repo_class, tmp_path):
         """Test retrieving commit history."""
-        # Setup mock
+        # Setup mock commit with parent
+        mock_parent = MagicMock()
+        mock_diff = MagicMock()
+        mock_diff.renamed_file = False
+        mock_diff.a_path = "test.py"
+        mock_diff.b_path = None
+        mock_parent.diff.return_value = [mock_diff]
+
+        mock_commit = MagicMock()
+        mock_commit.hexsha = "abcdef1234567890" * 2 + "abcdef12"
+        mock_commit.committed_date = 1704067200
+        mock_commit.author.name = "Test Author"
+        mock_commit.author.email = "test@example.com"
+        mock_commit.message = "Test commit message"
+        mock_commit.stats.total = {"insertions": 10, "deletions": 5}
+        mock_commit.parents = [mock_parent]
+
+        # Setup mock repo
         mock_repo = Mock()
         mock_repo.bare = False
         mock_repo.iter_commits.return_value = [mock_commit]
@@ -191,7 +208,10 @@ class TestGitAnalyzer:
 
         rename_events = [e for e in events if e.event_type == "rename"]
         assert len(rename_events) >= 1
-        assert rename_events[0].confidence == 1.0  # File rename is certain
+        # Check for the file-based rename (confidence 1.0)
+        file_rename_events = [e for e in rename_events if e.confidence == 1.0]
+        assert len(file_rename_events) >= 1
+        assert "old_name.py" in file_rename_events[0].description
 
     @patch("code_cartographer.core.git_analyzer.Repo")
     def test_build_temporal_complexity_graph(self, mock_repo_class, tmp_path):

@@ -54,6 +54,7 @@ test = [
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
+    "httpx>=0.24.0",
     "black==24.8.0",
     "isort>=5.12.0",
     "mypy>=1.0.0",

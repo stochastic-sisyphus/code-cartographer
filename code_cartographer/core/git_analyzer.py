@@ -83,7 +83,7 @@ class GitAnalyzer:
         self.repo_path = Path(repo_path).resolve()
         try:
             self.repo = Repo(self.repo_path)
-        except git.exc.InvalidGitRepositoryError as e:
+        except (git.exc.InvalidGitRepositoryError, git.exc.NoSuchPathError) as e:
             raise ValueError(f"Not a git repository: {repo_path}") from e
 
         if self.repo.bare:
