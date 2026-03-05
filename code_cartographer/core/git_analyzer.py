@@ -223,8 +223,9 @@ class GitAnalyzer:
         commits = self.get_commit_history(max_commits=max_commits)
 
         for i, commit in enumerate(commits):
-            if i == 0:
-                continue  # Skip first commit (no parent to compare)
+            # Need at least one previous commit for before_hash
+            if i >= len(commits) - 1:
+                continue  # Skip last commit (oldest, no previous to compare)
 
             # Look for refactoring patterns in commit message
             msg_lower = commit.message.lower()
@@ -242,7 +243,7 @@ class GitAnalyzer:
                         commit_hash=commit.hash,
                         event_type=event_type,
                         affected_definitions=[],
-                        before_hash=commits[i - 1].hash,
+                        before_hash=commits[i + 1].hash,
                         after_hash=commit.hash,
                         confidence=0.7,  # Based on commit message only
                         description=commit.message.split("\n")[0],
@@ -257,7 +258,7 @@ class GitAnalyzer:
                         commit_hash=commit.hash,
                         event_type="rename",
                         affected_definitions=[old_path, new_path],
-                        before_hash=commits[i - 1].hash,
+                        before_hash=commits[i + 1].hash,
                         after_hash=commit.hash,
                         confidence=1.0,  # File rename is certain
                         description=f"Renamed {old_path} to {new_path}",

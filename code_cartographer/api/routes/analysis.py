@@ -121,6 +121,8 @@ async def analyze_project(
             "message": "Analysis complete",
         }
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Analysis failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
