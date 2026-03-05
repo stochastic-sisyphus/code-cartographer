@@ -170,12 +170,22 @@ class TestGitAnalyzer:
     @patch("code_cartographer.core.git_analyzer.Repo")
     def test_detect_file_rename(self, mock_repo_class, tmp_path):
         """Test detection of file renames."""
+        # Create commit with file rename
+        mock_parent = Mock()
+        mock_diff = Mock()
+        mock_diff.renamed_file = True
+        mock_diff.rename_from = "old_name.py"
+        mock_diff.rename_to = "new_name.py"
+        mock_diff.a_path = "old_name.py"
+        mock_diff.b_path = "new_name.py"
+        mock_parent.diff.return_value = [mock_diff]
+
         commit1 = Mock()
         commit1.hexsha = "abc" * 13 + "a"
         commit1.committed_date = 1704067200
         commit1.author.name = "Author"
         commit1.author.email = "author@example.com"
-        commit1.message = "Rename file"
+        commit1.message = "Initial commit"
         commit1.stats.total = {"insertions": 0, "deletions": 0}
         commit1.parents = []
 
@@ -184,18 +194,8 @@ class TestGitAnalyzer:
         commit2.committed_date = 1704153600
         commit2.author.name = "Author"
         commit2.author.email = "author@example.com"
-        commit2.message = "Regular commit"
+        commit2.message = "Rename file"
         commit2.stats.total = {"insertions": 0, "deletions": 0}
-        commit2.parents = []
-
-        # Setup file rename
-        mock_diff = Mock()
-        mock_diff.renamed_file = True
-        mock_diff.rename_from = "old_name.py"
-        mock_diff.rename_to = "new_name.py"
-
-        mock_parent = Mock()
-        mock_parent.diff.return_value = [mock_diff]
         commit2.parents = [mock_parent]
 
         mock_repo = Mock()
