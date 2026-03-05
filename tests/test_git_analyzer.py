@@ -138,18 +138,22 @@ class TestGitAnalyzer:
         commit1 = Mock()
         commit1.hexsha = "abc" * 13 + "a"
         commit1.committed_date = 1704067200
+        commit1.author = Mock()
         commit1.author.name = "Author 1"
         commit1.author.email = "author1@example.com"
         commit1.message = "Refactor authentication module"
+        commit1.stats = Mock()
         commit1.stats.total = {"insertions": 50, "deletions": 30}
         commit1.parents = [mock_parent2]
 
         commit2 = Mock()
         commit2.hexsha = "def" * 13 + "d"
         commit2.committed_date = 1704153600
+        commit2.author = Mock()
         commit2.author.name = "Author 2"
         commit2.author.email = "author2@example.com"
         commit2.message = "Add new feature"
+        commit2.stats = Mock()
         commit2.stats.total = {"insertions": 20, "deletions": 0}
         commit2.parents = [mock_parent1]
 
