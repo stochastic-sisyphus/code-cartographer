@@ -193,16 +193,16 @@ if __name__ == '__main__':
 
 
 def test_code_analyzer(codebase_dir):
-    """Test the CodeAnalyzer on the sample codebase."""
-    print("\n=== Testing CodeAnalyzer ===")
+    """Test the ProjectAnalyzer on the sample codebase."""
+    print("\n=== Testing ProjectAnalyzer ===")
 
     # Create output directory
     output_dir = codebase_dir / "analysis_output"
     output_dir.mkdir(exist_ok=True)
 
     # Initialize and run the analyzer
-    analyzer = CodeAnalyzer(codebase_dir, output_dir)
-    analysis_results = analyzer.analyze()
+    analyzer = ProjectAnalyzer(root=codebase_dir)
+    analysis_results = analyzer.execute()
 
     # Print some basic stats
     print(f"Files analyzed: {len(analysis_results.get('files', []))}")
