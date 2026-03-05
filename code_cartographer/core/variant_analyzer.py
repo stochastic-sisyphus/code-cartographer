@@ -62,14 +62,14 @@ class CodeNormalizer:
     def _standardize_names(tree: ast.AST) -> ast.AST:
         """Standardize variable, function, and class names."""
         name_map = {}
-        counter = 0
+        counter = [0]  # Use list to avoid closure issues
 
         class NameStandardizer(ast.NodeTransformer):
             def visit_Name(self, node):
                 if isinstance(node.ctx, ast.Store):
                     if node.id not in name_map:
-                        name_map[node.id] = f"var_{counter}"
-                        counter += 1
+                        name_map[node.id] = f"var_{counter[0]}"
+                        counter[0] += 1
                     node.id = name_map[node.id]
                 elif isinstance(node.ctx, ast.Load) and node.id in name_map:
                     node.id = name_map[node.id]
@@ -80,8 +80,8 @@ class CodeNormalizer:
 
             def _extracted_from_visit_FunctionDef_19(self, node, arg1):
                 if node.name not in name_map:
-                    name_map[node.name] = f"{arg1}{counter}"
-                    counter += 1
+                    name_map[node.name] = f"{arg1}{counter[0]}"
+                    counter[0] += 1
                 node.name = name_map[node.name]
                 return self.generic_visit(node)
 

@@ -203,7 +203,7 @@ class GitAnalyzer:
             # Try to return to original state
             try:
                 self.repo.git.checkout(original_head.hexsha)
-            except:
+            except Exception:
                 logger.warning("Failed to return to original commit")
             return None
 
