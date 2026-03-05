@@ -13,7 +13,6 @@ authors = [
     { name = "Vanessa Beck" }
 ]
 keywords = ["code", "visualization", "analysis", "ast", "dependencies", "refactoring"]
-urls = {Homepage = "https://github.com/stochastic-sisyphus/code-cartographer", Repository = "https://github.com/stochastic-sisyphus/code-cartographer", Issues = "https://github.com/stochastic-sisyphus/code-cartographer/issues"}
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
