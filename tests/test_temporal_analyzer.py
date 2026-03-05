@@ -5,7 +5,7 @@ Tests for TemporalAnalyzer module.
 import json
 import pytest
 from datetime import datetime
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 
 from code_cartographer.core.temporal_analyzer import (
     TemporalAnalyzer,
@@ -26,8 +26,7 @@ def temp_cache_dir(tmp_path):
 @pytest.fixture
 def mock_git_analyzer():
     """Create a mock GitAnalyzer."""
-    analyzer = Mock(spec=GitAnalyzer)
-    return analyzer
+    return Mock(spec=GitAnalyzer)
 
 
 @pytest.fixture
