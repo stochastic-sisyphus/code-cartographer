@@ -34,7 +34,6 @@ jobs:
     - name: Lint with ruff
       run: |
         ruff check code_cartographer/ tests/
-      continue-on-error: true
 
     - name: Format check with black
       run: |

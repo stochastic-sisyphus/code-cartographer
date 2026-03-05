@@ -4,8 +4,7 @@ Tests for GitAnalyzer module.
 
 import pytest
 from datetime import datetime
-from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
 from code_cartographer.core.git_analyzer import (
     GitAnalyzer,

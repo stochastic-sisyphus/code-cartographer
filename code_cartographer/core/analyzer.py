@@ -18,7 +18,7 @@ import sys
 import textwrap
 import tokenize
 from collections import defaultdict
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from io import StringIO
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple

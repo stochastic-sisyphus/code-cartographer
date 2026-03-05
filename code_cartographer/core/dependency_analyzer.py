@@ -69,8 +69,8 @@ class DependencyAnalyzer:
         self._build_graph()
 
         # Analyze the graph
-        entry_points = self._find_entry_points()
-        leaf_nodes = self._find_leaf_nodes()
+        self._find_entry_points()
+        self._find_leaf_nodes()
         cycles = self._find_cycles()
 
         # Calculate initialization order
