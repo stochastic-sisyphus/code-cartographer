@@ -117,26 +117,7 @@ class TestGitAnalyzer:
     @patch("code_cartographer.core.git_analyzer.Repo")
     def test_detect_refactoring_events(self, mock_repo_class, tmp_path):
         """Test detection of refactoring events from commit messages."""
-        # Create commits with refactoring keywords
-        commit1 = Mock()
-        commit1.hexsha = "abc" * 13 + "a"
-        commit1.committed_date = 1704067200
-        commit1.author.name = "Author 1"
-        commit1.author.email = "author1@example.com"
-        commit1.message = "Refactor authentication module"
-        commit1.stats.total = {"insertions": 50, "deletions": 30}
-        commit1.parents = []
-
-        commit2 = Mock()
-        commit2.hexsha = "def" * 13 + "d"
-        commit2.committed_date = 1704153600
-        commit2.author.name = "Author 2"
-        commit2.author.email = "author2@example.com"
-        commit2.message = "Add new feature"
-        commit2.stats.total = {"insertions": 20, "deletions": 0}
-        commit2.parents = []
-
-        # Setup mock for file changes
+        # Create mock diffs
         mock_diff1 = Mock()
         mock_diff1.renamed_file = False
         mock_diff1.a_path = "auth.py"
@@ -144,7 +125,6 @@ class TestGitAnalyzer:
 
         mock_parent1 = Mock()
         mock_parent1.diff.return_value = [mock_diff1]
-        commit2.parents = [mock_parent1]
 
         mock_diff2 = Mock()
         mock_diff2.renamed_file = False
@@ -153,6 +133,25 @@ class TestGitAnalyzer:
 
         mock_parent2 = Mock()
         mock_parent2.diff.return_value = [mock_diff2]
+
+        # Create commits with refactoring keywords
+        commit1 = Mock()
+        commit1.hexsha = "abc" * 13 + "a"
+        commit1.committed_date = 1704067200
+        commit1.author.name = "Author 1"
+        commit1.author.email = "author1@example.com"
+        commit1.message = "Refactor authentication module"
+        commit1.stats.total = {"insertions": 50, "deletions": 30}
+        commit1.parents = [mock_parent2]
+
+        commit2 = Mock()
+        commit2.hexsha = "def" * 13 + "d"
+        commit2.committed_date = 1704153600
+        commit2.author.name = "Author 2"
+        commit2.author.email = "author2@example.com"
+        commit2.message = "Add new feature"
+        commit2.stats.total = {"insertions": 20, "deletions": 0}
+        commit2.parents = [mock_parent1]
 
         mock_repo = Mock()
         mock_repo.bare = False
