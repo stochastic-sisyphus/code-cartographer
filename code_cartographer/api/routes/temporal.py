@@ -5,22 +5,13 @@ Endpoints for git history and temporal code analysis.
 """
 
 import logging
-from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel
 
 from code_cartographer.core.git_analyzer import GitAnalyzer
 from code_cartographer.core.temporal_analyzer import TemporalAnalyzer
-from code_cartographer.api.models.schemas import (
-    CommitResponse,
-    TemporalDataResponse,
-    ComplexityTrendResponse,
-    RefactoringEventResponse,
-    TemporalMetricsResponse,
-)
 
 logger = logging.getLogger(__name__)
 

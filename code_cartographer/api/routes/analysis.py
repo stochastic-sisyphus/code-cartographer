@@ -7,26 +7,15 @@ Endpoints for code analysis operations.
 import hashlib
 import json
 import logging
-from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks
-from pydantic import BaseModel
 
 from code_cartographer.core.analyzer import ProjectAnalyzer
 from code_cartographer.core.dependency_analyzer import DependencyAnalyzer
 from code_cartographer.core.variant_analyzer import VariantAnalyzer
-from code_cartographer.api.models.schemas import (
-    ProjectAnalysisRequest,
-    ProjectAnalysisResponse,
-    FileMetadataResponse,
-    DefinitionResponse,
-    DependencyGraphResponse,
-    ComplexityMetrics,
-    ErrorResponse,
-    ProjectListResponse,
-)
+from code_cartographer.api.models.schemas import ProjectAnalysisRequest
 
 logger = logging.getLogger(__name__)
 
