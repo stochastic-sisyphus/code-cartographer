@@ -5,7 +5,7 @@ Analyzes sequential dependencies and prerequisites between code elements.
 """
 
 import networkx as nx
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Set, Any
 

@@ -4,8 +4,6 @@ WebSocket Service
 Real-time communication for analysis progress and updates.
 """
 
-import asyncio
-import json
 import logging
 from datetime import datetime
 from typing import Dict, Set

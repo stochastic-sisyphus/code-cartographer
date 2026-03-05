@@ -10,7 +10,6 @@ from typing import Dict, Optional
 
 from fastapi import APIRouter, HTTPException, Query
 
-from code_cartographer.core.git_analyzer import GitAnalyzer
 from code_cartographer.core.temporal_analyzer import TemporalAnalyzer
 
 logger = logging.getLogger(__name__)
