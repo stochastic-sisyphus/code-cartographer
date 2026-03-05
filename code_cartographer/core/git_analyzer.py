@@ -223,8 +223,8 @@ class GitAnalyzer:
         commits = self.get_commit_history(max_commits=max_commits)
 
         for i, commit in enumerate(commits):
-            # Need at least one previous commit for before_hash
-            if i >= len(commits) - 1:
+            # Need at least one older commit for before_hash
+            if i + 1 >= len(commits):
                 continue  # Skip last commit (oldest, no previous to compare)
 
             # Look for refactoring patterns in commit message
