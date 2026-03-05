@@ -5,7 +5,7 @@ Tests for TemporalAnalyzer module.
 import json
 import pytest
 from datetime import datetime
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
 from code_cartographer.core.temporal_analyzer import (
     TemporalAnalyzer,

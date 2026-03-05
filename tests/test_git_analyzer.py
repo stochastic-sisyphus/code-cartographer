@@ -42,10 +42,8 @@ class TestGitAnalyzer:
     def test_init_requires_gitpython(self, tmp_path):
         """Test that GitAnalyzer requires gitpython to be installed."""
         # GitPython should be installed for tests
-        try:
-            analyzer = GitAnalyzer(tmp_path / "non_existent")
-        except ValueError as e:
-            assert "Not a git repository" in str(e)
+        with pytest.raises(ValueError, match="Not a git repository"):
+            GitAnalyzer(tmp_path / "non_existent")
 
     def test_init_with_invalid_repo(self, tmp_path):
         """Test initialization with non-git directory."""
