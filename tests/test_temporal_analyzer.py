@@ -11,7 +11,6 @@ from unittest.mock import Mock, patch, MagicMock
 from code_cartographer.core.temporal_analyzer import (
     TemporalAnalyzer,
     ComplexityTrend,
-    VariantEvolution,
     TemporalData,
 )
 from code_cartographer.core.git_analyzer import CommitSnapshot, GitAnalyzer

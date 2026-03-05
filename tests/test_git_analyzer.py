@@ -11,7 +11,6 @@ from code_cartographer.core.git_analyzer import (
     GitAnalyzer,
     CommitSnapshot,
     RefactoringEvent,
-    TemporalMetrics,
 )
 
 
