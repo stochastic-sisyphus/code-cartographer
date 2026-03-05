@@ -1,5 +1,5 @@
 [tools]
-python = "3.11"
+python = "3.10"
 
 [tasks.install]
 description = "Install project dependencies"
@@ -23,11 +23,11 @@ run = "pytest"
 
 [tasks.format]
 description = "Format code with black and isort"
-run = ["black src/ tests/", "isort src/ tests/"]
+run = ["black code_cartographer/ tests/", "isort code_cartographer/ tests/"]
 
 [tasks.lint]
 description = "Run linters"
-run = ["mypy src/", "flake8 src/ tests/"]
+run = ["ruff check code_cartographer/ tests/", "mypy code_cartographer/"]
 
 [tasks.pre-commit]
 description = "Run pre-commit hooks"

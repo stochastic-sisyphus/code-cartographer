@@ -91,7 +91,7 @@ See [Temporal Topography Documentation](docs/TEMPORAL_TOPOGRAPHY.md) for complet
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.10+
 - (Optional) Graphviz for dependency visualization
 
 ### Installation
