@@ -38,7 +38,7 @@ def _get_temporal_analyzer(project_path: Path) -> TemporalAnalyzer:
 async def get_timeline(
     project_id: str,
     max_commits: int = Query(default=100, ge=1, le=1000),
-    file_pattern: Optional[str] = None
+    file_pattern: Optional[str] = None,
 ):
     """
     Get commit timeline for a project.
@@ -60,8 +60,7 @@ async def get_timeline(
     try:
         analyzer = _get_temporal_analyzer(project_path)
         commits = analyzer.git_analyzer.get_commit_history(
-            max_commits=max_commits,
-            file_pattern=file_pattern
+            max_commits=max_commits, file_pattern=file_pattern
         )
 
         # Convert to response format
@@ -83,7 +82,7 @@ async def get_timeline(
         return {
             "project_id": project_id,
             "total_commits": len(commit_responses),
-            "commits": commit_responses
+            "commits": commit_responses,
         }
 
     except Exception as e:
@@ -92,7 +91,9 @@ async def get_timeline(
 
 
 @router.get("/projects/{project_id}/commits")
-async def list_commits(project_id: str, max_commits: int = Query(default=50, ge=1, le=500)):
+async def list_commits(
+    project_id: str, max_commits: int = Query(default=50, ge=1, le=500)
+):
     """Get list of commits for a project."""
     return await get_timeline(project_id, max_commits=max_commits)
 
@@ -116,7 +117,9 @@ async def get_commit_details(project_id: str, commit_hash: str):
         commit = next((c for c in commits if c.hash.startswith(commit_hash)), None)
 
         if not commit:
-            raise HTTPException(status_code=404, detail=f"Commit not found: {commit_hash}")
+            raise HTTPException(
+                status_code=404, detail=f"Commit not found: {commit_hash}"
+            )
 
         return {
             "hash": commit.hash,
@@ -157,14 +160,10 @@ async def analyze_at_commit(project_id: str, commit_hash: str):
 
         if not analysis:
             raise HTTPException(
-                status_code=500,
-                detail=f"Failed to analyze commit {commit_hash}"
+                status_code=500, detail=f"Failed to analyze commit {commit_hash}"
             )
 
-        return {
-            "commit_hash": commit_hash,
-            "analysis": analysis
-        }
+        return {"commit_hash": commit_hash, "analysis": analysis}
 
     except HTTPException:
         raise
@@ -177,7 +176,7 @@ async def analyze_at_commit(project_id: str, commit_hash: str):
 async def get_complexity_evolution(
     project_id: str,
     max_commits: int = Query(default=50, ge=5, le=200),
-    strategy: str = Query(default="uniform", regex="^(uniform|major|all)$")
+    strategy: str = Query(default="uniform", regex="^(uniform|major|all)$"),
 ):
     """
     Get complexity evolution over time.
@@ -200,8 +199,7 @@ async def get_complexity_evolution(
 
         # Run temporal analysis
         temporal_data = analyzer.analyze_evolution(
-            max_commits=max_commits,
-            sample_strategy=strategy
+            max_commits=max_commits, sample_strategy=strategy
         )
 
         # Convert complexity trends
@@ -223,7 +221,7 @@ async def get_complexity_evolution(
         return {
             "project_id": project_id,
             "total_commits_analyzed": temporal_data.total_commits_analyzed,
-            "complexity_trends": trends
+            "complexity_trends": trends,
         }
 
     except HTTPException:
@@ -235,8 +233,7 @@ async def get_complexity_evolution(
 
 @router.get("/projects/{project_id}/evolution/refactorings")
 async def get_refactoring_events(
-    project_id: str,
-    max_commits: int = Query(default=100, ge=1, le=500)
+    project_id: str, max_commits: int = Query(default=100, ge=1, le=500)
 ):
     """Get detected refactoring events."""
     from code_cartographer.api.routes.analysis import get_project
@@ -249,7 +246,9 @@ async def get_refactoring_events(
 
     try:
         analyzer = _get_temporal_analyzer(project_path)
-        events = analyzer.git_analyzer.detect_refactoring_events(max_commits=max_commits)
+        events = analyzer.git_analyzer.detect_refactoring_events(
+            max_commits=max_commits
+        )
 
         event_responses = [
             {
@@ -267,7 +266,7 @@ async def get_refactoring_events(
         return {
             "project_id": project_id,
             "total_events": len(event_responses),
-            "refactoring_events": event_responses
+            "refactoring_events": event_responses,
         }
 
     except HTTPException:
@@ -279,8 +278,7 @@ async def get_refactoring_events(
 
 @router.get("/projects/{project_id}/evolution/hotspots")
 async def get_hotspots(
-    project_id: str,
-    max_commits: int = Query(default=100, ge=1, le=500)
+    project_id: str, max_commits: int = Query(default=100, ge=1, le=500)
 ):
     """Get file hotspots (frequently changed files)."""
     from code_cartographer.api.routes.analysis import get_project
@@ -303,7 +301,7 @@ async def get_hotspots(
                 for path, count in metrics.hotspots
             ],
             "file_churn": metrics.file_churn,
-            "contributor_stats": metrics.contributor_stats
+            "contributor_stats": metrics.contributor_stats,
         }
 
     except HTTPException:
@@ -315,9 +313,7 @@ async def get_hotspots(
 
 @router.get("/projects/{project_id}/files/{file_path:path}/history")
 async def get_file_history(
-    project_id: str,
-    file_path: str,
-    max_commits: int = Query(default=50, ge=1, le=200)
+    project_id: str, file_path: str, max_commits: int = Query(default=50, ge=1, le=200)
 ):
     """Get commit history for a specific file."""
     from code_cartographer.api.routes.analysis import get_project
@@ -330,7 +326,9 @@ async def get_file_history(
 
     try:
         analyzer = _get_temporal_analyzer(project_path)
-        commits = analyzer.git_analyzer.get_file_history(file_path, max_commits=max_commits)
+        commits = analyzer.git_analyzer.get_file_history(
+            file_path, max_commits=max_commits
+        )
 
         commit_responses = [
             {
@@ -347,7 +345,7 @@ async def get_file_history(
             "project_id": project_id,
             "file_path": file_path,
             "total_commits": len(commit_responses),
-            "commits": commit_responses
+            "commits": commit_responses,
         }
 
     except HTTPException:

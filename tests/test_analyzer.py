@@ -49,7 +49,7 @@ def test_project_analyzer_execute(sample_code):
 
     file_info = result["files"][0]
     assert file_info["path"] == str(sample_code.relative_to(sample_code.parent))
-    
+
     # Check that we found the expected function definitions
     definitions = file_info.get("definitions", [])
     function_names = [d["name"] for d in definitions if d["category"] == "function"]

@@ -37,12 +37,14 @@ class ConnectionManager:
         logger.info(f"Client connected to project {project_id}")
 
         # Send welcome message
-        await websocket.send_json({
-            "type": "connected",
-            "project_id": project_id,
-            "timestamp": datetime.now().isoformat(),
-            "message": "Connected to Temporal Topography"
-        })
+        await websocket.send_json(
+            {
+                "type": "connected",
+                "project_id": project_id,
+                "timestamp": datetime.now().isoformat(),
+                "message": "Connected to Temporal Topography",
+            }
+        )
 
     def disconnect(self, websocket: WebSocket, project_id: str):
         """
@@ -61,11 +63,7 @@ class ConnectionManager:
         logger.info(f"Client disconnected from project {project_id}")
 
     async def send_progress(
-        self,
-        project_id: str,
-        progress: int,
-        total: int,
-        message: str
+        self, project_id: str, progress: int, total: int, message: str
     ):
         """
         Send progress update to all connected clients for a project.
@@ -85,7 +83,7 @@ class ConnectionManager:
             "total": total,
             "percentage": int((progress / total) * 100) if total > 0 else 0,
             "message": message,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
         await self._broadcast(project_id, data)
@@ -101,7 +99,7 @@ class ConnectionManager:
         message = {
             "type": "complete",
             "data": data,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
         await self._broadcast(project_id, message)
@@ -117,7 +115,7 @@ class ConnectionManager:
         message = {
             "type": "error",
             "error": error,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
         await self._broadcast(project_id, message)

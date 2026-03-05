@@ -93,18 +93,14 @@ class TestTemporalAnalyzer:
         """Test TemporalAnalyzer initialization."""
         mock_git_class.return_value = Mock(spec=GitAnalyzer)
 
-        analyzer = TemporalAnalyzer(
-            repo_path=tmp_path, cache_dir=temp_cache_dir
-        )
+        analyzer = TemporalAnalyzer(repo_path=tmp_path, cache_dir=temp_cache_dir)
 
         assert analyzer.repo_path == tmp_path
         assert analyzer.cache_dir == temp_cache_dir
         assert analyzer.cache_dir.exists()
 
     @patch("code_cartographer.core.temporal_analyzer.GitAnalyzer")
-    def test_sample_commits_uniform(
-        self, mock_git_class, tmp_path, sample_commits
-    ):
+    def test_sample_commits_uniform(self, mock_git_class, tmp_path, sample_commits):
         """Test uniform commit sampling."""
         mock_git = Mock(spec=GitAnalyzer)
         mock_git_class.return_value = mock_git
@@ -143,9 +139,7 @@ class TestTemporalAnalyzer:
         assert sampled[0].hash == "abc123"
 
     @patch("code_cartographer.core.temporal_analyzer.GitAnalyzer")
-    def test_detect_complexity_trends(
-        self, mock_git_class, tmp_path, sample_commits
-    ):
+    def test_detect_complexity_trends(self, mock_git_class, tmp_path, sample_commits):
         """Test complexity trend detection."""
         mock_git = Mock(spec=GitAnalyzer)
         mock_git_class.return_value = mock_git

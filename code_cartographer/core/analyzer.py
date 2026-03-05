@@ -301,8 +301,10 @@ class ProjectAnalyzer:
         """Find all Python files, respecting exclusion patterns."""
         for p in self.root.rglob("*.py"):
             path_str = str(p)
-            if any(fnmatch.fnmatch(path_str, pattern) or fnmatch.fnmatch(p.name, pattern) 
-                   for pattern in self.exclude_patterns):
+            if any(
+                fnmatch.fnmatch(path_str, pattern) or fnmatch.fnmatch(p.name, pattern)
+                for pattern in self.exclude_patterns
+            ):
                 continue
             yield p
 

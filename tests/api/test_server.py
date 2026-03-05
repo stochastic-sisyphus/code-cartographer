@@ -68,9 +68,7 @@ class TestAnalysisEndpoints:
         """Test analyzing a non-existent path."""
         response = client.post(
             "/api/v1/projects/analyze",
-            json={
-                "project_path": "/nonexistent/path/that/does/not/exist"
-            }
+            json={"project_path": "/nonexistent/path/that/does/not/exist"},
         )
         assert response.status_code == 404
 
@@ -81,10 +79,7 @@ class TestAnalysisEndpoints:
         test_file.write_text("test")
 
         response = client.post(
-            "/api/v1/projects/analyze",
-            json={
-                "project_path": str(test_file)
-            }
+            "/api/v1/projects/analyze", json={"project_path": str(test_file)}
         )
         assert response.status_code == 400
 

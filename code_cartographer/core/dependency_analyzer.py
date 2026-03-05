@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Dict, List, Set, Any
 
 
-
 @dataclass
 class DependencyNode:
     """Represents a node in the dependency graph."""

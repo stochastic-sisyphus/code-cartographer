@@ -74,11 +74,7 @@ async def root(request: Request):
 @app.get("/api/v1/health")
 async def health_check():
     """Health check endpoint."""
-    return {
-        "status": "healthy",
-        "service": "temporal-topography",
-        "version": "0.3.0"
-    }
+    return {"status": "healthy", "service": "temporal-topography", "version": "0.3.0"}
 
 
 app.include_router(analysis.router, prefix="/api/v1", tags=["analysis"])
@@ -96,11 +92,13 @@ async def websocket_endpoint(websocket: WebSocket, project_id: str):
             data = await websocket.receive_text()
 
             # Echo back for now (can be extended for commands)
-            await websocket.send_json({
-                "type": "echo",
-                "message": f"Received: {data}",
-                "timestamp": datetime.now().isoformat()
-            })
+            await websocket.send_json(
+                {
+                    "type": "echo",
+                    "message": f"Received: {data}",
+                    "timestamp": datetime.now().isoformat(),
+                }
+            )
 
     except WebSocketDisconnect:
         manager.disconnect(websocket, project_id)
@@ -111,4 +109,5 @@ async def websocket_endpoint(websocket: WebSocket, project_id: str):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=8000)

@@ -126,7 +126,9 @@ class GitAnalyzer:
                     for diff in diffs:
                         # Handle renamed files
                         if diff.renamed_file:
-                            files_changed.append(f"{diff.rename_from} -> {diff.rename_to}")
+                            files_changed.append(
+                                f"{diff.rename_from} -> {diff.rename_to}"
+                            )
                         elif diff.a_path:
                             files_changed.append(diff.a_path)
                         elif diff.b_path:
@@ -166,9 +168,7 @@ class GitAnalyzer:
             logger.error(f"Git command failed: {e}")
             return []
 
-    def analyze_at_commit(
-        self, commit_hash: str, analyzer_func=None
-    ) -> Optional[Dict]:
+    def analyze_at_commit(self, commit_hash: str, analyzer_func=None) -> Optional[Dict]:
         """
         Checkout and analyze code at a specific commit.
 
@@ -336,7 +336,9 @@ class GitAnalyzer:
             logger.warning(f"Failed to extract complexity: {e}")
             return None
 
-    def get_file_history(self, file_path: str, max_commits: int = 50) -> List[CommitSnapshot]:
+    def get_file_history(
+        self, file_path: str, max_commits: int = 50
+    ) -> List[CommitSnapshot]:
         """
         Get commit history for a specific file.
 
@@ -350,7 +352,9 @@ class GitAnalyzer:
         commits = []
 
         try:
-            commit_iter = self.repo.iter_commits("HEAD", paths=file_path, max_count=max_commits)
+            commit_iter = self.repo.iter_commits(
+                "HEAD", paths=file_path, max_count=max_commits
+            )
 
             for commit in commit_iter:
                 snapshot = CommitSnapshot(

@@ -61,7 +61,9 @@ def serve_command(args: argparse.Namespace) -> None:
         import uvicorn
     except ImportError:
         print("[ERROR] uvicorn is required for the web server.")
-        print("Install with: pip install 'code-cartographer[web]' or pip install uvicorn")
+        print(
+            "Install with: pip install 'code-cartographer[web]' or pip install uvicorn"
+        )
         sys.exit(1)
 
     print(f"[INFO] Starting Temporal Topography server on {args.host}:{args.port}")
@@ -74,7 +76,7 @@ def serve_command(args: argparse.Namespace) -> None:
         host=args.host,
         port=args.port,
         reload=args.reload,
-        log_level="info"
+        log_level="info",
     )
 
 

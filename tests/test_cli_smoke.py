@@ -10,7 +10,6 @@ import tempfile
 from pathlib import Path
 
 
-
 def test_cli_help():
     """Test that CLI help works without errors."""
     result = subprocess.run(

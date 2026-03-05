@@ -9,27 +9,29 @@ from pydantic import BaseModel, Field
 
 # Request Models
 
+
 class ProjectAnalysisRequest(BaseModel):
     """Request to analyze a project."""
+
     project_path: str = Field(..., description="Path to the project directory")
     exclude_patterns: Optional[List[str]] = Field(
-        default=None,
-        description="Patterns to exclude from analysis"
+        default=None, description="Patterns to exclude from analysis"
     )
     max_commits: Optional[int] = Field(
         default=100,
-        description="Maximum number of commits to analyze for temporal data"
+        description="Maximum number of commits to analyze for temporal data",
     )
     include_temporal: bool = Field(
-        default=False,
-        description="Whether to include git history analysis"
+        default=False, description="Whether to include git history analysis"
     )
 
 
 # Response Models
 
+
 class ErrorResponse(BaseModel):
     """Error response."""
+
     error: str
     detail: Optional[str] = None
     timestamp: datetime = Field(default_factory=datetime.now)
@@ -37,6 +39,7 @@ class ErrorResponse(BaseModel):
 
 class ComplexityMetrics(BaseModel):
     """Code complexity metrics."""
+
     cyclomatic: Optional[int] = None
     cognitive: Optional[int] = None
     halstead: Optional[Dict[str, Any]] = None
@@ -45,6 +48,7 @@ class ComplexityMetrics(BaseModel):
 
 class DefinitionResponse(BaseModel):
     """Code definition (function, class, etc.)."""
+
     name: str
     type: str  # 'function', 'class', 'method'
     file_path: str
@@ -57,6 +61,7 @@ class DefinitionResponse(BaseModel):
 
 class FileMetadataResponse(BaseModel):
     """File metadata and metrics."""
+
     path: str
     lines_of_code: int
     complexity: Optional[ComplexityMetrics] = None
@@ -67,6 +72,7 @@ class FileMetadataResponse(BaseModel):
 
 class ProjectAnalysisResponse(BaseModel):
     """Complete project analysis results."""
+
     project_path: str
     analysis_timestamp: datetime
     total_files: int
@@ -78,6 +84,7 @@ class ProjectAnalysisResponse(BaseModel):
 
 class DependencyGraphResponse(BaseModel):
     """Dependency graph data."""
+
     nodes: List[Dict[str, Any]]
     edges: List[Dict[str, Any]]
     metrics: Optional[Dict[str, Any]] = None
@@ -85,6 +92,7 @@ class DependencyGraphResponse(BaseModel):
 
 class CommitResponse(BaseModel):
     """Git commit information."""
+
     hash: str
     short_hash: str
     timestamp: datetime
@@ -99,6 +107,7 @@ class CommitResponse(BaseModel):
 
 class RefactoringEventResponse(BaseModel):
     """Refactoring event information."""
+
     commit_hash: str
     event_type: str
     affected_definitions: List[str]
@@ -110,6 +119,7 @@ class RefactoringEventResponse(BaseModel):
 
 class ComplexityTrendResponse(BaseModel):
     """Complexity trend for a file."""
+
     file_path: str
     timeline: List[Dict[str, Any]]  # [{timestamp, complexity}]
     trend_direction: str  # 'increasing', 'decreasing', 'stable'
@@ -120,6 +130,7 @@ class ComplexityTrendResponse(BaseModel):
 
 class TemporalMetricsResponse(BaseModel):
     """Temporal metrics."""
+
     complexity_timeline: List[Dict[str, Any]]
     file_churn: Dict[str, int]
     hotspots: List[Dict[str, Any]]
@@ -128,6 +139,7 @@ class TemporalMetricsResponse(BaseModel):
 
 class TemporalDataResponse(BaseModel):
     """Temporal analysis results."""
+
     repository_path: str
     analysis_start: datetime
     analysis_end: datetime
@@ -140,6 +152,7 @@ class TemporalDataResponse(BaseModel):
 
 class VariantResponse(BaseModel):
     """Code variant information."""
+
     variant_id: str
     files: List[str]
     similarity_score: float
@@ -149,11 +162,13 @@ class VariantResponse(BaseModel):
 
 class ProjectListResponse(BaseModel):
     """List of analyzed projects."""
+
     projects: List[Dict[str, Any]]
 
 
 class WebSocketMessage(BaseModel):
     """WebSocket message format."""
+
     type: str  # 'progress', 'complete', 'error'
     data: Dict[str, Any]
     timestamp: datetime = Field(default_factory=datetime.now)

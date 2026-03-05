@@ -57,7 +57,9 @@ def _load_cached_analysis(project_id: str) -> Optional[Dict]:
 
 
 @router.post("/projects/analyze", response_model=Dict)
-async def analyze_project(request: ProjectAnalysisRequest, background_tasks: BackgroundTasks):
+async def analyze_project(
+    request: ProjectAnalysisRequest, background_tasks: BackgroundTasks
+):
     """
     Analyze a code project.
 
@@ -67,10 +69,14 @@ async def analyze_project(request: ProjectAnalysisRequest, background_tasks: Bac
         project_path = Path(request.project_path).resolve()
 
         if not project_path.exists():
-            raise HTTPException(status_code=404, detail=f"Project path not found: {project_path}")
+            raise HTTPException(
+                status_code=404, detail=f"Project path not found: {project_path}"
+            )
 
         if not project_path.is_dir():
-            raise HTTPException(status_code=400, detail=f"Path is not a directory: {project_path}")
+            raise HTTPException(
+                status_code=400, detail=f"Path is not a directory: {project_path}"
+            )
 
         # Generate project ID
         project_id = _get_project_id(str(project_path))
@@ -83,14 +89,13 @@ async def analyze_project(request: ProjectAnalysisRequest, background_tasks: Bac
                 "project_id": project_id,
                 "status": "cached",
                 "analysis": cached,
-                "message": "Analysis retrieved from cache"
+                "message": "Analysis retrieved from cache",
             }
 
         # Perform analysis
         logger.info(f"Starting analysis for {project_path}")
         analyzer = ProjectAnalyzer(
-            root=project_path,
-            exclude_patterns=request.exclude_patterns or []
+            root=project_path, exclude_patterns=request.exclude_patterns or []
         )
 
         analysis_result = analyzer.execute()
@@ -100,7 +105,7 @@ async def analyze_project(request: ProjectAnalysisRequest, background_tasks: Bac
             "project_id": project_id,
             "project_path": str(project_path),
             "analysis_timestamp": datetime.now().isoformat(),
-            "analysis_result": analysis_result
+            "analysis_result": analysis_result,
         }
 
         # Cache in background
@@ -113,7 +118,7 @@ async def analyze_project(request: ProjectAnalysisRequest, background_tasks: Bac
             "project_id": project_id,
             "status": "complete",
             "analysis": analysis_data,
-            "message": "Analysis complete"
+            "message": "Analysis complete",
         }
 
     except Exception as e:
@@ -131,11 +136,13 @@ async def list_projects():
         try:
             with open(cache_file, "r") as f:
                 data = json.load(f)
-                projects.append({
-                    "project_id": data.get("project_id"),
-                    "project_path": data.get("project_path"),
-                    "analysis_timestamp": data.get("analysis_timestamp"),
-                })
+                projects.append(
+                    {
+                        "project_id": data.get("project_id"),
+                        "project_path": data.get("project_path"),
+                        "analysis_timestamp": data.get("analysis_timestamp"),
+                    }
+                )
         except Exception as e:
             logger.warning(f"Failed to load project from {cache_file}: {e}")
 
@@ -165,11 +172,7 @@ async def get_project_files(project_id: str):
     analysis = project_data.get("analysis_result", {})
     files = analysis.get("files", [])
 
-    return {
-        "project_id": project_id,
-        "total_files": len(files),
-        "files": files
-    }
+    return {"project_id": project_id, "total_files": len(files), "files": files}
 
 
 @router.get("/projects/{project_id}/files/{file_path:path}")
@@ -220,7 +223,7 @@ async def get_dependencies(project_id: str):
             "project_id": project_id,
             "nodes": nodes,
             "edges": edges,
-            "metrics": dep_data.get("metrics", {})
+            "metrics": dep_data.get("metrics", {}),
         }
 
     except Exception as e:
@@ -239,15 +242,14 @@ async def get_variants(project_id: str, threshold: float = 0.8):
 
     try:
         analyzer = VariantAnalyzer(
-            root=Path(project_path),
-            semantic_threshold=threshold
+            root=Path(project_path), semantic_threshold=threshold
         )
         variant_data = analyzer.analyze()
 
         return {
             "project_id": project_id,
             "threshold": threshold,
-            "variants": variant_data.get("variant_groups", [])
+            "variants": variant_data.get("variant_groups", []),
         }
 
     except Exception as e:
