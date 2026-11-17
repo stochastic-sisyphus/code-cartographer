@@ -59,18 +59,24 @@ Unfortunately the cycle is **much** harder to follow when there are dozens of mo
 - **CLI flexibility**
   Exclusion patterns, Git SHA tagging, output formatting, variant merging controls
 
-## Temporal Topography - NEW!
+## Temporal Topography 
 
-**Immersive Temporal Code Visualization Platform**
+**Temporal Traversal**
 
-Code Cartographer now includes Temporal Topography, a powerful web-based interface for exploring your codebase's evolution through time:
+code cartography absolutely did not require a new feat but alas i present: temporal traversal. 
+ive never been creative ever 
+my brain has one single mode: alliteration. 
+normalize making fun of this level of infuriating cringe bc no one talks about the youth's clumsy alliteration and its rampant! 
+i simply cannot help myself we need to invest in the epidemic that is obnoxious literary device usage. # alliteration theme on 100 # codebase's evolution through time # i <3 time 
 
-- **Temporal Analysis**: Navigate git history and track code evolution
-- **Interactive Visualizations**: Complexity trends, dependency graphs, file hotspots
-- **Refactoring Detection**: Automatically identify renames, splits, merges, and extractions
-- **Modern Web UI**: Fast, responsive interface built with FastAPI and vanilla JavaScript
-- **Real-time Updates**: WebSocket-based progress tracking during analysis
-- **Complexity Evolution**: See how code complexity changes over time
+- navigate git history and track code evolution
+- complexity trends, dependency graphs, file hotspots
+- automatically identify renames, splits, merges, and extractions
+- fast, responsive interface built with FastAPI and vanilla JavaScript (ha ew)
+- WebSocket-based progress tracking during analysis
+- code complexity changes over time
+- et al
+- barney and friends 
 
 ### Quick Start with Temporal Topography
 
@@ -268,34 +274,35 @@ results = analyzer.analyze()
 
 ### Memory Issues
 
+_honestly, ur so real for that_
+
 - Reduce analysis scope using exclude patterns
 - Process directories sequentially for large projects
 - Use the similarity threshold in VariantAnalyzer to limit comparisons
+- Get a better machine, idk 
 
 ### Performance Tips
 
-- Focus analysis on specific directories
-- Use appropriate similarity thresholds
-- Leverage code normalization options
+_no clue lol_
 
 ### Common Issues
 
-- Ensure Python 3.8+ is being used
-- Check file permissions for output directories
-- Verify Graphviz installation for dependency graphs
+[DSM-5](https://www.psychiatry.org/psychiatrists/practice/dsm/)
 
 ---
 
 ## Author Notes
 
 This tool exists to reconcile broken, duplicated, or ghost-forked Python projects.
-It helps you detect what's salvageable, refactor what's duplicated, and visualize the mess you made.
+It helps you detect what's salvageable, refactor what's duplicated, and look the mess you made.
 
 Whether you're dealing with:
 
 - Fragmented directories
 - Local edits lost to time
 - Abandoned branches and reanimated scripts
+
+You are not alone. You can call our hotline 24/7 for support 
 
 This is for you.
 Or at least, for the version of you that still wants to fix it.
@@ -307,3 +314,9 @@ Or at least, for the version of you that still wants to fix it.
 ## License
 
 MIT License. See LICENSE file for details.
+patent pending! _borat_: NOT!
+stochastic-sisyphus TM 
+no trademark just @stochastic-sisyphus
+ttyl
+xoxo 
+gossip sisyphus 
